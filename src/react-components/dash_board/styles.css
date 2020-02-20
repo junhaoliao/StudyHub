@@ -1,0 +1,27 @@
+/* Styles for the Dash Board React component */
+
+#nav-dropdown {
+    color: white;
+    font-weight: bold;
+    background-color: #ff0000;
+}
+
+.dashboard_header {
+    font-size: 40px;
+    margin-left: 100px;
+    margin-top: 50px;
+}
+
+.cards_grid {
+    margin-left: 100px;
+    margin-top: 60px;
+}
+
+.course_card {
+    width: 250px;
+    height: 200px;
+    margin-right: 30px;
+    margin-top: 10px;
+}
+
+

@@ -3,7 +3,7 @@ import React from "react";
 import "./styles.css";
 
 /* Component for the Home page */
-class Home extends React.Component {
+class Page404 extends React.Component {
     render() {
         return (
             <div>
@@ -19,4 +19,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default Page404;

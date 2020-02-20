@@ -1,0 +1,46 @@
+/* Styles for the CSC309A React component */
+.course_name_container {
+    margin-top: 20px;
+    width: 180px;
+}
+
+.course_name {
+    text-align: center;
+    font-size: 36px;
+}
+
+.course_main_container {
+    margin-left: 0;
+    margin-right: 0;
+
+}
+
+.chat_room_container {
+    margin-left: 0;
+}
+
+.chat_room {
+    height: 60vh;
+}
+
+.chat_room_message_bar {
+
+}
+
+.resource_button {
+    width: 240px;
+    margin-right: 20px;
+    height: 50px;
+}
+
+.announcement_header {
+    margin-top: 30px;
+    margin-left: 5px;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.announcements {
+    width: 240px;
+    margin-right: 20px;
+}
