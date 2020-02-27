@@ -2,8 +2,8 @@ import React from "react";
 
 import "./styles.css";
 
-import {LoginBox} from "../LoginBox/login_box";
-import {SignupBox} from "../SignupBox/signup_box";
+import {LoginBox} from "../LoginBox/index";
+import {SignupBox} from "../SignupBox/index";
 
 /* Component for the Home page */
 class Home extends React.Component {

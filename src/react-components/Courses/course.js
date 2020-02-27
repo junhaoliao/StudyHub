@@ -3,22 +3,42 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 class Course extends React.Component {
+    LikedButton = "";
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            liked: props.course.liked
+        }
+    }
+
+    toggle_like = event => {
+        // console.log(this.state)
+        this.setState({
+            liked: !this.state.liked
+        });
+        if (this.state.liked) {
+            this.LikedButton = <Button className="mr-auto" variant="danger" onClick={this.toggle_like}>
+                <span role={"img"} aria-label="red-heart">❤</span>
+                Liked</Button>;
+        } else {
+            this.LikedButton = <Button className="mr-auto" variant="secondary" onClick={this.toggle_like}>
+                <span role={"img"} aria-label="white-heart">🤍</span>
+                Like</Button>;
+        }
+    };
 
     render() {
         const {course} = this.props;
 
-
-        let LikedButton;
-
-        if (course.liked) {
-            LikedButton = <Button className="mr-auto" variant="danger">
+        if (this.state.liked) {
+            this.LikedButton = <Button className="mr-auto" variant="danger" onClick={this.toggle_like}>
                 <span role={"img"} aria-label="red-heart">❤</span>
                 Liked</Button>;
         } else {
-            LikedButton = <Button className="mr-auto" variant="secondary">
+            this.LikedButton = <Button className="mr-auto" variant="secondary" onClick={this.toggle_like}>
                 <span role={"img"} aria-label="white-heart">🤍</span>
-                Liked</Button>;
+                Like</Button>;
         }
 
         return (
@@ -29,7 +49,7 @@ class Course extends React.Component {
                         Admin: {course.admin}
                     </Card.Text>
                     <div className="d-flex flex-row mt-auto">
-                        {LikedButton}
+                        {this.LikedButton}
                         <Button className="ml-auto" variant="primary" href={course.name}>
                             <span role={"img"} aria-label="study">📖</span>
                             Enter</Button>

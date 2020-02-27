@@ -12,10 +12,6 @@ import Card from 'react-bootstrap/Card';
 
 /* Component for the Home page */
 class CSC309A extends React.Component {
-    alertClicked() {
-        alert('You clicked the third ListGroupItem');
-    }
-
     render() {
         return (
             <div>
@@ -47,7 +43,7 @@ class CSC309A extends React.Component {
                         </InputGroup>
                     </Container>
                     <div>
-                        <Button className={"resource_button"}>
+                        <Button href={"/CSC309A/resources"} className={"resource_button"}>
                             Resources
                         </Button>
                         <header className={"announcement_header"}>
@@ -62,7 +58,7 @@ class CSC309A extends React.Component {
                                         </Accordion.Toggle>
                                     </Card.Header>
                                     <Accordion.Collapse eventKey="0">
-                                        <Card.Body>Hello! I'm the body</Card.Body>
+                                        <Card.Body>Hello! I'm the first announcement!</Card.Body>
                                     </Accordion.Collapse>
                                 </Card>
                                 <Card>
@@ -72,7 +68,7 @@ class CSC309A extends React.Component {
                                         </Accordion.Toggle>
                                     </Card.Header>
                                     <Accordion.Collapse eventKey="1">
-                                        <Card.Body>Hello! I'm another body</Card.Body>
+                                        <Card.Body>Hello! I'm another announcement!</Card.Body>
                                     </Accordion.Collapse>
                                 </Card>
                             </Accordion>

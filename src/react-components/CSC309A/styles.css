@@ -28,6 +28,7 @@
 }
 
 .resource_button {
+    font-size: 24px;
     width: 240px;
     margin-right: 20px;
     height: 50px;
@@ -43,4 +44,16 @@
 .announcements {
     width: 240px;
     margin-right: 20px;
+}
+
+.resources_header {
+    margin-top: 10px;
+
+}
+
+.resources_header_text {
+    text-align: center;
+    margin-left: 20px;
+    font-size: 32px;
+    display: inline-block;
 }

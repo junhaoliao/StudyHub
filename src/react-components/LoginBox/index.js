@@ -1,6 +1,7 @@
 import React from "react";
 import "./styles.css";
-import Home from "../dash_board/index";
+import {Redirect} from "react-router-dom";
+
 export class LoginBox extends React.Component {
   // hard code for existing user log in information
   username_list = ["Junhao", "Ashley", "Kruzer", "Kevin"];
@@ -114,7 +115,7 @@ export class LoginBox extends React.Component {
         </div>
       );
     } else {
-      return <Home></Home>;
+      return <Redirect to="/dash_board"/>;
     }
   }
 }
