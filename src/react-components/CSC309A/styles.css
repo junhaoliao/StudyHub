@@ -1,56 +1,51 @@
 /* Styles for the CSC309A React component */
-.course_name_container {
+.course_header {
+    margin-left: 1%;
     margin-top: 20px;
-    width: 180px;
-}
-
-.course_name {
-    text-align: center;
+    margin-bottom: 20px;
     font-size: 36px;
 }
 
-.course_main_container {
-    margin-left: 0;
-    margin-right: 0;
-
-}
-
 .chat_room_container {
-    margin-left: 0;
+    margin-left: 1%;
+    width: 75%;
+    float: left;
 }
 
-.chat_room {
-    height: 60vh;
-}
-
-.chat_room_message_bar {
+.chat_room_messages {
+    height: 63vh;
 
 }
 
-.resource_button {
-    font-size: 24px;
-    width: 240px;
-    margin-right: 20px;
-    height: 50px;
+.emoji_selector {
+    float: left;
 }
 
-.announcement_header {
-    margin-top: 30px;
-    margin-left: 5px;
-    font-size: 24px;
-    margin-bottom: 20px;
+.chat_bar {
+    margin-left: 60px;
 }
 
-.announcements {
-    width: 240px;
-    margin-right: 20px;
+.course_secondary_column {
+    margin-left: 80%;
+    margin-right: 3%;
 }
+
+.resources_button {
+    width: 100%;
+    height: 100px;
+}
+
+.resources_button_text {
+    margin-top: 26px;
+    line-height: 20px;
+    font-size: 30px;
+}
+
+.announcements_container {
+    margin-top: 50px;
+}
+
 
 .resources_header_text {
     font-size: 24px;
-}
-
-.resource_file_names {
-    margin-top: 8px;
-    margin-left: 10px;
 }

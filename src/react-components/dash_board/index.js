@@ -5,56 +5,105 @@ import "./styles.css";
 import NavBar from "../NavBar/navbar";
 import Courses from "../Courses/courses";
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button';
+import {Button, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
 
-import add_course from "../../actions/add_course";
 
+const course_list = [
+
+    {name: "CSC309A", admin: "Kevin", info: "the best course offered at UofT", liked: true},
+    {name: "ECE361", admin: "Junhao", info: "the best course offered at UofT", liked: false},
+    {name: "CSC343", admin: "Kruzer", info: "the best course offered at UofT", liked: true},
+    {name: "CSC309B", admin: "Ashley", info: "the best course offered at UofT", liked: false}
+];
 
 /* Component for the Home page */
 class dash_board extends React.Component {
     state = {
+        adding_course: false,
         add_course_name: "",
         add_course_admin: "",
-        course_list: [
-
-            {name: "CSC309A", admin: "Kevin", info: "the best course offered at UofT", liked: true},
-            {name: "ECE361", admin: "Junhao", info: "the best course offered at UofT", liked: false},
-            {name: "CSC343", admin: "Kruzer", info: "the best course offered at UofT", liked: true},
-            {name: "CSC309B", admin: "Ashley", info: "the best course offered at UofT", liked: false}
-        ]
+        terms_confirmed: false
     };
-    handleInputChange = event => {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
 
-        // log(name)
+    handleChange = (e, {name, value}) => this.setState({[name]: value});
 
-        // 'this' is bound to the component in this arrow function.
-        this.setState({
-            [name]: value // [name] sets the object property name to the value of the 'name' variable.
-        });
+    handleSubmit = () => {
+        const {add_course_name, add_course_admin, terms_confirmed} = this.state;
+        if (terms_confirmed) {
+            const newCourse = {};
+            newCourse.name = add_course_name;
+            newCourse.admin = add_course_admin;
+            newCourse.info = "the best course offered at UofT";
+            newCourse.liked = false;
+            course_list.push(newCourse);
+            this.setState({
+                adding_course: false,
+                add_course_name: "",
+                add_course_admin: "",
+                terms_confirmed: false
+            });
+        }
+
+
     };
+
+    course_panel() {
+        const {adding_course} = this.state;
+        if (adding_course) {
+            return (
+                <div className={"add_course_container"}>
+                    <Segment inverted>
+                        <Header as={"h1"}>
+                            Adding a new course...
+                        </Header>
+                        <Form onSubmit={this.handleSubmit} inverted>
+                            <Form.Group widths='equal'>
+                                <Form.Input name="add_course_name" value={this.state.add_course_name}
+                                            onChange={this.handleChange} required fluid label='Course Name'
+                                            placeholder='Course Name'/>
+                                <Form.Input name="add_course_admin" value={this.state.add_course_admin}
+                                            onChange={this.handleChange} required fluid label='Course Admin(temporary)'
+                                            placeholder='Course Admin(temporary)'/>
+                            </Form.Group>
+                            <Form.Checkbox
+                                onChange={() => this.setState((prevState) => ({terms_confirmed: !prevState.terms_confirmed}))}
+                                checked={this.state.terms_confirmed}
+                                required label='I agree to the Terms and Conditions'/>
+                            <Button type='submit'>Submit</Button>
+                        </Form>
+                    </Segment>
+                </div>
+
+            );
+        } else {
+            return (<div className={"courses_container"}>
+                    <Menu secondary>
+                        <Menu.Item
+                            name='DashBoard'
+                            className={"dashboard_header"}
+                        />
+                        <Menu.Item
+                            position={"right"}
+                        >
+                            <Button basic color={"yellow"} onClick={() => this.setState({adding_course: true})}
+                                    className={"add_course_button"}>
+                                <Icon name={"plus large"}/>
+                            </Button>
+                        </Menu.Item>
+                    </Menu>
+                    <Courses
+                        course_list={course_list}
+                    />
+                </div>
+            );
+        }
+    }
 
     render() {
         return (
             <div>
                 <NavBar/>
-                <Container>
-                    <Row className={"flex-row"}>
-                        <header className={"dashboard_header mr-auto"}>
-                            DashBoard
-                        </header>
-                        <Button href={"add_course"} variant="outline-warning" className={"add_course_button ml-auto"}>
-                            +
-                        </Button>
-                    </Row>
-                </Container>
-                <Courses
-                    course_list={this.state.course_list}
-                />
+                {this.course_panel()}
             </div>
         );
     }

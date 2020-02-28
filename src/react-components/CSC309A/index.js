@@ -2,82 +2,154 @@ import React from "react";
 
 import "./styles.css";
 import NavBar from "../NavBar/navbar";
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Accordion from 'react-bootstrap/Accordion';
-import Card from 'react-bootstrap/Card';
+
+import {Accordion, Button, Comment, Form, Header, Icon, Popup, Segment} from "semantic-ui-react";
+import Avatar from 'react-avatar';
+
+const chat_log = [
+    {user: "Kevin", date: "Today at 0:00AM", message: "Welcome to the new class!😀"},
+    {user: "Junhao", date: "Today at 0:00AM", message: "What a nice day!😂"},
+    {user: "Kruzer", date: "Today at 0:00AM", message: "😆Let's come and finish the project tonight!"},
+    {user: "Ashley", date: "Today at 0:00AM", message: "No problem! I will start with the profile.😎"},
+];
+
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+const announcements = [
+    {title: "Announcement 1", content: "I am the first announcement."},
+    {title: "Announcement 2", content: "I am another announcement."},
+];
 
 /* Component for the Home page */
 class CSC309A extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            message_to_send: "",
+            activeIndex: 0
+        }
+    }
+
+    handleChange = (e, {name, value}) => this.setState({[name]: value});
+
+    handleSubmit = () => {
+        const newMessage = {};
+        newMessage.user = "RegularUser";
+
+        const now = new Date();
+
+        newMessage.date = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + " on " +
+            months[now.getMonth()] + '-' + now.getDate();
+
+        newMessage.message = this.state.message_to_send;
+        chat_log.push(newMessage);
+
+        this.setState({message_to_send: ''});
+    };
+
+    handleClick = (e, titleProps) => {
+        const {index} = titleProps;
+        const {activeIndex} = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({activeIndex: newIndex})
+    };
+
+    plot_comment(comment) {
+
+        return (
+            <Comment>
+                <Comment.Avatar src={<Avatar name={comment.user} size="42" round={true}/>}/>
+                <Comment.Content>
+                    <Comment.Author as='a'>{comment.user}</Comment.Author>
+                    <Comment.Metadata>
+                        <div>{comment.date}</div>
+                    </Comment.Metadata>
+                    <Comment.Text>{comment.message}</Comment.Text>
+                </Comment.Content>
+            </Comment>
+        );
+    }
+
+    plot_announcements(announcements) {
+        const {activeIndex} = this.state;
+        let result = [];
+        for (let i = 0; i < announcements.length && i < 3; i++) {
+            result.push(<Accordion.Title
+                active={activeIndex === i}
+                index={i}
+                onClick={this.handleClick}
+            >
+                <Icon name='dropdown'/>
+                {announcements[i].title}
+            </Accordion.Title>);
+            result.push(
+                <Accordion.Content active={activeIndex === i}>
+                    <p>
+                        {announcements[i].content}
+                    </p>
+                </Accordion.Content>
+            );
+        }
+        return result;
+    }
+
     render() {
+        const {message_to_send} = this.state;
         return (
             <div>
                 <NavBar/>
-                <div className={"course_name_container"}>
-                    <header className={"course_name"}>CSC309A</header>
+                <div className={"course_header"}>
+                    <Header as='h1'>
+                        <Icon name='book'/>
+                        <Header.Content> CSC309A</Header.Content>
+                    </Header>
                 </div>
 
-                <div className={"course_main_container d-flex"}>
-                    <Container className={"chat_room_container"}>
-                        <Form>
-                            <Form.Group controlId="exampleForm.ControlInput1">
-                                <Form.Control className={"chat_room"} as={"textarea"}
-                                              defaultValue="Kevin: Welcome to the new class" rows="16"/>
-                            </Form.Group>
-                        </Form>
-                        <InputGroup className={"chat_room_message_bar"}>
-                            <FormControl
-                                placeholder="Type Your Message Here"
-                                aria-label="Recipient's username"
-                                aria-describedby="basic-addon2"
+                <div className={"chat_room_container"}>
+                    <Segment className={"chat_room_messages"}>
+                        <Comment.Group>
+                            {chat_log.map(comment => this.plot_comment(comment))}
+                        </Comment.Group>
+                    </Segment>
+                    <Popup on='click' trigger={<Button className={"emoji_selector"}>😀</Button>} flowing hoverable>
+                        <Button
+                            onClick={() => this.setState({message_to_send: this.state.message_to_send + "😀"})}>😀</Button>
+                        <Button
+                            onClick={() => this.setState({message_to_send: this.state.message_to_send + "😆"})}>😆</Button>
+                        <Button
+                            onClick={() => this.setState({message_to_send: this.state.message_to_send + "😂"})}>😂</Button>
+                        <Button
+                            onClick={() => this.setState({message_to_send: this.state.message_to_send + "😎"})}>😎</Button>
+                        <Button
+                            onClick={() => this.setState({message_to_send: this.state.message_to_send + "👍"})}>👍</Button>
+                        <Button
+                            onClick={() => this.setState({message_to_send: this.state.message_to_send + "🤝"})}>🤝</Button>
+                    </Popup>
+                    <Form onSubmit={this.handleSubmit} className={"chat_bar"}>
+                        <Form.Group>
+                            <Form.Input
+                                width={16}
+                                placeholder='Enter your message here'
+                                name='message_to_send'
+                                value={message_to_send}
+                                onChange={this.handleChange}
                             />
-                            <InputGroup.Append>
-                                <Button variant="outline-secondary">
-                                    <span role={"img"} aria-label="emoji">😀</span>
-                                </Button>
-                                <Button variant="outline-secondary">Send</Button>
-                            </InputGroup.Append>
-                        </InputGroup>
-                    </Container>
-                    <div>
-                        <Button href={"/CSC309A/resources"} className={"resource_button"}>
-                            Resources
-                        </Button>
-                        <header className={"announcement_header"}>
-                            Announcements
-                        </header>
-                        <div className={"announcements"}>
-                            <Accordion defaultActiveKey="0">
-                                <Card>
-                                    <Card.Header>
-                                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                            Announcement 1
-                                        </Accordion.Toggle>
-                                    </Card.Header>
-                                    <Accordion.Collapse eventKey="0">
-                                        <Card.Body>Hello! I'm the first announcement!</Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                                <Card>
-                                    <Card.Header>
-                                        <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                                            Announcement 2
-                                        </Accordion.Toggle>
-                                    </Card.Header>
-                                    <Accordion.Collapse eventKey="1">
-                                        <Card.Body>Hello! I'm another announcement!</Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                            </Accordion>
-                        </div>
-                    </div>
+                            <Form.Button color={"blue"} content='Submit'/>
+                        </Form.Group>
+                    </Form>
                 </div>
-
+                <div className={"course_secondary_column"}>
+                    <Button href="/CSC309A/resources" color={"blue"} className={"resources_button"}>
+                        <div className={"resources_button_text"}>📐 Resources</div>
+                    </Button>
+                    <Accordion className={"announcements_container"} styled>
+                        {this.plot_announcements(announcements)}
+                    </Accordion>
+                </div>
 
             </div>
+
         );
     }
 }

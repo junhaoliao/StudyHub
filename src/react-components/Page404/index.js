@@ -1,5 +1,7 @@
 import React from "react";
 
+import NavBar from "../NavBar/navbar";
+
 import "./styles.css";
 
 /* Component for the Home page */
@@ -7,6 +9,7 @@ class Page404 extends React.Component {
     render() {
         return (
             <div>
+                <NavBar/>
                 <header className={"emoji_404"}>
                     <span role={"img"} aria-label="sad" className={"large_emoji"}>😦</span>
                 </header>

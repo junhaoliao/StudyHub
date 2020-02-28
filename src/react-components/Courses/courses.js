@@ -1,7 +1,6 @@
 import React from "react";
 import {uid} from "react-uid";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
+import {Card} from "semantic-ui-react";
 
 import Course from "./course"
 
@@ -17,18 +16,16 @@ class Courses extends React.Component {
         const {course_list} = this.props;
 
         return (
-            <div>
-                <Container className={"cards_grid"}>
-                    <Row>
-                        {course_list.map(course => (
-                            <Course
-                                key={uid(course)}
-                                course={course}
-                            />
-                        ))}
-                    </Row>
-                </Container>
-            </div>
+
+            <Card.Group itemsPerRow={4}>
+                {course_list.map(course => (
+                    <Course
+                        key={uid(course)}
+                        course={course}
+                    />
+                ))}
+            </Card.Group>
+
         );
     }
 }
