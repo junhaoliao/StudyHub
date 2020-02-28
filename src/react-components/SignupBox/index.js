@@ -1,5 +1,6 @@
 import React from "react";
 import "./styles.css";
+
 export class SignupBox extends React.Component {
   state = {
     username: "",
@@ -48,12 +49,6 @@ export class SignupBox extends React.Component {
   render() {
     return (
       <div>
-        <div class="ui attached message">
-          <h2 class="ui blue center aligned icon header">
-            <i class=" circular users icon"></i>
-            Welcome to StudentHub
-          </h2>
-        </div>
         <form className="ui form attached fluid segment">
           <div className="field">
             <label className="ui blue basic label">Username</label>
@@ -172,10 +167,7 @@ export class SignupBox extends React.Component {
           </div>
         </form>
 
-        <div className="ui bottom attached warning message">
-          <i className="icon help"></i>
-          Already signed up? <a href="login">Login here</a> instead.
-        </div>
+
       </div>
     );
   }

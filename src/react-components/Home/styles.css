@@ -1,1 +1,23 @@
 /* Styles for the Home React component */
+.sign_up_box_container {
+    width: 500px;
+    margin-top: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home_page_container {
+    background-image: url("/background.jpg");
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+}
+
+.signup_prompt {
+    position: absolute;
+    bottom: 0px;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    background-color: antiquewhite;
+}
