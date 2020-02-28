@@ -1,0 +1,19 @@
+.bill_board_header {
+    margin-top: 20px;
+    width: 180px;
+}
+
+.bill_board {
+    text-align: center;
+    font-size: 36px;
+}
+
+.input_outline {
+    margin: 5px;
+    margin-left: 10px;
+}
+
+.container_design {
+    margin-top: 30px;
+    margin: 10px;
+}
