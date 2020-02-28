@@ -50,7 +50,7 @@ export class SignupBox extends React.Component {
       <div>
         <div class="ui attached message">
           <h2 class="ui blue center aligned icon header">
-            <i class="circular users icon"></i>
+            <i class=" circular users icon"></i>
             Welcome to StudentHub
           </h2>
         </div>
@@ -85,7 +85,6 @@ export class SignupBox extends React.Component {
               <label className="ui blue basic label">GPA</label>
               <div className="ui input focus">
                 <input
-                  className="gpa_input"
                   name="gpa"
                   type="text"
                   placeholder="GPA"
@@ -101,6 +100,7 @@ export class SignupBox extends React.Component {
               <label className="ui blue basic label">Level of Education</label>
               <div>
                 <select
+                  className="ui dropdown"
                   name="education"
                   value={this.state.education}
                   onChange={this.input_handler}
@@ -120,6 +120,7 @@ export class SignupBox extends React.Component {
               <label className="ui blue basic label">Field of Study</label>
               <div>
                 <select
+                  className="ui dropdown"
                   name="discipline"
                   value={this.state.discipline}
                   onChange={this.input_handler}
@@ -173,7 +174,7 @@ export class SignupBox extends React.Component {
 
         <div className="ui bottom attached warning message">
           <i className="icon help"></i>
-          Already signed up? <a href="#">Login here</a> instead.
+          Already signed up? <a href="login">Login here</a> instead.
         </div>
       </div>
     );
