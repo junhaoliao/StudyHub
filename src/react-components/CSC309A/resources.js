@@ -74,7 +74,7 @@ class CSC309A_resources extends React.Component {
     plot_resource_icon(resource) {
         return (
             <Card>
-                <Image src='/*' wrapped ui={false}/>
+                <Image size="medium" src={"/file_icons/" + resource.type + ".svg"}/>
                 <Card.Content>
                     <Card.Header>{resource.name}</Card.Header>
                     <Card.Meta>
