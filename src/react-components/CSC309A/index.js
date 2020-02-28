@@ -30,6 +30,10 @@ class CSC309A extends React.Component {
         }
     }
 
+    componentDidMount() {
+        document.title = "CSC309A";
+    }
+
     handleChange = (e, {name, value}) => this.setState({[name]: value});
 
     handleSubmit = () => {

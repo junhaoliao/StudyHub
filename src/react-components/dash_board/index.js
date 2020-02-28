@@ -47,6 +47,10 @@ class dash_board extends React.Component {
 
     };
 
+    componentDidMount() {
+        document.title = 'Dash Board';
+    }
+
     course_panel() {
         const {adding_course} = this.state;
         if (adding_course) {

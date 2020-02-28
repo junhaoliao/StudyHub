@@ -48,6 +48,10 @@ class CSC309A_resources extends React.Component {
 
     }
 
+    componentDidMount() {
+        document.title = "CSC309A Resources";
+    }
+
     plot_resource_list(resource) {
         return (
             <Table.Row>
