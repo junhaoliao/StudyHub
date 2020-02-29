@@ -147,11 +147,17 @@ class CSC309A extends React.Component {
     return (
       <div>
         <NavBar />
-        <ProfileView className={"inline"}></ProfileView>
-        <div className={"course_header"}>
-          <Header as="h1">
-            <Header.Content> CSC309A</Header.Content>
-          </Header>
+        <div className="ui fifteen column grid">
+          <div className="column">
+            <ProfileView></ProfileView>
+          </div>
+          <div className="column">
+            <div className={"course_header"}>
+              <Header as="h1">
+                <Header.Content> CSC309A</Header.Content>
+              </Header>
+            </div>
+          </div>
         </div>
 
         <div className={"chat_room_container"}>

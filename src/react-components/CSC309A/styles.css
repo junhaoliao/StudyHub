@@ -1,7 +1,9 @@
 /* Styles for the CSC309A React component */
 .course_header {
+  margin-left: 1%;
+  margin-top: 20px;
+  margin-bottom: 20px;
   font-size: 36px;
-  display: inline;
 }
 
 .chat_room_container {
@@ -47,5 +49,5 @@
 }
 
 .inline {
-  display: inline;
+  float: left;
 }

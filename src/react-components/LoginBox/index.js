@@ -117,7 +117,14 @@ export class LoginBox extends React.Component {
   render() {
     if (this.state.login_regular) {
       return <Redirect to="/dash_board" />;
-    } else if (!this.state.login_regular && this.state.finish_typing) {
+    }
+    if (this.state.login_admin) {
+      return <Redirect to="/adash_board" />;
+    } else if (
+      !this.state.login_regular &&
+      !this.state.login_admin &&
+      this.state.finish_typing
+    ) {
       return (
         /*The overall login box*/
 

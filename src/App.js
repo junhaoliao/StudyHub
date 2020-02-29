@@ -10,11 +10,13 @@ import CSC309A from "./react-components/CSC309A";
 import CSC309A_Resources from "./react-components/CSC309A/resources";
 import CSC309A_Resources_someVideo from "./react-components/CSC309A/someVideo";
 import Page404 from "./react-components/Page404";
-import hub_Billboard from "./react-components/bill_board/bill_board";
+import { RegularBB } from "./react-components/bill_board/regular_billboard";
+import { AdminBB } from "./react-components/bill_board/admin_billboard";
 import { LoginBox } from "./react-components/LoginBox";
 import { AdminDashboard } from "./react-components/admin_dashboard";
 import { Profile } from "./react-components/Profile";
 import { ProfileView } from "./react-components/ProfileView";
+
 //import 'semantic-ui-css/semantic.min.css'
 
 class App extends React.Component {
@@ -38,11 +40,13 @@ class App extends React.Component {
               exact
               component={CSC309A_Resources_someVideo}
             />
-            <Route path="/bill_board" exact component={hub_Billboard} />
+            <Route path="/bill_board" exact component={RegularBB} />
+            <Route path="/abill_board" exact component={AdminBB} />
             <Route path="/login" exact component={LoginBox} />
             <Route path="/adash_board" exact component={AdminDashboard} />
             <Route path="/profile" exact component={Profile} />
             <Route path="/profileview" exact component={ProfileView} />
+
             <Route path="*" component={Page404} />
           </Switch>
         </BrowserRouter>

@@ -10,7 +10,7 @@ export class AdminNavBar extends React.Component {
           Admin
         </Menu.Item>
         <Menu.Item name="User" href={"/adash_board"} color={"blue"} />
-        <Menu.Item name="BillBoard" color={"yellow"} />
+        <Menu.Item name="BillBoard" href="/abill_board" color={"yellow"} />
       </Menu>
     );
   }
