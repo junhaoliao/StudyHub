@@ -4,6 +4,7 @@ import "./styles.css";
 
 import NavBar from "../NavBar/navbar";
 import Courses from "../Courses/courses";
+import ToMarker from "../ToMarker/ToMarker";
 
 import {Button, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
 
@@ -98,6 +99,9 @@ class dash_board extends React.Component {
                     <Courses
                         course_list={course_list}
                     />
+                    <ToMarker header={"To Edward"}
+                              content={"Since everything will be hard-coded, we only made CSC309A available. " +
+                              "Anyways feel free to add classes or toggle the like buttons."}/>
                 </div>
             );
         }

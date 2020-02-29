@@ -4,6 +4,7 @@ import "./styles.css";
 import NavBar from "../NavBar/navbar";
 import {Button, Card, Grid, Icon, Image, Menu, Segment, Table} from 'semantic-ui-react'
 import {Link} from "react-router-dom";
+import ToMarker from "../ToMarker/ToMarker";
 
 
 const course_resources = [
@@ -193,6 +194,9 @@ class CSC309A_resources extends React.Component {
                     </Menu.Item>
                 </Menu>
                 {this.display_items_element}
+                <ToMarker header={"To Edward"}
+                          content={"You can switch to Icon view on this page, and video integration" +
+                          "(YouTube) is working. We will add file uploading feature in the next phase (as soon as we learn about databases)"}/>
             </div>
         );
     }
