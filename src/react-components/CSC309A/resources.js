@@ -26,9 +26,9 @@ const course_resources = [
         faved: true
     },
     {
-        name: "I don't really have those files.pdf",
-        link: "/*",
-        type: "pdf",
+        name: "I don't really have those files(YouTube)",
+        link: "noFile",
+        type: "mp4",
         size: "0 KB",
         date: "February 28, 2020",
         description: "I am a description",
