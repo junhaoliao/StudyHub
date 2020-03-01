@@ -17,6 +17,11 @@ import {AdminDashboard} from "./react-components/admin_dashboard";
 import {Profile} from "./react-components/Profile";
 import {ProfileView} from "./react-components/ProfileView";
 
+import Ranking from "./react-components/ranking";
+
+
+
+
 //import 'semantic-ui-css/semantic.min.css'
 
 class App extends React.Component {
@@ -46,7 +51,7 @@ class App extends React.Component {
                         <Route path="/adash_board" exact component={AdminDashboard}/>
                         <Route path="/profile" exact component={Profile}/>
                         <Route path="/profileview" exact component={ProfileView}/>
-
+                        <Route path="/ranking" exact component={Ranking}/>
                         <Route path="*" component={Page404}/>
                     </Switch>
                 </BrowserRouter>
