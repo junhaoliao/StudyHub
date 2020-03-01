@@ -1,4 +1,13 @@
-.centre {
-    text-align: center;
-    margin-top: 20vh;
+
+
+.courses_container {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+
+dashboard_header {
+    position: relative;
+    left: -4vh;
+    font-size: 50px;
 }
