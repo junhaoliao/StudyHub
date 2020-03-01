@@ -1,13 +1,25 @@
+/* Styles for the Ranking React component */
 
 
-.courses_container {
+.ranking_header {
+    position: relative;
+    left: -4vh;
+    font-size: 50px;
+}
+
+.add_item_button {
+    height: 60px;
+    width: 60px;
+}
+
+.items_container {
     margin-left: 5%;
     margin-right: 5%;
 }
 
-
-dashboard_header {
-    position: relative;
-    left: -4vh;
-    font-size: 50px;
+.add_item_container {
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px
 }

@@ -1,20 +1,20 @@
-
-
 import React from "react";
+import "./styles.css";
+
 
 import NavBar from "../NavBar/navbar";
 
-import "./styles.css";
-import {Button, Icon, Menu} from "semantic-ui-react";
-import Courses from "../Courses/courses";
+import {Button, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
+import Items from "../item/items";
 
 
-const course_list = [
 
-    {name: "CSC309A", admin: "Kevin", info: "1234 people liked this course", liked: 1234},
-    {name: "ECE361", admin: "Junhao", info: "123 people liked this course", liked: 123},
-    {name: "CSC343", admin: "Kruzer", info: "12 people liked this course", liked: 12},
-    {name: "CSC309B", admin: "Ashley", info: "1 people liked this course", liked: 1},
+const item_list = [
+
+    {name: "CSC309A", admin: "Kevin", info: "1234 people liked this course", count: 1234},
+    {name: "ECE361", admin: "Junhao", info: "123 people liked this course", count: 123},
+    {name: "CSC343", admin: "Kruzer", info: "12 people liked this course", count: 12},
+    {name: "CSC309B", admin: "Ashley", info: "1 people liked this course", count: 1}
 ];
 
 
@@ -23,32 +23,50 @@ class Ranking extends React.Component {
 
 
 
+item_panel() {
+
+    return (<div className={"items_container"}>
+            <Menu secondary>
+                <Menu.Item
+                    name='Ranking'
+                    className={"ranking_header"}
+                />
+                <Menu.Item
+                    position={"right"}
+                >
+                    <Button size="small" color="green" position={"right"}>
+                        <Icon name="reload" />
+                        Reload
+                    </Button>
+                </Menu.Item>
+            </Menu>
+            <Items
+                item_list={item_list}
+            />
+        </div>
+    );
+
+}
+
     render() {
         return (
             <div>
                 <NavBar/>
-                <Button size="small" color="green">
-                    <Icon name="renew" />
-                    Renew
-                </Button>
-
-                <div className={"courses_container"}>
-                    <Menu secondary>
-                        <Menu.Item
-                            name='Rank'
-                            className={"dashboard_header"}
-                        />
-
-                    </Menu>
-                    <Courses
-                        course_list={course_list}
-                    />
-                </div>
-
-
+                {this.item_panel()}
             </div>
         );
     }
+
+
 }
 
 export default Ranking;
+
+
+
+
+
+
+
+
+
