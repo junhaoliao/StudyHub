@@ -4,55 +4,92 @@ import "./styles.css";
 
 import NavBar from "../NavBar/navbar";
 
-import {Button, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
-import Items from "../item/items";
+import {Button, Form, Header, Icon, Menu, Segment,Table,Rating} from "semantic-ui-react";
 
-
-
-const item_list = [
-
-    {name: "CSC309A", admin: "Kevin", info: "1234 people liked this course", count: 1234},
-    {name: "ECE361", admin: "Junhao", info: "123 people liked this course", count: 123},
-    {name: "CSC343", admin: "Kruzer", info: "12 people liked this course", count: 12},
-    {name: "CSC309B", admin: "Ashley", info: "1 people liked this course", count: 1}
-];
 
 
 /* Component for the Ranking page */
 class Ranking extends React.Component {
 
-
-
-item_panel() {
-
-    return (<div className={"items_container"}>
-            <Menu secondary>
-                <Menu.Item
-                    name='Ranking'
-                    className={"ranking_header"}
-                />
-                <Menu.Item
-                    position={"right"}
-                >
-                    <Button size="small" color="green" position={"right"}>
-                        <Icon name="reload" />
-                        Reload
-                    </Button>
-                </Menu.Item>
-            </Menu>
-            <Items
-                item_list={item_list}
-            />
-        </div>
-    );
-
-}
-
     render() {
         return (
             <div>
                 <NavBar/>
-                {this.item_panel()}
+
+                <div className={"courses_container"}>
+
+                    <Menu secondary>
+                <Menu.Item
+                    name='Ranking'
+                    className={"ranking_header"}
+                />
+                <Button size="small" color="green" position={"right"}>
+                    <Icon name="reload" />
+                    Reload
+                </Button>
+                <Table celled padded>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell singleLine>Course Name</Table.HeaderCell>
+                            <Table.HeaderCell>Admin</Table.HeaderCell>
+                            <Table.HeaderCell>Likes</Table.HeaderCell>
+                            <Table.HeaderCell>His/Her course you may like</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+
+                    <Table.Body>
+                        <Table.Row>
+                            <Table.Cell>
+                                <Header as='h2' textAlign='center'>
+                                    CSC309A
+                                </Header>
+                            </Table.Cell>
+                            <Table.Cell singleLine>Kevin</Table.Cell>
+                            <Table.Cell>
+                                ❤️ 1234
+                            </Table.Cell>
+                            <Table.Cell textAlign='right'>
+                                NULL
+                            </Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell>
+                                <Header as='h2' textAlign='center'>
+                                    ECE361
+                                </Header>
+                            </Table.Cell>
+                            <Table.Cell singleLine>Junhao</Table.Cell>
+                            <Table.Cell>
+                                ❤️ 123
+                            </Table.Cell>
+                            <Table.Cell textAlign='right'>
+                               NULL
+                            </Table.Cell>
+
+                        </Table.Row>
+
+                        <Table.Row>
+                            <Table.Cell>
+                                <Header as='h2' textAlign='center'>
+                                    CSC343
+                                </Header>
+                            </Table.Cell>
+                            <Table.Cell singleLine>Kruzer</Table.Cell>
+                            <Table.Cell>
+                                ❤️ 12
+                            </Table.Cell>
+                            <Table.Cell textAlign='right'>
+                                NULL
+                            </Table.Cell>
+                        </Table.Row>
+
+
+                    </Table.Body>
+                </Table>
+                    </Menu>
+
+                </div>
+
             </div>
         );
     }
