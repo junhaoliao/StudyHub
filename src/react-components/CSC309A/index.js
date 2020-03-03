@@ -4,10 +4,10 @@ import "./styles.css";
 import NavBar from "../NavBar/navbar";
 
 import {Accordion, Button, Comment, Form, Grid, Header, Icon, Popup, Segment} from "semantic-ui-react";
-import Avatar from "react-avatar";
 
 import {ProfileView} from "../ProfileView";
 import ToMarker from "../ToMarker/ToMarker";
+import {uid} from "react-uid";
 
 const chat_log = [
     {
@@ -97,9 +97,9 @@ class CSC309A extends React.Component {
 
     plot_comment(comment) {
         return (
-            <Comment>
+            <Comment key={uid(comment)}>
                 <Comment.Avatar
-                    src={<Avatar name={comment.user} size="42" round={true}/>}
+                    src=<Avatar name={comment.user} size="42" round={true}/>
                 />
                 <Comment.Content>
                     <Comment.Author as="a">{comment.user}</Comment.Author>
@@ -117,17 +117,17 @@ class CSC309A extends React.Component {
         let result = [];
         for (let i = 0; i < announcements.length && i < 3; i++) {
             result.push(
-                <Accordion.Title
-                    active={activeIndex === i}
-                    index={i}
-                    onClick={this.handleClick}
+                <Accordion.Title key={uid(announcements[i]) + "_title"}
+                                 active={activeIndex === i}
+                                 index={i}
+                                 onClick={this.handleClick}
                 >
                     <Icon name="dropdown"/>
                     {announcements[i].title}
                 </Accordion.Title>
             );
             result.push(
-                <Accordion.Content active={activeIndex === i}>
+                <Accordion.Content active={activeIndex === i} key={uid(announcements[i]) + "_content"}>
                     <p>{announcements[i].content}</p>
                 </Accordion.Content>
             );

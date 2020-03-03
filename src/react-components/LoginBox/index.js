@@ -29,6 +29,8 @@ export class LoginBox extends React.Component {
         event.preventDefault();
         if (this.state.username === "") {
             console.log("Username cannot be empty");
+            document.querySelector(".username_input").focus();
+            return;
         }
         if (this.state.password === "") {
             console.log("Password cannot be empty");
@@ -118,6 +120,7 @@ export class LoginBox extends React.Component {
             );
         }
     };
+
     render() {
         if (this.state.login_regular) {
             return <Redirect to="/dash_board"/>;

@@ -5,6 +5,7 @@ import NavBar from "../NavBar/navbar";
 import {Button, Card, Grid, Icon, Image, Menu, Segment, Table} from 'semantic-ui-react'
 import {Link} from "react-router-dom";
 import ToMarker from "../ToMarker/ToMarker";
+import {uid} from "react-uid";
 
 
 const course_resources = [
@@ -55,7 +56,7 @@ class CSC309A_resources extends React.Component {
 
     plot_resource_list(resource) {
         return (
-            <Table.Row>
+            <Table.Row key={uid(resource)}>
                 <Table.Cell>
                     <Grid>
                         <Grid.Column width={1}>
@@ -74,7 +75,7 @@ class CSC309A_resources extends React.Component {
 
     plot_resource_icon(resource) {
         return (
-            <Card>
+            <Card key={uid(resource)}>
                 <Image size="medium" src={"/file_icons/" + resource.type + ".svg"}/>
                 <Card.Content>
                     <Card.Header>{resource.name}</Card.Header>

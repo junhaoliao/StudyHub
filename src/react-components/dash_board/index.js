@@ -11,10 +11,10 @@ import {Button, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
 
 const course_list = [
 
-    {name: "CSC309A", admin: "Kevin", info: "the best course offered at UofT", liked: true},
-    {name: "ECE361", admin: "Junhao", info: "the best course offered at UofT", liked: false},
-    {name: "CSC343", admin: "Kruzer", info: "the best course offered at UofT", liked: true},
-    {name: "CSC309B", admin: "Ashley", info: "the best course offered at UofT", liked: false}
+    {name: "CSC309A", admin: "Kevin", info: "The best course offered at UofT", liked: true},
+    {name: "ECE361", admin: "Junhao", info: "The best course offered at UofT", liked: false},
+    {name: "CSC343", admin: "Kruzer", info: "The best course offered at UofT", liked: true},
+    {name: "CSC309B", admin: "Ashley", info: "The best course offered at UofT", liked: false}
 ];
 
 /* Component for the Home page */
@@ -34,7 +34,7 @@ class dash_board extends React.Component {
             const newCourse = {};
             newCourse.name = add_course_name;
             newCourse.admin = add_course_admin;
-            newCourse.info = "the best course offered at UofT";
+            newCourse.info = "The best course offered at UofT";
             newCourse.liked = false;
             course_list.push(newCourse);
             this.setState({
@@ -92,7 +92,7 @@ class dash_board extends React.Component {
                         >
                             <Button basic color={"yellow"} onClick={() => this.setState({adding_course: true})}
                                     className={"add_course_button"}>
-                                <Icon name={"plus large"}/>
+                                <Icon size="large" name={"plus"}/>
                             </Button>
                         </Menu.Item>
                     </Menu>
