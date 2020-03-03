@@ -1,28 +1,23 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+We used react-semantic-ui library in this project
 
-## StudyHub
+# StudyHub
 
-In the project directory, you can run:
+Welcome to StudyHub, here are some main features of our project:
 
-### `npm start`
+## `Login/Signup Page`
+There is a button at the bottom of the home page to switch between Login and Signup page.
+### `Login Page`
+We have two types of user: admin and regular users.
+The username and password for these two types of users are as follows:
+- regular user:<br />
+username: user <br />
+password: user <br />
+- admin user: <br />
+username: admin <br />
+password: admin <br />
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### `Signup Page`
+Currently the signup feature is unavaible since we need to store the user data.<br>
+However, all fields required for signup have been displayed in the signup box.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
