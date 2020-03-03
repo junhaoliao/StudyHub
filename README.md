@@ -47,9 +47,20 @@ There are several features inside each course page:
 4. Resources: regualr users can click on Resource button to access course resources. Both icon and list view are avaiable. 
 
 ### `BillBoard`
+BillBoard functions like website chat room, where every regular user can communicate with each other.
 
+### `Ranking`
+Ranking page has top three courses that has most likes. Currently all courses are hardcoded.
 
+### `Profile`
+Profile page has all user inforamtion. 
 
+## `Admin User`
+Admin page has two views only. An admin user has only one obligation - remove. <br />
+An admin user can remove any regular user. <br />
+An admin user can remove any content inside a course page. <br />
+An admin user can remove any content inside a billboard. <br />
+All these actions are done due to a regular user might upload irrelavent resources to the website. 
 
 
 
