@@ -5,6 +5,8 @@ import NavBar from "../NavBar/navbar";
 
 import {Accordion, Button, Comment, Form, Grid, Header, Icon, Popup, Segment} from "semantic-ui-react";
 
+import Avatar from "react-avatar";
+
 import {ProfileView} from "../ProfileView";
 import ToMarker from "../ToMarker/ToMarker";
 import {uid} from "react-uid";
@@ -99,7 +101,7 @@ class CSC309A extends React.Component {
         return (
             <Comment key={uid(comment)}>
                 <Comment.Avatar
-                    src=<Avatar name={comment.user} size="42" round={true}/>
+                    src={<Avatar name={comment.user} size="42" round={true}/>}
                 />
                 <Comment.Content>
                     <Comment.Author as="a">{comment.user}</Comment.Author>
