@@ -4,6 +4,7 @@ import "./styles.css";
 
 import {SignupBox} from "../SignupBox";
 import {LoginBox} from "../LoginBox";
+import {Button} from "semantic-ui-react";
 
 /* Component for the Home page */
 class Home extends React.Component {
@@ -30,27 +31,29 @@ class Home extends React.Component {
                     <div className="ui signup_prompt  warning ">
                         <i className="icon help"></i>
                         Already signed up?{" "}
-                        <button
-                            className="ui primary basic button"
+                        <Button
+                            basic
+                            color={"blue"}
+                            size={"small"}
                             onClick={() => this.setState({sign_up: false})}
                         >
                             Login HERE
-                        </button>
+                        </Button>
                         {" "}
                         instead.
                     </div>
                 ) : (
                     <div className="ui signup_prompt  warning ">
                         <i className="icon help"></i>
-                        Wanna sign up?{" "}
-                        <button
-                            className="ui primary basic button"
+                        Don't have an account?{" "}
+                        <Button
+                            basic
+                            color={"blue"}
+                            size={"small"}
                             onClick={() => this.setState({sign_up: true})}
                         >
                             Sign Up HERE
-                        </button>
-                        {" "}
-                        instead.
+                        </Button>
                     </div>
                 )}
             </div>

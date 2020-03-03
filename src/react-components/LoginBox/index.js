@@ -1,6 +1,7 @@
 import React from "react";
 import "./styles.css";
 import {Redirect} from "react-router-dom";
+import {Form, Segment} from "semantic-ui-react";
 
 export class LoginBox extends React.Component {
     // hard code for existing user log in information
@@ -26,22 +27,26 @@ export class LoginBox extends React.Component {
     submit_handler = event => {
         console.log(this.state);
         event.preventDefault();
+        if (this.state.username === "") {
+            console.log("Username cannot be empty");
+        }
+        if (this.state.password === "") {
+            console.log("Password cannot be empty");
+            document.querySelector(".password_input").focus();
+            return;
+        }
         let correct_regular = false;
         let correct_admin = false;
         this.setState(
             {
-                finish_typing: true
+                finish_typing: true,
+                password: ""
             },
             () => {
                 console.log("finish typing: " + this.state.finish_typing);
             }
         );
-        if (this.state.username == "") {
-            console.log("Username cannot be empty");
-        }
-        if (this.state.password == "") {
-            console.log("Password cannot be empty");
-        }
+
 
         // for (
         //   let user_index = 0;
@@ -113,110 +118,68 @@ export class LoginBox extends React.Component {
             );
         }
     };
-
     render() {
         if (this.state.login_regular) {
             return <Redirect to="/dash_board"/>;
         }
         if (this.state.login_admin) {
             return <Redirect to="/adash_board"/>;
-        } else if (
-            !this.state.login_regular &&
-            !this.state.login_admin &&
-            this.state.finish_typing
-        ) {
-            return (
-                /*The overall login box*/
-
-                <div className="ui placeholder segment">
-                    <div className="field">
-                        <label className="ui blue basic label">Username</label>
-                        <div className="ui left icon input">
-                            <input
-                                className="username_input"
-                                name="username"
-                                type="text"
-                                placeholder="Username"
-                                value={this.state.username}
-                                onChange={this.input_handler}
-                            ></input>
-
-                            <i className="blue user icon"></i>
-                        </div>
-                    </div>
-                    <div className="field">
-                        <label className="ui blue basic label">Password</label>
-                        <div className="ui left icon input">
-                            <input
-                                className="password_input"
-                                name="password"
-                                type="password"
-                                placeholder="Password"
-                                value={this.state.password}
-                                onChange={this.input_handler}
-                            ></input>
-                            <i className="blue lock icon"></i>
-                        </div>
-                    </div>
-                    <div className="field">
-                        <button
-                            className="ui primary button"
-                            type="submit"
-                            onClick={this.submit_handler}
-                        >
-                            Log In
-                        </button>
-                    </div>
-                    <div className="ui negative message">
-                        <div className="header">Invalid Username or Password</div>
-                        <p>Please Renter Username and Password</p>
-                    </div>
-                </div>
-            );
         } else {
             return (
                 /*The overall login box*/
+                <Segment>
+                    <Form>
+                        <div className="field">
+                            <label className="ui blue basic label">Username</label>
+                            <div className="ui left icon input">
+                                <input
+                                    autoFocus
+                                    className="username_input"
+                                    name="username"
+                                    type="text"
+                                    placeholder="Username"
+                                    value={this.state.username}
+                                    onChange={this.input_handler}
+                                />
 
-                <div className="ui placeholder segment">
-                    <div className="field">
-                        <label className="ui blue basic label">Username</label>
-                        <div className="ui left icon input">
-                            <input
-                                className="username_input"
-                                name="username"
-                                type="text"
-                                placeholder="Username"
-                                value={this.state.username}
-                                onChange={this.input_handler}
-                            ></input>
+                                <i className="blue user icon"/>
+                            </div>
+                        </div>
+                        <div className="field">
+                            <label className="ui blue basic label">Password</label>
+                            <div className="ui left icon input">
+                                <input
+                                    className="password_input"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Password"
+                                    value={this.state.password}
+                                    onChange={this.input_handler}
+                                />
+                                <i className="blue lock icon"/>
+                            </div>
+                        </div>
+                        <div className="field">
+                            <button
+                                className="ui primary button"
+                                type="submit"
+                                onClick={this.submit_handler}
+                            >
+                                Log In
+                            </button>
+                        </div>
+                        {(
+                            !this.state.login_regular &&
+                            !this.state.login_admin &&
+                            this.state.finish_typing
+                        ) ?
+                            <div className="ui negative message">
+                                <div className="header">Invalid Username or Password</div>
+                                <p>Please Renter Username and Password</p>
+                            </div> : <div/>}
+                    </Form>
+                </Segment>
 
-                            <i className="blue user icon"></i>
-                        </div>
-                    </div>
-                    <div className="field">
-                        <label className="ui blue basic label">Password</label>
-                        <div className="ui left icon input">
-                            <input
-                                className="password_input"
-                                name="password"
-                                type="password"
-                                placeholder="Password"
-                                value={this.state.password}
-                                onChange={this.input_handler}
-                            ></input>
-                            <i className="blue lock icon"></i>
-                        </div>
-                    </div>
-                    <div className="field">
-                        <button
-                            className="ui primary button"
-                            type="submit"
-                            onClick={this.submit_handler}
-                        >
-                            Log In
-                        </button>
-                    </div>
-                </div>
             );
         }
     }
