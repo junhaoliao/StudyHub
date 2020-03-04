@@ -197,7 +197,8 @@ class CSC309A_resources extends React.Component {
                 {this.display_items_element}
                 <ToMarker header={"To Edward"}
                           content={"You can switch to Icon view on this page, and video integration" +
-                          "(YouTube) is working. We will add file uploading feature in the next phase (as soon as we learn about databases)"}/>
+                          "(YouTube) is working. We will add file uploading feature in the next phase (as soon as we learn about databases). " +
+                          "Pagination is shown but not reflecting the actual count of files."}/>
             </div>
         );
     }

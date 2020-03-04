@@ -14,7 +14,7 @@
 }
 
 .signup_prompt {
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     padding: 10px;
     width: 100%;
