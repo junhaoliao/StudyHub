@@ -11,11 +11,11 @@ app.use(bodyParser.json());
 // building database
 const { ObjectID } = require("mongodb");
 const { mongoose } = require("./db/mongoose");
-const { Regularuser } = require("./models/RegularUser");
+const { RegularUser } = require("./models/RegularUser");
 
-console.log("hello");
+console.log("Welcome to server.js");
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });
