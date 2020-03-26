@@ -172,7 +172,7 @@ export class LoginBox extends React.Component {
             <button
               className="ui primary button"
               type="submit"
-              onClick={() => loginSubmit(this, App)}
+              onClick={() => loginSubmit(this)}
             >
               Log In
             </button>

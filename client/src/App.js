@@ -65,6 +65,9 @@ class App extends React.Component {
             <Route path="*" component={Page404} />
         */}
             <Route path="/dash_board" exact component={dash_board} />
+            <Route path="/home" exact component={Home} />
+
+            {/*
             <Route
               exact
               path={
@@ -72,11 +75,11 @@ class App extends React.Component {
                   "/",
                   "/home",
                   "/dash_board"
-                ] /* any of these URLs are accepted. */
+                ] 
               }
               render={({ history }) => (
                 <div className="app">
-                  {/* Different componenets rendered depending on if someone is logged in. */}
+            
                   {!currentUser ? (
                     <Home history={history} app={this} />
                   ) : (
@@ -86,6 +89,7 @@ class App extends React.Component {
                 </div>
               )}
             />
+                */}
           </Switch>
         </BrowserRouter>
       </div>

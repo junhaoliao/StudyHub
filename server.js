@@ -54,6 +54,45 @@ app.post("/RegularUser/login", (req, res) => {
     });
 });
 
+app.post("/RegularUser/signup", (req, res) => {
+  const username = req.body.username;
+
+  console.log("Create a new user");
+  console.log("username: " + username);
+
+  RegularUser.findOne({ username: username })
+    .then(result => {
+      if (!result) {
+        const new_RegularUser = new RegularUser({
+          username: req.body.username,
+          password: req.body.password,
+          GPA: req.body.GPA,
+          gender: req.body.gender,
+          levelOfEducation: req.body.levelOfEducation,
+          fieldOfStudy: req.body.fieldOfStudy,
+          courseTeaching: [],
+          courseTaking: []
+        });
+        new_RegularUser.save().then(
+          user => {
+            req.session.username = user.username;
+            res.send({ currentUser: user.username });
+            //res.send(result);
+          },
+          error => {
+            res.status(400).send(error);
+          }
+        );
+      } else {
+        console.log("Username already exists");
+        res.status(400).send();
+      }
+    })
+    .catch(error => {
+      res.status(400).send();
+    });
+});
+
 // A route to logout a user
 app.get("/RegularUser/logout", (req, res) => {
   // Remove the session
@@ -74,6 +113,8 @@ app.get("/RegularUser/check-session", (req, res) => {
     res.status(401).send();
   }
 });
+
+// API rountes start here
 
 app.get("/RegularUser/username/password", (req, res) => {
   console.log("Access User");

@@ -1,5 +1,7 @@
 // Functions to help with user actions.
 
+import { SignupBox } from "../react-components/SignupBox";
+
 // A function to check if a user is logged in on the session cookie
 export const readCookie = app => {
   const url = "/RegularUser/check-session";
@@ -56,4 +58,68 @@ export const loginSubmit = loginBox => {
     .catch(error => {
       console.log(error);
     });
+};
+
+export const updateSignupForm = (SignupBox, field) => {
+  const value = field.value;
+  const name = field.name;
+  SignupBox.setState({
+    [name]: value
+  });
+};
+
+export const signupSubmit = signupBox => {
+  let correct = true;
+  if (signupBox.state.username == "") {
+    console.log("Username cannot be empty");
+    correct = false;
+  }
+  if (signupBox.state.levelOfEducation == "") {
+    console.log("Level of Education cannot be empty");
+    correct = false;
+  }
+  if (signupBox.state.fieldOfStudy == "") {
+    console.log("Field of Study cannot be empty");
+    correct = false;
+  }
+  if (
+    signupBox.state.password == "" ||
+    signupBox.state.confirm_password == ""
+  ) {
+    console.log("Password cannot be empty");
+    correct = false;
+  }
+  if (signupBox.state.password != signupBox.state.confirm_password) {
+    console.log("Password does NOT match");
+    correct = false;
+  }
+  if (correct) {
+    console.log("sign up for new user");
+    const request = new Request("/RegularUser/signup", {
+      method: "post",
+      body: JSON.stringify(signupBox.state),
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json"
+      }
+    });
+    // Send the request with fetch()
+    console.log("sending request");
+    fetch(request)
+      .then(res => {
+        if (res.status === 200) {
+          console.log("return json");
+          return res.json();
+        }
+      })
+      .then(json => {
+        console.log(json);
+        if (json.currentUser !== undefined) {
+          signupBox.setState({ signin_regular: true });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 };
