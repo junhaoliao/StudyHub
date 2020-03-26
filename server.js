@@ -8,6 +8,10 @@ const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
+// express-session for managing user sessions
+const session = require("express-session");
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // building database
 const { ObjectID } = require("mongodb");
 const { mongoose } = require("./db/mongoose");
@@ -16,17 +20,61 @@ const { RegularUser } = require("./models/RegularUser");
 console.log("Welcome to server.js");
 
 // Create a session cookie
-// app.use(
-//   session({
-//     secret: "oursecret",
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       expires: 60000,
-//       httpOnly: true
-//     }
-//   })
-// );
+app.use(
+  session({
+    secret: "oursecret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 60000,
+      httpOnly: true
+    }
+  })
+);
+
+// A route to login and create a session
+app.post("/RegularUser/login", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  console.log("username: " + username);
+  console.log("password: " + password);
+
+  RegularUser.findByUsernamePassword(username, password)
+    .then(user => {
+      console.log("found user");
+      req.session.username = user.username;
+      console.log("ready to send response1");
+      //req.seesion.user = user._id;
+      console.log("ready to send response2");
+      res.send({ currentUser: user.username });
+    })
+    .catch(error => {
+      res.status(400).send();
+    });
+});
+
+// A route to logout a user
+app.get("/RegularUser/logout", (req, res) => {
+  // Remove the session
+  req.session.destroy(error => {
+    if (error) {
+      res.status(500).send(error);
+    } else {
+      res.send();
+    }
+  });
+});
+
+// A route to check if a use is logged in on the session cookie
+app.get("/RegularUser/check-session", (req, res) => {
+  if (req.session.username) {
+    res.send({ currentUser: req.session.username });
+  } else {
+    res.status(401).send();
+  }
+});
+
 app.get("/RegularUser/username/password", (req, res) => {
   console.log("Access User");
   const username = req.body.username;
