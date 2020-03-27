@@ -42,7 +42,7 @@ export class LoginBox extends React.Component {
           document.querySelector(".password_input").focus();
           return;
       }
-      loginSubmit(this).
+      loginSubmit(this);
   };
 
   render() {

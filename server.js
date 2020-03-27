@@ -237,7 +237,7 @@ app.get("*", (req, res) => {
   res.sendFile(__dirname + "/client/build/index.html");
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 80;
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });
