@@ -1,7 +1,8 @@
 import React from "react";
 import "./styles.css";
-import { Redirect } from "react-router-dom";
-import { updateSignupForm, signupSubmit } from "../../actions/RegularUser";
+import {Redirect} from "react-router-dom";
+import {signupSubmit, updateSignupForm} from "../../actions/RegularUser";
+
 export class SignupBox extends React.Component {
   state = {
     username: "",
@@ -58,7 +59,7 @@ export class SignupBox extends React.Component {
       <div>
         <form className="ui form attached fluid segment">
           <div className="field">
-            <label className="ui blue basic label">Username</label>
+            <label>Username</label>
             <div className="ui blue input focus">
               <input
                 className="username_input"
@@ -73,7 +74,7 @@ export class SignupBox extends React.Component {
 
           <div className="two fields">
             <div className="field">
-              <label className="ui blue basic label">Gender</label>
+              <label>Gender</label>
               <div>
                 <select
                   className="ui dropdown"
@@ -89,7 +90,7 @@ export class SignupBox extends React.Component {
             </div>
 
             <div className="field">
-              <label className="ui blue basic label">GPA</label>
+              <label>GPA</label>
               <div className="ui input focus">
                 <input
                   name="GPA"
@@ -104,7 +105,7 @@ export class SignupBox extends React.Component {
 
           <div className="two fields">
             <div className="field">
-              <label className="ui blue basic label">Level of Education</label>
+              <label>Level of Education</label>
               <div>
                 <select
                   className="ui dropdown"
@@ -124,13 +125,13 @@ export class SignupBox extends React.Component {
             </div>
 
             <div className="field">
-              <label className="ui blue basic label">Field of Study</label>
+              <label>Field of Study</label>
               <div>
                 <select
-                  className="ui dropdown"
-                  name="fieldOfStudy"
-                  value={this.state.fieldOfStudy}
-                  onChange={e => updateSignupForm(this, e.target)}
+                    className="ui dropdown"
+                    name="fieldOfStudy"
+                    value={this.state.fieldOfStudy}
+                    onChange={e => updateSignupForm(this, e.target)}
                 >
                   <option></option>
                   <option value="CS">CS</option>
@@ -140,39 +141,40 @@ export class SignupBox extends React.Component {
             </div>
           </div>
 
-          <div className="field">
-            <label className="ui blue basic label">Password</label>
-            <div className="ui input focus">
-              <input
-                className="password_input"
-                name="password"
-                type="password"
-                placeholder="Password"
-                value={this.state.password}
-                onChange={e => updateSignupForm(this, e.target)}
-              ></input>
+          <div className="two fields">
+            <div className="field">
+              <label>Password</label>
+              <div className="ui input focus">
+                <input
+                    className="password_input"
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    value={this.state.password}
+                    onChange={e => updateSignupForm(this, e.target)}
+                ></input>
+              </div>
+            </div>
+
+            <div className="field">
+              <label>Confirm Password</label>
+              <div className="ui input focus">
+                <input
+                    className="confirm_password_input"
+                    name="confirm_password"
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={this.state.confirm_password}
+                    onChange={e => updateSignupForm(this, e.target)}
+                ></input>
+              </div>
             </div>
           </div>
-
-          <div className="field">
-            <label className="ui blue basic label">Confirm Password</label>
-            <div className="ui input focus">
-              <input
-                className="confirm_password_input"
-                name="confirm_password"
-                type="password"
-                placeholder="Confirm Password"
-                value={this.state.confirm_password}
-                onChange={e => updateSignupForm(this, e.target)}
-              ></input>
-            </div>
-          </div>
-
           <div className="field">
             <button
-              className="ui blue primary button"
-              type="submit"
-              onClick={() => signupSubmit(this)}
+                className="ui blue primary button"
+                type="submit"
+                onClick={() => signupSubmit(this)}
             >
               Sign Up
             </button>

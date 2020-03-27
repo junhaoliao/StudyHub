@@ -12,7 +12,7 @@ class Home extends React.Component {
     super(props);
     this.props.history.push("/home");
     this.state = {
-      sign_up: true
+      sign_up: false
     };
   }
 
