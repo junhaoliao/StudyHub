@@ -1,7 +1,5 @@
 // Functions to help with user actions.
 
-import { SignupBox } from "../react-components/SignupBox";
-
 // A function to check if a user is logged in on the session cookie
 export const readCookie = app => {
   const url = "/RegularUser/check-session";
@@ -14,7 +12,10 @@ export const readCookie = app => {
     })
     .then(json => {
       if (json && json.currentUser) {
-        app.setState({ currentUser: json.currentUser });
+        app.setState({
+          currentUser: json.currentUser,
+          currentUserID: json.currentUserID
+        });
       }
     })
     .catch(error => {
@@ -70,26 +71,26 @@ export const updateSignupForm = (SignupBox, field) => {
 
 export const signupSubmit = signupBox => {
   let correct = true;
-  if (signupBox.state.username == "") {
+  if (signupBox.state.username === "") {
     console.log("Username cannot be empty");
     correct = false;
   }
-  if (signupBox.state.levelOfEducation == "") {
+  if (signupBox.state.levelOfEducation === "") {
     console.log("Level of Education cannot be empty");
     correct = false;
   }
-  if (signupBox.state.fieldOfStudy == "") {
+  if (signupBox.state.fieldOfStudy === "") {
     console.log("Field of Study cannot be empty");
     correct = false;
   }
   if (
-    signupBox.state.password == "" ||
-    signupBox.state.confirm_password == ""
+      signupBox.state.password === "" ||
+      signupBox.state.confirm_password === ""
   ) {
     console.log("Password cannot be empty");
     correct = false;
   }
-  if (signupBox.state.password != signupBox.state.confirm_password) {
+  if (signupBox.state.password !== signupBox.state.confirm_password) {
     console.log("Password does NOT match");
     correct = false;
   }

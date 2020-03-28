@@ -3,7 +3,7 @@ import React from "react";
 import {Icon, Message} from "semantic-ui-react";
 
 class ToMarker extends React.Component {
-    marking = true;
+    marking = false;
 
     render() {
         const {header, content} = this.props;

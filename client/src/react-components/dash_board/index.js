@@ -5,7 +5,9 @@ import NavBar from "../NavBar/navbar";
 import Courses from "../Courses/courses";
 import ToMarker from "../ToMarker/ToMarker";
 
-import { Button, Form, Header, Icon, Menu, Segment } from "semantic-ui-react";
+import {Button, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
+
+import {getCourseList} from "../../actions/course";
 
 const course_list = [
   {
@@ -38,15 +40,18 @@ const course_list = [
 class dash_board extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      courseList: [],
+      adding_course: false,
+      add_course_name: "",
+      add_course_admin: "",
+      terms_confirmed: false
+    };
+    getCourseList(this);
     this.props.history.push("/dash_board");
   }
 
-  state = {
-    adding_course: false,
-    add_course_name: "",
-    add_course_admin: "",
-    terms_confirmed: false
-  };
+
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
@@ -122,22 +127,22 @@ class dash_board extends React.Component {
             <Menu.Item name="DashBoard" className={"dashboard_header"} />
             <Menu.Item position={"right"}>
               <Button
-                basic
-                color={"yellow"}
-                onClick={() => this.setState({ adding_course: true })}
-                className={"add_course_button"}
+                  basic
+                  color={"yellow"}
+                  onClick={() => this.setState({adding_course: true})}
+                  className={"add_course_button"}
               >
-                <Icon size="large" name={"plus"} />
+                <Icon size="large" name={"plus"}/>
               </Button>
             </Menu.Item>
           </Menu>
-          <Courses course_list={course_list} />
+          <Courses course_list={this.state.courseList}/>
           <ToMarker
-            header={"To Edward"}
-            content={
-              "Since everything will be hard-coded, we only made CSC309A available. " +
-              "Anyways feel free to add classes or toggle the like buttons."
-            }
+              header={"To Edward"}
+              content={
+                "Since everything will be hard-coded, we only made CSC309A available. " +
+                "Anyways feel free to add classes or toggle the like buttons."
+              }
           />
         </div>
       );

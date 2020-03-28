@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 
 // DO NOT CHANGE THIS FILE
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost:27017/RegularUserDB",
-  { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }
+    process.env.MONGODB_URI || "mongodb://localhost:27017/studyhub",
+    {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true}
 );
 
 // DO NOT CHANGE THIS FILE
