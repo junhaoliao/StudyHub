@@ -67,6 +67,7 @@ class App extends React.Component {
             <Route path="/dash_board" exact component={dash_board} />
             <Route path="/home" exact component={Home} />
             <Route path="/" exact component={Home} />
+            <Route path="/bill_board" exact component={RegularBB} />
             {/*
             <Route
               exact
