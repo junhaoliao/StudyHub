@@ -3,48 +3,42 @@ import "./styles.css";
 
 import NavBar from "../NavBar/navbar";
 import Courses from "../Courses/courses";
-import ToMarker from "../ToMarker/ToMarker";
 
 import {Button, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
 
-import {getCourseList} from "../../actions/course";
+import {createCourse, getCourseList} from "../../actions/course";
 
-const course_list = [
-  {
-    name: "CSC309A",
-    admin: "Kevin",
-    info: "The best course offered at UofT",
-    liked: true
-  },
-  {
-    name: "ECE361",
-    admin: "Junhao",
-    info: "The best course offered at UofT",
-    liked: false
-  },
-  {
-    name: "CSC343",
-    admin: "Kruzer",
-    info: "The best course offered at UofT",
-    liked: true
-  },
-  {
-    name: "CSC309B",
-    admin: "Ashley",
-    info: "The best course offered at UofT",
-    liked: false
-  }
-];
+// function addCourseMessage(props) {
+//   const {message} = props;
+//   if (message) {
+//     if(message.type==="success"){
+//       return  <Message
+//           success
+//           header='The course was successful added'
+//           content='You may now go to the dashboard to access this course'
+//       />;
+//     } else{
+//       return <Message
+//           error
+//           header='Operation failed. The course was not added'
+//           content='You may logout or try again at a later time'
+//       />;
+//     }
+//   }
+//   // no message yet
+//   return <empty/>;
+// }
 
 /* Component for the Home page */
 class dash_board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      message: null,
       courseList: [],
       adding_course: false,
       add_course_name: "",
-      add_course_admin: "",
+      add_course_info: "",
       terms_confirmed: false
     };
     getCourseList(this);
@@ -55,72 +49,58 @@ class dash_board extends React.Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  handleSubmit = () => {
-    const { add_course_name, add_course_admin, terms_confirmed } = this.state;
-    if (terms_confirmed) {
-      const newCourse = {};
-      newCourse.name = add_course_name;
-      newCourse.admin = add_course_admin;
-      newCourse.info = "The best course offered at UofT";
-      newCourse.liked = false;
-      course_list.push(newCourse);
-      this.setState({
-        adding_course: false,
-        add_course_name: "",
-        add_course_admin: "",
-        terms_confirmed: false
-      });
-    }
-  };
+
 
   componentDidMount() {
     document.title = "Dash Board";
   }
 
   course_panel() {
-    const { adding_course } = this.state;
+    const {adding_course, add_course_name, add_course_info, terms_confirmed, message} = this.state;
     if (adding_course) {
       return (
         <div className={"add_course_container"}>
           <Segment inverted>
             <Header as={"h1"}>Adding a new course...</Header>
-            <Form onSubmit={this.handleSubmit} inverted>
+            <Form onSubmit={() => createCourse(this)} inverted>
               <Form.Group widths="equal">
                 <Form.Input
-                  name="add_course_name"
-                  value={this.state.add_course_name}
-                  onChange={this.handleChange}
-                  required
-                  fluid
-                  label="Course Name"
-                  placeholder="Course Name"
+                    name="add_course_name"
+                    value={add_course_name}
+                    onChange={this.handleChange}
+                    required
+                    fluid
+                    label="Course Name"
+                    placeholder="Course Name"
                 />
                 <Form.Input
-                  name="add_course_admin"
-                  value={this.state.add_course_admin}
-                  onChange={this.handleChange}
-                  required
-                  fluid
-                  label="Course Admin(temporary)"
-                  placeholder="Course Admin(temporary)"
+                    name="add_course_info"
+                    value={add_course_info}
+                    onChange={this.handleChange}
+                    required
+                    fluid
+                    label="Course Info (Optional)"
+                    placeholder="Course Info (Optional)"
                 />
               </Form.Group>
               <Form.Checkbox
-                onChange={() =>
-                  this.setState(prevState => ({
-                    terms_confirmed: !prevState.terms_confirmed
-                  }))
-                }
-                checked={this.state.terms_confirmed}
-                required
-                label="I agree to the Terms and Conditions"
+                  onChange={() =>
+                      this.setState(prevState => ({
+                        terms_confirmed: !prevState.terms_confirmed
+                      }))
+                  }
+                  checked={terms_confirmed}
+                  required
+                  label="I agree to the Terms and Conditions"
               />
               <Button type="submit">Submit</Button>
             </Form>
+            {/*<addCourseMessage message={this.state.message}/>*/}
           </Segment>
         </div>
       );
     } else {
+
       return (
         <div className={"courses_container"}>
           <Menu secondary>
@@ -137,13 +117,6 @@ class dash_board extends React.Component {
             </Menu.Item>
           </Menu>
           <Courses course_list={this.state.courseList}/>
-          <ToMarker
-              header={"To Edward"}
-              content={
-                "Since everything will be hard-coded, we only made CSC309A available. " +
-                "Anyways feel free to add classes or toggle the like buttons."
-              }
-          />
         </div>
       );
     }
