@@ -4,8 +4,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
-const CourseSchema = require("./Course").CourseSchema;
-
 const RegularUserSchema = new mongoose.Schema({
     username: String,
     password: String,
