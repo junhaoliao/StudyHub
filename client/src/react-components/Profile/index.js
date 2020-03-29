@@ -17,9 +17,7 @@ export class Profile extends React.Component {
       levelOfEducation: "",
       fieldOfStudy: "",
       courseTaking: [],
-      courseTeaching: [],
-      courseTaking_name: [],
-      courseTeaching_name: []
+      courseTeaching: []
     };
   }
 
@@ -67,11 +65,19 @@ export class Profile extends React.Component {
           </div>
           <div className="item">
             <div class="ui black horizontal label">Courses Teaching</div>
-            <div className="ui blue label"></div>
+            {courseTeaching.map(course => (
+              <div className="ui black label">
+                <a classname="label">{course.name}</a>
+              </div>
+            ))}
           </div>
           <div className="item">
             <div class="ui blue horizontal label">Courses Taking</div>
-            <div className="ui blue label"></div>
+            {courseTaking.map(course => (
+              <div className="ui blue label">
+                <a classname="label">{course.name}</a>
+              </div>
+            ))}
           </div>
         </div>
       </div>

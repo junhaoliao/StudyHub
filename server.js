@@ -12,21 +12,23 @@ app.use(bodyParser.json());
 
 // express-session for managing user sessions
 const session = require("express-session");
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // fileUpload for uploading file to courses
-const fileUpload = require('express-fileupload');
-app.use(fileUpload({
-  limits: {fileSize: 500 * 1024 * 1024}
-}));
+const fileUpload = require("express-fileupload");
+app.use(
+  fileUpload({
+    limits: { fileSize: 500 * 1024 * 1024 }
+  })
+);
 
 // building database
-const {ObjectID} = require("mongodb");
-const {mongoose} = require("./db/mongoose");
+const { ObjectID } = require("mongodb");
+const { mongoose } = require("./db/mongoose");
 mongoose.set("useFindAndModify", false);
-const {RegularUser} = require("./models/RegularUser");
-const {Course} = require("./models/Course");
-const {BillBoard} = require("./models/BillBoard");
+const { RegularUser } = require("./models/RegularUser");
+const { Course } = require("./models/Course");
+const { BillBoard } = require("./models/BillBoard");
 console.log("Welcome to server.js");
 
 // Create a session cookie
@@ -399,17 +401,17 @@ app.patch("/courses/:courseName", (req, res) => {
                 res.status(500).send(); // server error
               });
           },
-            error => {
-              log("bad request");
-              res.status(400).send(error); // 400 for bad request
-            }
+          error => {
+            log("bad request");
+            res.status(400).send(error); // 400 for bad request
+          }
         );
       }
     })
-      .catch(error => {
-        console.log(error);
-        res.status(500).send(); // server error
-      });
+    .catch(error => {
+      console.log(error);
+      res.status(500).send(); // server error
+    });
 });
 
 // add an announcement to the course
@@ -433,18 +435,18 @@ app.post("/courses/:courseName/announcement", (req, res) => {
 
   // Save the user
   course.save().then(
-      result => {
-        RegularUser.findById(currentUserID).then(user => {
-          log(user);
-          log(course._id);
-          user.courseTeaching.push(course._id);
-          user.save();
-          res.send(result);
-        });
-      },
-      error => {
-        res.status(400).send(error); // 400 for bad request
-      }
+    result => {
+      RegularUser.findById(currentUserID).then(user => {
+        log(user);
+        log(course._id);
+        user.courseTeaching.push(course._id);
+        user.save();
+        res.send(result);
+      });
+    },
+    error => {
+      res.status(400).send(error); // 400 for bad request
+    }
   );
 });
 
@@ -454,13 +456,13 @@ app.get("/BillBoard/content", (req, res) => {
   const userid = req.session.currentUserID;
   if (userid !== undefined) {
     BillBoard.find()
-        .then(result => {
-          if (!result) {
-            res.status(404).send();
-          } else {
-            res.send(result);
-          }
-        })
+      .then(result => {
+        if (!result) {
+          res.status(404).send();
+        } else {
+          res.send(result);
+        }
+      })
       .catch(error => {
         res.status(500).send();
       });
@@ -551,6 +553,85 @@ app.get("/RegularUser/profile", (req, res) => {
   }
 });
 
+// return regular user course taking
+app.get("/RegularUser/profile/courseTaking", (req, res) => {
+  const userid = req.session.currentUserID;
+  if (userid != undefined) {
+    RegularUser.findById(userid)
+      .then(user => {
+        if (!user) {
+          console.log("Regular user does not exist");
+          res.status(404).send();
+        } else {
+          let count = 0;
+          const list = [];
+          const rawList = user.courseTaking;
+          rawList.forEach(courseObjectID =>
+            Course.findById(courseObjectID).then(course => {
+              RegularUser.findById(course.admin).then(admin => {
+                const thisCourse = {};
+                thisCourse.name = course.name;
+                thisCourse.info = course.description;
+                thisCourse.admin = admin.username;
+                thisCourse.liked = true;
+                list.push(thisCourse);
+                count++;
+                if (count === rawList.length) {
+                  res.send({ courses: list });
+                }
+              });
+            })
+          );
+        }
+      })
+      .catch(error => {
+        res.status(400).send();
+      });
+  } else {
+    console.log("Unauthorized access to profile course taking");
+    res.status(401).send();
+  }
+});
+
+// return regular user course teaching
+app.get("/RegularUser/profile/courseTeaching", (req, res) => {
+  const userid = req.session.currentUserID;
+  if (userid != undefined) {
+    RegularUser.findById(userid)
+      .then(user => {
+        if (!user) {
+          console.log("Regular user does not exist");
+          res.status(404).send();
+        } else {
+          let count = 0;
+          const list = [];
+          const rawList = user.courseTeaching;
+          rawList.forEach(courseObjectID =>
+            Course.findById(courseObjectID).then(course => {
+              RegularUser.findById(course.admin).then(admin => {
+                const thisCourse = {};
+                thisCourse.name = course.name;
+                thisCourse.info = course.description;
+                thisCourse.admin = admin.username;
+                thisCourse.liked = true;
+                list.push(thisCourse);
+                count++;
+                if (count === rawList.length) {
+                  res.send({ courses: list });
+                }
+              });
+            })
+          );
+        }
+      })
+      .catch(error => {
+        res.status(400).send();
+      });
+  } else {
+    console.log("Unauthorized access to profile course teaching");
+    res.status(401).send();
+  }
+});
 // update user information
 /* request body:
 {
@@ -588,9 +669,9 @@ app.patch("/RegularUser/Profile", (req, res) => {
               res.send(400).send();
             }
           )
-            .catch(error => {
-              res.status(400).send();
-            });
+          .catch(error => {
+            res.status(400).send();
+          });
       }
     });
   }
@@ -598,7 +679,7 @@ app.patch("/RegularUser/Profile", (req, res) => {
 
 // handling upload requests
 // partial code from example https://github.com/bradtraversy/react_file_uploader
-app.post('/upload', (req, res) => {
+app.post("/upload", (req, res) => {
   if (req.files === null) {
     return res.status(400).send();
   }
@@ -610,7 +691,7 @@ app.post('/upload', (req, res) => {
       console.error(err);
       return res.status(500).send(err);
     }
-    res.json({fileName: file.name, filePath: `/uploads/${file.name}`});
+    res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
   });
 });
 

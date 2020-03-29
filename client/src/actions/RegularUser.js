@@ -84,8 +84,8 @@ export const signupSubmit = signupBox => {
     correct = false;
   }
   if (
-      signupBox.state.password === "" ||
-      signupBox.state.confirm_password === ""
+    signupBox.state.password === "" ||
+    signupBox.state.confirm_password === ""
   ) {
     console.log("Password cannot be empty");
     correct = false;
