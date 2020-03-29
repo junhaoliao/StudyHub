@@ -400,10 +400,46 @@ app.patch("/courses/:courseName", (req, res) => {
         );
       }
     })
-    .catch(error => {
-      console.log(error);
-      res.status(500).send(); // server error
-    });
+      .catch(error => {
+        console.log(error);
+        res.status(500).send(); // server error
+      });
+});
+
+// add an announcement to the course
+// 1. get the course
+// 2. check whether the current user is the admin of the course
+// 3. push the announcement into course.announcements
+// 4. delete the first announcement whenever there are more than 3 announcements
+app.post("/courses/:courseName/announcement", (req, res) => {
+  const currentUserID = req.session.currentUserID;
+  if (!currentUserID) {
+    res.status(400).send();
+    return;
+  }
+
+  const course = new Course({
+    name: req.body.name,
+    description: req.body.description,
+    admin: currentUserID,
+    users: [currentUserID]
+  });
+
+  // Save the user
+  course.save().then(
+      result => {
+        RegularUser.findById(currentUserID).then(user => {
+          log(user);
+          log(course._id);
+          user.courseTeaching.push(course._id);
+          user.save();
+          res.send(result);
+        });
+      },
+      error => {
+        res.status(400).send(error); // 400 for bad request
+      }
+  );
 });
 
 /* Bill Board API Route */
@@ -412,9 +448,9 @@ app.get("/BillBoard/content", (req, res) => {
   const userid = req.session.currentUserID;
   if (userid !== undefined) {
     BillBoard.find()
-      .then(result => {
-        if (!result) {
-          res.status(404).send();
+        .then(result => {
+          if (!result) {
+            res.status(404).send();
         } else {
           res.send(result);
         }

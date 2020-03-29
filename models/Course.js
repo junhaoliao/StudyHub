@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
-
+const AnnouncementSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    content: {
+        type: String,
+        required: true
+    }
+});
 const CourseSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -13,7 +22,8 @@ const CourseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    users: [mongoose.Schema.Types.ObjectId]
+    users: [mongoose.Schema.Types.ObjectId],
+    announcements: [AnnouncementSchema]
 });
 
 CourseSchema.statics.findByCourseName = function (courseName) {
