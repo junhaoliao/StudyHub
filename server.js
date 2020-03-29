@@ -415,7 +415,7 @@ app.patch("/courses/:courseName", (req, res) => {
 });
 
 // add an announcement to the course
-// 1. get the course
+// 1. get the course done
 // 2. check whether the current user is the admin of the course
 // 3. push the announcement into course.announcements
 // 4. delete the first announcement whenever there are more than 3 announcements
@@ -425,30 +425,55 @@ app.post("/courses/:courseName/announcement", (req, res) => {
     res.status(400).send();
     return;
   }
-
-  const course = new Course({
-    name: req.body.name,
-    description: req.body.description,
-    admin: currentUserID,
-    users: [currentUserID]
-  });
-
-  // Save the user
-  course.save().then(
-    result => {
-      RegularUser.findById(currentUserID).then(user => {
-        log(user);
-        log(course._id);
-        user.courseTeaching.push(course._id);
-        user.save();
-        res.send(result);
+  let theCourse = null;
+  Course.findByCourseName(courseName)
+      .then(course => {
+        if (!course) {
+          log("invalid course name");
+          res.status(404).send(); // could not find this resource
+        } else {
+          //find the user in the course users list
+          course.users.findById(currentUserID).then((currentUser)=>{
+                if(!currentUser){
+                  //not a user of the course
+                  res.status(401).send() //unauthorized
+                }else{
+                  //process the request
+                  const newAnn ={
+                    title: req.body.title,
+                    content: req.body.content
+                  };
+                  course.announcements.push(newAnn);
+                  //see if there are more than 3 ann
+                  if(course.announcements.length > 3){
+                    //delete the last ann
+                    course.announcements.pull(0); //delete the first one
+                    //save the new list
+                    course.save().then((result)=>{
+                          res.send({
+                            message:
+                                "announcement sent successfully"
+                          });
+                        }
+                    ),(error)=>{
+                      res.status(400).send(error);
+                    }
+                  }
+                }
+              }
+          ).catch((error)=>{
+            console.log(error);
+            res.status(500).send();
+          })
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(500).send(); // server error
       });
-    },
-    error => {
-      res.status(400).send(error); // 400 for bad request
-    }
-  );
+
 });
+
 
 /* Bill Board API Route */
 // return all bill board content
