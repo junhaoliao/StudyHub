@@ -12,15 +12,21 @@ app.use(bodyParser.json());
 
 // express-session for managing user sessions
 const session = require("express-session");
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
+
+// fileUpload for uploading file to courses
+const fileUpload = require('express-fileupload');
+app.use(fileUpload({
+  limits: {fileSize: 500 * 1024 * 1024}
+}));
 
 // building database
-const { ObjectID } = require("mongodb");
-const { mongoose } = require("./db/mongoose");
+const {ObjectID} = require("mongodb");
+const {mongoose} = require("./db/mongoose");
 mongoose.set("useFindAndModify", false);
-const { RegularUser } = require("./models/RegularUser");
-const { Course } = require("./models/Course");
-const { BillBoard } = require("./models/BillBoard");
+const {RegularUser} = require("./models/RegularUser");
+const {Course} = require("./models/Course");
+const {BillBoard} = require("./models/BillBoard");
 console.log("Welcome to server.js");
 
 // Create a session cookie
@@ -393,10 +399,10 @@ app.patch("/courses/:courseName", (req, res) => {
                 res.status(500).send(); // server error
               });
           },
-          error => {
-            log("bad request");
-            res.status(400).send(error); // 400 for bad request
-          }
+            error => {
+              log("bad request");
+              res.status(400).send(error); // 400 for bad request
+            }
         );
       }
     })
@@ -451,10 +457,10 @@ app.get("/BillBoard/content", (req, res) => {
         .then(result => {
           if (!result) {
             res.status(404).send();
-        } else {
-          res.send(result);
-        }
-      })
+          } else {
+            res.send(result);
+          }
+        })
       .catch(error => {
         res.status(500).send();
       });
@@ -582,12 +588,30 @@ app.patch("/RegularUser/Profile", (req, res) => {
               res.send(400).send();
             }
           )
-          .catch(error => {
-            res.status(400).send();
-          });
+            .catch(error => {
+              res.status(400).send();
+            });
       }
     });
   }
+});
+
+// handling upload requests
+// partial code from example https://github.com/bradtraversy/react_file_uploader
+app.post('/upload', (req, res) => {
+  if (req.files === null) {
+    return res.status(400).send();
+  }
+
+  const file = req.files.file;
+
+  file.mv(`${__dirname}/uploads/${file.name}`, err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+    res.json({fileName: file.name, filePath: `/uploads/${file.name}`});
+  });
 });
 
 app.use(express.static(__dirname + "/client/build"));

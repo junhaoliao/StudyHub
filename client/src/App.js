@@ -2,35 +2,26 @@ import React from "react";
 
 import "./App.css";
 // Importing react-router-dom to use the React Router
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 // Importing pages
 import Home from "./react-components/Home";
 import dash_board from "./react-components/dash_board";
-import CSC309A from "./react-components/CSC309A";
-import CSC309A_Resources from "./react-components/CSC309A/resources";
-import CSC309A_Resources_someVideo from "./react-components/CSC309A/someVideo";
-import Page404 from "./react-components/Page404";
-import { AdminPage } from "./react-components/Page404/admin_Page404";
-import { RegularBB } from "./react-components/bill_board/regular_billboard";
-import { AdminBB } from "./react-components/bill_board/admin_billboard";
-import { LoginBox } from "./react-components/LoginBox";
-import { AdminDashboard } from "./react-components/admin_dashboard";
-import { Profile } from "./react-components/Profile";
-import { ProfileView } from "./react-components/ProfileView";
-
-import Ranking from "./react-components/ranking";
-
+import {RegularBB} from "./react-components/bill_board/regular_billboard";
+import {Profile} from "./react-components/Profile";
+import {uploadModule} from "./react-components/uploadModule";
 //import 'semantic-ui-css/semantic.min.css'
 // import Action functions
-import { readCookie } from "./actions/RegularUser";
+import {readCookie} from "./actions/RegularUser";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      currentUser: null
+    };
     readCookie(this);
   }
-  state = {
-    currentUser: null
-  };
+
   render() {
     const { currentUser } = this.state;
 
@@ -68,7 +59,8 @@ class App extends React.Component {
             <Route path="/home" exact component={Home} />
             <Route path="/" exact component={Home} />
             <Route path="/bill_board" exact component={RegularBB} />
-            <Route path="/profile" exact component={Profile} />
+            <Route path="/profile" exact component={Profile}/>
+            <Route path="/upload" exact component={uploadModule}/>
             {/*
             <Route
               exact

@@ -60,21 +60,13 @@ export const createCourse = (app) => {
                     adding_course: false,
                     add_course_name: "",
                     add_course_info: "",
-                    terms_confirmed: false,
-                    message: {
-                        body: "Success: Added a Course.",
-                        type: "success"
-                    }
+                    terms_confirmed: false
                 });
 
             } else {
                 alert("Course was not added. There may have been a course with a same name.");
                 app.setState({
-                    terms_confirmed: false,
-                    message: {
-                        body: "Error: Could not add Course.",
-                        type: "error"
-                    }
+                    terms_confirmed: false
                 });
             }
         })

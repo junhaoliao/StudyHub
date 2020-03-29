@@ -34,7 +34,8 @@ class dash_board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: null,
+
+
       courseList: [],
       adding_course: false,
       add_course_name: "",
@@ -56,7 +57,7 @@ class dash_board extends React.Component {
   }
 
   course_panel() {
-    const {adding_course, add_course_name, add_course_info, terms_confirmed, message} = this.state;
+    const {adding_course, add_course_name, add_course_info, terms_confirmed} = this.state;
     if (adding_course) {
       return (
         <div className={"add_course_container"}>
