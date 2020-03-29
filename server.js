@@ -486,6 +486,74 @@ app.post("/BillBoard/new", (req, res) => {
   }
 });
 
+/* Profile API routes*/
+// return regular user profile by user id
+app.get("/RegularUser/profile", (req, res) => {
+  const userid = req.session.currentUserID;
+  if (userid !== undefined) {
+    RegularUser.findById(userid)
+      .then(user => {
+        if (!user) {
+          console.log("Regular user does not exist");
+          res.status(404).send();
+        } else {
+          res.send(user);
+        }
+      })
+      .catch(error => {
+        res.status(500).send();
+      });
+  } else {
+    console.log("Unauthorized access to user profile");
+    res.status(401).send();
+  }
+});
+
+// update user information
+/* request body:
+{
+    "username": "",
+    "password": "",
+    "GPA": ,
+    "gender": "",
+    "levelOfEducation": "",
+    "fieldOfStudy": ""
+}
+*/
+app.patch("/RegularUser/Profile", (req, res) => {
+  const userid = req.session.currentUserID;
+  //const userid = req.body.userid;
+  if (userid !== undefined) {
+    RegularUser.findById(userid).then(user => {
+      if (!user) {
+        console.log("Regular user does not exist");
+        res.status(404).send();
+      } else {
+        user.username = req.body.username;
+        user.password = req.body.password;
+        user.GPA = req.body.GPA;
+        user.gender = req.body.gender;
+        user.levelOfEducation = req.body.levelOfEducation;
+        user.fieldOfStudy = req.body.fieldOfStudy;
+        user
+          .save()
+          .then(
+            result => {
+              console.log("Saving new user profile");
+              res.send(result);
+            },
+            error => {
+              res.send(400).send();
+            }
+          )
+          .catch(error => {
+            res.status(400).send();
+          });
+      }
+    });
+  }
+});
+
 app.use(express.static(__dirname + "/client/build"));
 
 // All routes other than above will go to index.html
