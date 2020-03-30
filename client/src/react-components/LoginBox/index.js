@@ -16,7 +16,8 @@ export class LoginBox extends React.Component {
   state = {
     username: "",
     password: "",
-    login_regular: false
+    login_regular: false,
+    error: true
     // login_admin: false,
     // finish_typing: false
   };
@@ -30,19 +31,19 @@ export class LoginBox extends React.Component {
   // };
 
   submit_handler = event => {
-      console.log(this.state);
-      event.preventDefault();
-      if (this.state.username === "") {
-          console.log("Username cannot be empty");
-          document.querySelector(".username_input").focus();
-          return;
-      }
-      if (this.state.password === "") {
-          console.log("Password cannot be empty");
-          document.querySelector(".password_input").focus();
-          return;
-      }
-      loginSubmit(this);
+    console.log(this.state);
+    event.preventDefault();
+    if (this.state.username === "") {
+      console.log("Username cannot be empty");
+      document.querySelector(".username_input").focus();
+      return;
+    }
+    if (this.state.password === "") {
+      console.log("Password cannot be empty");
+      document.querySelector(".password_input").focus();
+      return;
+    }
+    loginSubmit(this);
   };
 
   render() {
@@ -97,8 +98,7 @@ export class LoginBox extends React.Component {
               Log In
             </button>
           </div>
-          {!this.state.login_regular &&
-          this.state.finish_typing ? (
+          {!this.state.error ? (
             <div className="ui negative message">
               <div className="header">Invalid Username or Password</div>
               <p>Please Renter Username and Password</p>

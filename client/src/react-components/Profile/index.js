@@ -20,6 +20,8 @@ export class Profile extends React.Component {
     this.state = {
       login: false,
       edit: false,
+      save: true,
+      match: true,
       username: "",
       password: "",
       oldPassword: "",
@@ -174,16 +176,24 @@ export class Profile extends React.Component {
                 <div className="ui huge black horizontal label">
                   Old Password
                 </div>
-                <div className="ui medium blue input focus">
-                  <input
-                    className="password_input"
-                    name="oldPassword"
-                    type="password"
-                    placeholder="Old Password"
-                    value={this.state.oldPassword}
-                    onChange={e => updateProfileForm(this, e.target)}
-                  ></input>
-                </div>
+                <span>
+                  <div className="ui medium blue input focus">
+                    <input
+                      className="password_input"
+                      name="oldPassword"
+                      type="password"
+                      placeholder="Old Password"
+                      value={this.state.oldPassword}
+                      onChange={e => updateProfileForm(this, e.target)}
+                    ></input>
+                  </div>
+
+                  {this.state.oldPassword ? null : (
+                    <div className="ui left pointing red basic label">
+                      Please enter old password
+                    </div>
+                  )}
+                </span>
               </Grid.Column>
             </Grid.Row>
 
@@ -265,9 +275,14 @@ export class Profile extends React.Component {
                   <option value="2nd Year">2nd Year</option>
                   <option value="3rd Year">3rd Year</option>
                   <option value="4th Year">4th Year</option>
-                  <option value="Master Year">Master</option>
-                  <option value="Ph.D. Year">Ph.D.</option>
+                  <option value="Master">Master</option>
+                  <option value="Ph.D.">Ph.D.</option>
                 </select>
+                {this.state.levelOfEducation ? null : (
+                  <div className="ui left pointing red basic label">
+                    Please select degree
+                  </div>
+                )}
               </Grid.Column>
               <Grid.Column>
                 <div class="ui huge black horizontal label">Field of Study</div>
@@ -281,6 +296,11 @@ export class Profile extends React.Component {
                   <option value="CS">CS</option>
                   <option value="ECE">ECE</option>
                 </select>
+                {this.state.fieldOfStudy ? null : (
+                  <div className="ui left pointing red basic label">
+                    Please select discipline
+                  </div>
+                )}
               </Grid.Column>
             </Grid.Row>
 
@@ -334,6 +354,18 @@ export class Profile extends React.Component {
             Cancel
           </div>
         </div>
+        {this.state.save ? null : (
+          <div className="ui negative message">
+            <div class="header">The old password is incorrect</div>
+            <p>Please Renter the old password to save changes</p>
+          </div>
+        )}
+        {this.state.match ? null : (
+          <div className="ui negative message">
+            <div class="header">The new password does not match</div>
+            <p>Please Renter the new password to save changes</p>
+          </div>
+        )}
       </div>
     );
   }
