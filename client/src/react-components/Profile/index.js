@@ -4,7 +4,10 @@ import {
   readCookie,
   switchView,
   updateProfileForm,
-  CancelButton
+  CancelButton,
+  SaveButton,
+  remove_courseTaking,
+  remove_courseTeaching
 } from "../../actions/Profile";
 import { Visibility } from "semantic-ui-react";
 //import "./styles.css";
@@ -18,6 +21,9 @@ export class Profile extends React.Component {
       edit: false,
       username: "",
       password: "",
+      oldPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
       gender: "",
       GPA: "",
       levelOfEducation: "",
@@ -132,6 +138,49 @@ export class Profile extends React.Component {
             </div>
           </div>
 
+          <div className="field">
+            <label>Old Password</label>
+            <div className="ui input focus">
+              <input
+                className="password_input"
+                name="oldPassword"
+                type="password"
+                placeholder="Password"
+                value={this.state.oldPassword}
+                onChange={e => updateProfileForm(this, e.target)}
+              ></input>
+            </div>
+          </div>
+          <div className="two fields">
+            <div className="field">
+              <label>New Password</label>
+              <div className="ui input focus">
+                <input
+                  className="password_input"
+                  name="newPassword"
+                  type="password"
+                  placeholder="Password"
+                  value={this.state.newPassword}
+                  onChange={e => updateProfileForm(this, e.target)}
+                ></input>
+              </div>
+            </div>
+
+            <div className="field">
+              <label>Confirm New Password</label>
+              <div className="ui input focus">
+                <input
+                  className="confirm_password_input"
+                  name="confirmNewPassword"
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={this.state.confirmnNewPassword}
+                  onChange={e => updateProfileForm(this, e.target)}
+                ></input>
+              </div>
+            </div>
+          </div>
+
           <div className="item">
             <div className="field">
               <div className="ui black horizontal label">GPA</div>
@@ -201,7 +250,10 @@ export class Profile extends React.Component {
             <div class="ui black horizontal label">Courses Teaching</div>
             {courseTeaching.map(course => (
               <div className="ui black label">
-                <a classname="ui black label">
+                <a
+                  classname="ui black label"
+                  onClick={() => remove_courseTeaching(this, course)}
+                >
                   {course.name}
                   <i className="delete icon"></i>
                 </a>
@@ -212,7 +264,10 @@ export class Profile extends React.Component {
             <div class="ui blue horizontal label">Courses Taking</div>
             {courseTaking.map(course => (
               <div className="ui blue label">
-                <a classname="ui blue label">
+                <a
+                  classname="ui blue label"
+                  onClick={() => remove_courseTaking(this, course)}
+                >
                   {course.name}
                   <i className="delete icon"></i>
                 </a>
@@ -220,7 +275,7 @@ export class Profile extends React.Component {
             ))}
           </div>
           <div className="item">
-            <button class="ui primary button" onClick={() => switchView(this)}>
+            <button class="ui primary button" onClick={() => SaveButton(this)}>
               Save
             </button>
             <button class="ui  button" onClick={() => CancelButton(this)}>
