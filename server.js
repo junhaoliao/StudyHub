@@ -546,6 +546,61 @@ app.post("/courses/:courseName/announcement", (req, res) => {
     });
 });
 
+app.delete("/courses/:courseName/:announcement", (req, res) => {
+    const currentUserID = req.session.currentUserID;
+    if (!currentUserID) {
+        res.status(400).send();
+        return;
+    }
+    let theCourse = null;
+    const courseName = req.params.courseName;
+    console.log(courseName);
+    const _id = req.params.announcement;
+
+    Course.findByCourseName(courseName)
+        .then(course => {
+            if (!course) {
+                log("invalid course name");
+                res.status(404).send(); // could not find this resource
+            } else {
+                //find the annuncement
+                const announcement = course.announcements.id(_id);
+                    if(!announcement){
+                        log("invalid announcement id");
+                        res.status(404).send(); // could not find this resource
+                    }else{
+                        // check whether the current user is the admin of the course
+                        if (course.admin != currentUserID) {
+                            return res.status(403).send();
+                        } else {
+                            //find the macthed announcement (by id)
+                          //  const theAnnouncement = course.announcements.id(_id);
+                                course.announcements.pull(announcement);
+                            //save the course
+                            course.save().then(
+                                result => {
+                                    return res.send({
+                                        message: "announcement deleted successfully"
+                                    });
+                                },
+                                error => {
+                                    return res.status(400).send(error);
+                                }
+                            );
+
+                        }
+                    }
+                    //hi i am working here
+            }
+        })
+        .catch(error => {
+            console.log("clacp");
+            console.log(error);
+            return res.status(500).send(); // server error
+        });
+});
+
+
 /* Bill Board API Route */
 // return all bill board content
 app.get("/BillBoard/content", (req, res) => {
