@@ -11,6 +11,7 @@ const AnnouncementSchema = new mongoose.Schema({
     }
 });
 
+
 const msgSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -66,4 +67,6 @@ CourseSchema.statics.findByCourseName = function (courseName) {
 
 const Course = mongoose.model('Course', CourseSchema);
 
+
 module.exports = {Course, CourseSchema};
+
