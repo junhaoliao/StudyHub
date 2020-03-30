@@ -12,7 +12,8 @@ export class SignupBox extends React.Component {
     fieldOfStudy: "",
     password: "",
     confirm_password: "",
-    signin_regular: false
+    signin_regular: false,
+    password_match: false
   };
 
   //   input_handler = event => {
@@ -70,6 +71,11 @@ export class SignupBox extends React.Component {
                 onChange={e => updateSignupForm(this, e.target)}
               ></input>
             </div>
+            {this.state.username ? null : (
+              <div className="ui pointing red basic label">
+                Please enter a username
+              </div>
+            )}
           </div>
 
           <div className="two fields">
@@ -118,10 +124,15 @@ export class SignupBox extends React.Component {
                   <option value="2nd Year">2nd Year</option>
                   <option value="3rd Year">3rd Year</option>
                   <option value="4th Year">4th Year</option>
-                  <option value="Master Year">Master</option>
-                  <option value="Ph.D. Year">Ph.D.</option>
+                  <option value="Master">Master</option>
+                  <option value="Ph.D.">Ph.D.</option>
                 </select>
               </div>
+              {this.state.levelOfEducation ? null : (
+                <div className="ui pointing red basic label">
+                  Please select degree
+                </div>
+              )}
             </div>
 
             <div className="field">
@@ -138,6 +149,11 @@ export class SignupBox extends React.Component {
                   <option value="ECE">ECE</option>
                 </select>
               </div>
+              {this.state.fieldOfStudy ? null : (
+                <div className="ui pointing red basic label">
+                  Please select discipline
+                </div>
+              )}
             </div>
           </div>
 
@@ -154,6 +170,11 @@ export class SignupBox extends React.Component {
                   onChange={e => updateSignupForm(this, e.target)}
                 ></input>
               </div>
+              {this.state.password ? null : (
+                <div className="ui pointing red basic label">
+                  Please enter a password
+                </div>
+              )}
             </div>
 
             <div className="field">
@@ -168,6 +189,11 @@ export class SignupBox extends React.Component {
                   onChange={e => updateSignupForm(this, e.target)}
                 ></input>
               </div>
+              {this.state.confirm_password ? null : (
+                <div className="ui pointing red basic label">
+                  Please confirm password
+                </div>
+              )}
             </div>
           </div>
           <div className="field">
@@ -179,6 +205,14 @@ export class SignupBox extends React.Component {
               Sign Up
             </button>
           </div>
+          {!this.state.password_match ? (
+            <div />
+          ) : (
+            <div className="ui negative message">
+              <div className="header">Password Does Not Match</div>
+              <p>Please Renter Password</p>
+            </div>
+          )}
         </form>
       </div>
     );

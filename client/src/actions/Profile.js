@@ -81,12 +81,20 @@ export const switchView = Profile => {
   if (Profile.state.edit) {
     Profile.setState({
       edit: false,
-      oldPassword: ""
+      save: true,
+      match: true,
+      oldPassword: "",
+      newPassword: "",
+      confirmNewPassword: ""
     });
   } else {
     Profile.setState({
       edit: true,
-      oldPassword: ""
+      save: true,
+      match: true,
+      oldPassword: "",
+      newPassword: "",
+      confirmNewPassword: ""
     });
   }
 };
@@ -132,10 +140,12 @@ export const SaveButton = Profile => {
     Profile.state.password,
     (err, result) => {
       if (result) {
+        Profile.setState({ save: true });
         console.log("Password match");
         const newProfile = {};
         let correct = true;
         newProfile.username = Profile.state.username;
+        newProfile.password = Profile.state.oldPassword;
         // check password
         if (
           Profile.state.newPassword === "" &&
@@ -143,12 +153,14 @@ export const SaveButton = Profile => {
         ) {
           console.log("Please enter a new password");
           correct = false;
+          Profile.setState({ match: false });
         } else if (
           Profile.state.newPassword !== "" &&
           Profile.state.confirmNewPassword === ""
         ) {
           console.log("Please confirm a new password");
           correct = false;
+          Profile.setState({ match: false });
         } else if (
           Profile.state.newPassword !== "" &&
           Profile.state.confirmNewPassword !== ""
@@ -157,11 +169,20 @@ export const SaveButton = Profile => {
             console.log("New password match");
             correct = true;
             newProfile.password = Profile.state.newPassword;
+            Profile.setState({ match: true });
           }
         } else {
           console.log("No change on the password");
           correct = true;
-          newProfile.password = Profile.state.oldPassword;
+          //newProfile.password = Profile.state.oldPassword;
+          Profile.setState({ match: false });
+        }
+
+        if (Profile.state.newPassword !== Profile.state.confirmNewPassword) {
+          console.log("New password NOT match");
+          correct = false;
+          //newProfile.password = Profile.state.newPassword;
+          Profile.setState({ match: false });
         }
 
         //check level of education
@@ -204,6 +225,7 @@ export const SaveButton = Profile => {
             .then(res => {
               if (res.status === 200) {
                 console.log("Successfully updated user information");
+                readCookie(Profile);
                 switchView(Profile);
               }
             })
@@ -213,6 +235,7 @@ export const SaveButton = Profile => {
         }
       } else {
         console.log("Password NOT match");
+        Profile.setState({ save: false });
       }
     }
   );
