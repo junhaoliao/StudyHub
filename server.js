@@ -19,13 +19,19 @@ const fileUpload = require('express-fileupload');
 app.use(fileUpload({
     limits: {fileSize: 500 * 1024 * 1024}
 }));
+const fileUpload = require("express-fileupload");
+app.use(
+  fileUpload({
+    limits: { fileSize: 500 * 1024 * 1024 }
+  })
+);
 
 // datetime for converting date to string
 const datetime = require('date-and-time');
 
 // building database
-const {ObjectID} = require("mongodb");
-const {mongoose} = require("./db/mongoose");
+const { ObjectID } = require("mongodb");
+const { mongoose } = require("./db/mongoose");
 mongoose.set("useFindAndModify", false);
 const {RegularUser} = require("./models/RegularUser");
 const {Course} = require("./models/Course");
@@ -302,14 +308,7 @@ app.get("/courses", (req, res) => {
         })
         .catch(error => res.status(500).send());
 
-    // Course.find().then(
-    //     courses => {
-    //         res.send({courses}); // can wrap in object if want to add more properties
-    //     },
-    //     error => {
-    //         res.status(500).send(error); // server error
-    //     }
-    // );
+
 });
 
 app.post("/courses", (req, res) => {
@@ -325,7 +324,7 @@ app.post("/courses", (req, res) => {
         users: [currentUserID]
     });
 
-    // Save the user
+    // Save the course
     course.save().then(
         result => {
             RegularUser.findById(currentUserID).then(user => {
@@ -345,7 +344,7 @@ app.post("/courses", (req, res) => {
 app.get("/courses/:courseName", (req, res) => {
     const userID = req.session.currentUserID;
     if (!userID) {
-        return res.status(400).send(); // user not logged in
+        return res.status(403).send(); // user not logged in
     }
     Course.findByCourseName(courseName)
         .then(course => {
@@ -475,33 +474,58 @@ app.patch("/courses/:courseName", (req, res) => {
 // 3. push the announcement into course.announcements
 // 4. delete the first announcement whenever there are more than 3 announcements
 app.post("/courses/:courseName/announcement", (req, res) => {
-    const currentUserID = req.session.currentUserID;
-    if (!currentUserID) {
-        return res.status(403).send();
-    }
+  console.log("rock your body");
+  const currentUserID = req.session.currentUserID;
+  if (!currentUserID) {
+    res.status(400).send();
+    return;
+  }
+  let theCourse = null;
+  console.log("rock your body right");
+  const courseName = req.params.courseName;
 
-    const course = new Course({
-        name: req.body.name,
-        description: req.body.description,
-        admin: currentUserID,
-        users: [currentUserID]
-    });
+  Course.findByCourseName(courseName)
+    .then(course => {
+      console.log("backstreet boy alright");
+      if (!course) {
+        log("invalid course name");
+        res.status(404).send(); // could not find this resource
+      } else {
+        // check whether the current user is the admin of the course
+        if (course.admin != currentUserID) {
+          return res.status(403).send();
+        } else {
+          const newAnnouncement = {
+            title: req.body.title,
+            content: req.body.content
+          };
+          course.announcements.push(newAnnouncement);
 
-    // Save the user
-    course.save().then(
-        result => {
-            RegularUser.findById(currentUserID).then(user => {
-                log(user);
-                log(course._id);
-                user.courseTeaching.push(course._id);
-                user.save();
-                res.send(result);
-            });
-        },
-        error => {
-            res.status(400).send(error); // 400 for bad request
+          //see if there are more than 3 announcements
+          if (course.announcements.length > 3) {
+            //delete the oldest announcement
+            course.announcements.shift();
+          }
+
+          //save the course
+          course.save().then(
+            result => {
+              return res.send({
+                message: "announcement sent successfully"
+              });
+            },
+            error => {
+              return res.status(400).send(error);
+            }
+          );
         }
-    );
+      }
+    })
+    .catch(error => {
+      console.log("hi i am here");
+      console.log(error);
+      return res.status(111).send(); // server error
+    });
 });
 
 /* Bill Board API Route */
@@ -607,49 +631,135 @@ app.get("/RegularUser/profile", (req, res) => {
     }
 });
 
+// return regular user course taking
+app.get("/RegularUser/profile/courseTaking", (req, res) => {
+  const userid = req.session.currentUserID;
+  if (userid != undefined) {
+    RegularUser.findById(userid)
+      .then(user => {
+        if (!user) {
+          console.log("Regular user does not exist");
+          res.status(404).send();
+        } else {
+          let count = 0;
+          const list = [];
+          const rawList = user.courseTaking;
+          rawList.forEach(courseObjectID =>
+            Course.findById(courseObjectID).then(course => {
+              RegularUser.findById(course.admin).then(admin => {
+                const thisCourse = {};
+                thisCourse.id = courseObjectID;
+                thisCourse.name = course.name;
+                thisCourse.info = course.description;
+                thisCourse.admin = admin.username;
+                thisCourse.liked = true;
+                list.push(thisCourse);
+                count++;
+                if (count === rawList.length) {
+                  res.send({ courses: list });
+                }
+              });
+            })
+          );
+        }
+      })
+      .catch(error => {
+        res.status(400).send();
+      });
+  } else {
+    console.log("Unauthorized access to profile course taking");
+    res.status(401).send();
+  }
+});
+
+// return regular user course teaching
+app.get("/RegularUser/profile/courseTeaching", (req, res) => {
+  const userid = req.session.currentUserID;
+  if (userid != undefined) {
+    RegularUser.findById(userid)
+      .then(user => {
+        if (!user) {
+          console.log("Regular user does not exist");
+          res.status(404).send();
+        } else {
+          let count = 0;
+          const list = [];
+          const rawList = user.courseTeaching;
+          rawList.forEach(courseObjectID =>
+            Course.findById(courseObjectID).then(course => {
+              RegularUser.findById(course.admin).then(admin => {
+                const thisCourse = {};
+                thisCourse.id = courseObjectID;
+                thisCourse.name = course.name;
+                thisCourse.info = course.description;
+                thisCourse.admin = admin.username;
+                thisCourse.liked = true;
+                list.push(thisCourse);
+                count++;
+                if (count === rawList.length) {
+                  res.send({ courses: list });
+                }
+              });
+            })
+          );
+        }
+      })
+      .catch(error => {
+        res.status(400).send();
+      });
+  } else {
+    console.log("Unauthorized access to profile course teaching");
+    res.status(401).send();
+  }
+});
 // update user information
 /* request body:
-{
-    "username": "",
-    "password": "",
-    "GPA": ,
-    "gender": "",
-    "levelOfEducation": "",
-    "fieldOfStudy": ""
-}
-*/
-app.patch("/RegularUser/Profile", (req, res) => {
-    const userid = req.session.currentUserID;
-    //const userid = req.body.userid;
-    if (userid !== undefined) {
-        RegularUser.findById(userid).then(user => {
-            if (!user) {
-                console.log("Regular user does not exist");
-                res.status(404).send();
-            } else {
-                user.username = req.body.username;
-                user.password = req.body.password;
-                user.GPA = req.body.GPA;
-                user.gender = req.body.gender;
-                user.levelOfEducation = req.body.levelOfEducation;
-                user.fieldOfStudy = req.body.fieldOfStudy;
-                user
-                    .save()
-                    .then(
-                        result => {
-                            console.log("Saving new user profile");
-                            res.send(result);
-                        },
-                        error => {
-                            res.send(400).send();
-                        }
-                    )
-                    .catch(error => {
-                        res.status(400).send();
-                    });
+  {
+      "username": "",
+      "password": "",
+      "GPA": ,
+      "gender": "",
+      "levelOfEducation": "",
+      "fieldOfStudy": ""
+  }
+  */
+app.post("/RegularUser/Profile", (req, res) => {
+  const userid = req.session.currentUserID;
+  //const userid = req.body.userid;
+  if (userid !== undefined) {
+    RegularUser.findById(userid).then(user => {
+      if (!user) {
+        console.log("Regular user does not exist");
+        res.status(404).send();
+      } else {
+        user.username = req.body.username;
+        user.password = req.body.password;
+        user.GPA = req.body.GPA;
+        user.gender = req.body.gender;
+        user.levelOfEducation = req.body.levelOfEducation;
+        user.fieldOfStudy = req.body.fieldOfStudy;
+        user.courseTaking = req.body.courseTaking;
+        user.courseTeaching = req.body.courseTeaching;
+        console.log("test1");
+        user
+          .save()
+          .then(
+            result => {
+              console.log("Saving new user profile");
+              res.send(result);
+            },
+            error => {
+              console.log("test2");
+              res.send(400).send();
             }
-        });
-    }
+          )
+          .catch(error => {
+            console.log("test3");
+            res.status(400).send();
+          });
+      }
+    });
+  }
 });
 
 // handling upload requests
