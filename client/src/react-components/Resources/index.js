@@ -2,9 +2,12 @@ import React from "react";
 
 import "./styles.css";
 import NavBar from "../NavBar/navbar";
-import {Button, Card, Grid, Icon, Image, Menu, Segment, Table} from 'semantic-ui-react'
+import {UploadModule} from "../UploadModule/";
+import {Button, Card, Grid, Icon, Image, Menu, Popup, Segment, Table} from 'semantic-ui-react'
 import {uid} from "react-uid";
 
+
+import {readCookie} from "../../actions/RegularUser";
 import {getResources} from "../../actions/resource";
 
 /* Component for the CSC309A_resources page */
@@ -17,10 +20,13 @@ export class Resources extends React.Component {
         const {match: {params}} = this.props;
 
         this.state = {
+            currentUserID: {},
+            admin: {},
             courseName: params.courseName,
             resources: [],
             display_style: "list"
         };
+        readCookie(this);
         getResources(this);
     }
 
@@ -152,7 +158,8 @@ export class Resources extends React.Component {
     };
 
     render() {
-        const {courseName} = this.state;
+        const {courseName, currentUserID, admin} = this.state;
+        const isAdmin = currentUserID === admin;
         this.display_items();
         return (
             <div>
@@ -164,11 +171,21 @@ export class Resources extends React.Component {
                     </Menu.Item>
 
                     <Menu.Item header className={"resources_header_text"}>{`${courseName} Resources`}</Menu.Item>
-                    <Menu.Item as='a' icon position='right' name={"list"} onClick={this.set_display_style}>
+                    <Menu.Item as='a' position='right' icon name={"list"} onClick={this.set_display_style}>
                         <Icon name={'list'}/>
                     </Menu.Item>
                     <Menu.Item as='a' icon name={"icon"} onClick={this.set_display_style}>
                         <Icon name={'th'}/>
+                    </Menu.Item>
+                    <Menu.Item as='a' icon>
+                        <Popup
+                            on='click'
+                            disabled={!isAdmin}
+                            pinned
+                            trigger={<Button disabled={!isAdmin} icon={'upload'}
+                                             content={isAdmin ? "Upload" : "Only Course Admin can upload"}/>}>
+                            <UploadModule courseName={courseName}/>
+                        </Popup>
                     </Menu.Item>
                 </Menu>
                 {this.display_items_element}

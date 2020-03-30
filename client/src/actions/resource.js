@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const getResources = (app) => {
     // the URL for the request
 
@@ -17,9 +19,50 @@ export const getResources = (app) => {
         })
         .then(json => {
             // the resolved promise with the JSON body
-            app.setState({resources: json.resources});
+            app.setState({
+                admin: json.admin,
+                resources: json.resources
+            });
         })
         .catch(error => {
             console.log(error);
         });
+};
+
+export const fileUploadHandler = async (e, {app}) => {
+    e.preventDefault();
+    const {file, courseName} = app.state;
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const res = await axios.post(`/courses/${courseName}/upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: progressEvent => {
+                const percentage = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total));
+                app.setState({
+                    uploadPercentage: percentage
+                });
+
+                // Clear percentage
+                setTimeout(() => app.setState({uploadPercentage: 0}), 10000);
+            }
+        });
+
+        const {resFileName, resFilePath} = res.data;
+
+        app.setState({filename: resFileName, filePath: resFilePath, message: "File Uploaded"});
+    } catch (err) {
+        if (err.response.status === 500) {
+            app.setState({
+                message: 'There was a problem with the server'
+            });
+        } else {
+            app.setState({
+                message: err.response.data.msg
+            });
+        }
+    }
 };

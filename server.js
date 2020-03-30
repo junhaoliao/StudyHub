@@ -412,7 +412,10 @@ app.get("/courses/:courseName/getResources", (req, res) => {
                         resourcesList.push(newResource);
                         count++;
                         if (count === course.resources.length) {
-                            return res.send({resources: resourcesList});
+                            return res.send({
+                                admin: course.admin,
+                                resources: resourcesList
+                            });
                         }
                     }).catch(error => {
                         console.log(error);

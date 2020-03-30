@@ -1,12 +1,13 @@
 import React from "react";
 
 import {Button, Form, Header, Icon, Progress, Segment} from "semantic-ui-react";
-import axios from 'axios';
+import {fileUploadHandler} from "../../actions/resource";
 
-export class uploadModule extends React.Component {
+export class UploadModule extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            courseName: this.props.courseName,
             file: "",
             fileName: "",
             uploadedFile: false,
@@ -21,42 +22,7 @@ export class uploadModule extends React.Component {
             fileName: e.target.files[0].name
         });
     };
-    onSubmit = async e => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('file', this.state.file);
 
-        try {
-            const res = await axios.post('/courses/0000/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                onUploadProgress: progressEvent => {
-                    const percentage = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-                    this.setState({
-                        uploadPercentage: percentage
-                    });
-
-                    // Clear percentage
-                    setTimeout(() => this.setState({uploadPercentage: 0}), 10000);
-                }
-            });
-
-            const {resFileName, resFilePath} = res.data;
-
-            this.setState({filename: resFileName, filePath: resFilePath, message: "File Uploaded"});
-        } catch (err) {
-            if (err.response.status === 500) {
-                this.setState({
-                    message: 'There was a problem with the server'
-                });
-            } else {
-                this.setState({
-                    message: err.response.data.msg
-                });
-            }
-        }
-    };
 
     render() {
         return (
@@ -64,7 +30,7 @@ export class uploadModule extends React.Component {
                 <Header icon>
                     <Icon name='file outline'/>
                 </Header>
-                <Form onSubmit={this.onSubmit}>
+                <Form app={this} onSubmit={fileUploadHandler}>
                     <Form.Field>
                         <input onChange={this.onChange} type={"file"} id='customFile'/>
                     </Form.Field>
