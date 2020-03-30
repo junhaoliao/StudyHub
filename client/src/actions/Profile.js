@@ -12,6 +12,7 @@ export const readCookie = Profile => {
         Profile.setState({
           login: true,
           username: json.username,
+          password: json.password,
           gender: json.gender,
           GPA: json.GPA,
           levelOfEducation: json.levelOfEducation,
@@ -65,3 +66,30 @@ export const readCookie = Profile => {
       console.log(error);
     });
 };
+
+export const updateProfileForm = (Profile, field) => {
+  const value = field.value;
+  const name = field.name;
+  Profile.setState({
+    [name]: value
+  });
+};
+
+export const switchView = Profile => {
+  if (Profile.state.edit) {
+    Profile.setState({
+      edit: false
+    });
+  } else {
+    Profile.setState({
+      edit: true
+    });
+  }
+};
+
+export const CancelButton = Profile => {
+  readCookie(Profile);
+  switchView(Profile);
+};
+
+// export const remove_courseTaking = (Profile, )
