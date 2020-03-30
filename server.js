@@ -496,19 +496,16 @@ app.patch("/courses/:courseName", (req, res) => {
 // 3. push the announcement into course.announcements
 // 4. delete the first announcement whenever there are more than 3 announcements
 app.post("/courses/:courseName/announcement", (req, res) => {
-  console.log("rock your body");
   const currentUserID = req.session.currentUserID;
   if (!currentUserID) {
     res.status(400).send();
     return;
   }
   let theCourse = null;
-  console.log("rock your body right");
   const courseName = req.params.courseName;
 
   Course.findByCourseName(courseName)
     .then(course => {
-      console.log("backstreet boy alright");
       if (!course) {
         log("invalid course name");
         res.status(404).send(); // could not find this resource
@@ -544,9 +541,8 @@ app.post("/courses/:courseName/announcement", (req, res) => {
       }
     })
     .catch(error => {
-      console.log("hi i am here");
       console.log(error);
-      return res.status(111).send(); // server error
+      return res.status(500).send(); // server error
     });
 });
 
