@@ -19,12 +19,6 @@ const fileUpload = require('express-fileupload');
 app.use(fileUpload({
     limits: {fileSize: 500 * 1024 * 1024}
 }));
-const fileUpload = require("express-fileupload");
-app.use(
-  fileUpload({
-    limits: { fileSize: 500 * 1024 * 1024 }
-  })
-);
 
 // datetime for converting date to string
 const datetime = require('date-and-time');
@@ -341,21 +335,46 @@ app.post("/courses", (req, res) => {
     );
 });
 
-app.get("/courses/:courseName", (req, res) => {
+app.get("/getCourses/:courseName", (req, res) => {
     const userID = req.session.currentUserID;
     if (!userID) {
         return res.status(403).send(); // user not logged in
     }
+    const courseName = req.params.courseName;
     Course.findByCourseName(courseName)
         .then(course => {
             if (!course) {
                 log("invalid course name");
                 res.status(404).send(); // could not find this resource
             } else {
-
-                const theCourse = {};
-                theCourse.name = course.name;
-                // incomplete
+                const theCourse = {
+                    admin: course.admin,
+                    announcements: course.announcements
+                };
+                let count = 0;
+                const chatroom = [];
+                course.chatroom.forEach((msg) => {
+                    RegularUser.findById(msg.user_id).then(
+                        (user) => {
+                            const updatedMsg = {
+                                user_id: msg.user_id,
+                                date: datetime.format(msg.date, "h:mm:s on MMM D"),
+                                message: msg.message,
+                                username: user.username
+                            };
+                            chatroom.push(updatedMsg);
+                            count++;
+                            //log(msg);
+                            if (count === course.chatroom.length) {
+                                theCourse.chatroom = chatroom;
+                                res.send({course: theCourse});
+                            }
+                        },
+                        (error) => {
+                            return res.send(400).send(error);
+                        }
+                    );
+                });
 
             }
         })
@@ -867,6 +886,42 @@ app.get('/download/:file_id', (req, res) => {
         res.status(500).send(); // server error
     });
 
+
+});
+
+// post msg to some course chat room given course name
+app.post("/courses/:courseName/chatroom", (req, res) => {
+    const currentUserID = req.session.currentUserID;
+    if (!currentUserID) {
+        return res.status(403).send();
+    }
+
+    console.log("start to find the course");
+    const courseName = req.params.courseName;
+    Course.findByCourseName(courseName).then((course) => {
+        console.log("start to create the message object");
+        const newMsg = {
+            user_id: currentUserID,
+            date: new Date(),
+            message: req.body.message
+        };
+
+        course.chatroom.push(newMsg);
+
+        if (course.chatroom.length > 50) {
+            course.chatroom.shift();
+        }
+        console.log("start to save the course tuple");
+        course.save().then(
+            result => {
+                return res.send(result);
+            }).catch(error => {
+            return res.status(500).send();
+        });
+
+    }).catch(error => {
+        return res.status(500).send();
+    });
 
 });
 

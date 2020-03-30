@@ -50,7 +50,7 @@ class Course extends React.Component {
                 <Card.Content extra>
                     <div className='ui two buttons'>
                         {this.LikedButton}
-                        <Button color={"blue"} href={course.name}>
+                        <Button color={"blue"} href={`/courses/${course.name}`}>
                             <span role={"img"} aria-label="study">📖</span>
                             Enter</Button>
                     </div>

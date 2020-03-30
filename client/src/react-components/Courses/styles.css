@@ -11,6 +11,8 @@
 }
 
 .chat_room_messages {
+    overflow: auto;
+    scroll-behavior: smooth;
     height: 68vh;
 }
 

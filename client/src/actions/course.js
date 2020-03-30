@@ -75,3 +75,79 @@ export const createCourse = (app) => {
         });
 
 };
+
+export const getCourseObject = (app) => {
+    // the URL for the request
+
+    const courseName = app.state.courseName;
+    const url = "/getCourses/" + courseName;
+
+    // Since this is a GET request, simply call fetch on the URL
+    fetch(url)
+        .then(res => {
+            if (res.status === 200) {
+                // return a promise that resolves with the JSON body
+                //this.courseList = res.json();
+                return res.json();
+            } else {
+                alert("Could not get courses");
+            }
+        })
+        .then(json => {
+            // the resolved promise with the JSON body
+            const course = json.course;
+            app.setState({
+                admin: course.admin,
+                chatroom: course.chatroom
+            });
+            setTimeout(() => {
+                const chatroomSegment = document.querySelector(".chat_room_messages");
+                if (chatroomSegment.clientHeight + chatroomSegment.scrollTop + 200 > chatroomSegment.scrollHeight) {
+                    chatroomSegment.scrollTop = chatroomSegment.scrollHeight;
+                }
+            }, 1500);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
+export const postNewMsg = (app) => {
+
+    const {courseName, message_to_send} = app.state;
+
+    // the URL for the request
+    const url = "/courses/" + courseName + "/chatroom";
+
+    const newMessage = {message: message_to_send};
+
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: "post",
+        body: JSON.stringify(newMessage),
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    // Send the request with fetch()
+    fetch(request)
+        .then(function (res) {
+            // Handle response we get from the API.
+            // Usually check the error codes to see what happened.
+            if (res.status === 200) {
+                getCourseObject(app);
+                app.setState({
+                    message_to_send: ""
+                });
+                const chatroomSegment = document.querySelector(".chat_room_messages");
+                chatroomSegment.scrollTop = chatroomSegment.scrollHeight;
+            } else {
+                alert("The message was not sent for unknown reason. You may want to logout and log back in.")
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};

@@ -9,40 +9,8 @@ import Avatar from "react-avatar";
 
 import {ProfileView} from "../ProfileView";
 import {uid} from "react-uid";
+import {getCourseObject, postNewMsg} from "../../actions/course";
 
-const chat_log = [
-    {
-        user: "Kevin",
-        date: "Today at 0:00AM",
-        message: "Welcome to the new class!😀"
-    },
-    {user: "Junhao", date: "Today at 0:00AM", message: "What a nice day!😂"},
-    {
-        user: "Kruzer",
-        date: "Today at 0:00AM",
-        message: "😆Let's come and finish the project tonight!"
-    },
-    {
-        user: "Ashley",
-        date: "Today at 0:00AM",
-        message: "No problem! I will start with the profile.😎"
-    }
-];
-
-const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-];
 
 const announcements = [
     {title: "Announcement 1", content: "I am the first announcement."},
@@ -50,45 +18,58 @@ const announcements = [
 ];
 
 /* Component for the Home page */
-class CSC309A extends React.Component {
+export class CoursePage extends React.Component {
     constructor(props) {
         super(props);
+        const {match: {params}} = this.props;
+
         this.state = {
-            courseObject: null,
+            courseName: params.courseName,
+            admin: {},
+            chatroom: [],
             message_to_send: "",
+            scroll_height: 0,
             activeIndex: 0
         };
+        getCourseObject(this);
     }
 
-
     componentDidMount() {
-        document.title = "CSC309A";
+        document.title = this.state.courseName;
+        setInterval(() => {
+            const app = this;
+            getCourseObject(app);
+        }, 5000);
+        setTimeout(() => {
+            const chatroomSegment = document.querySelector(".chat_room_messages");
+            chatroomSegment.scrollTop = chatroomSegment.scrollHeight;
+        }, 1500);
     }
 
     handleChange = (e, {name, value}) => this.setState({[name]: value});
-
-    handleSubmit = () => {
-        const newMessage = {};
-        newMessage.user = "RegularUser";
-
-        const now = new Date();
-
-        newMessage.date =
-            now.getHours() +
-            ":" +
-            now.getMinutes() +
-            ":" +
-            now.getSeconds() +
-            " on " +
-            months[now.getMonth()] +
-            "-" +
-            now.getDate();
-
-        newMessage.message = this.state.message_to_send;
-        chat_log.push(newMessage);
-
-        this.setState({message_to_send: ""});
-    };
+    //
+    // handleSubmit = () => {
+    //     const newMessage = {};
+    //     newMessage.user = "RegularUser";
+    //
+    //     const now = new Date();
+    //
+    //     newMessage.date =
+    //         now.getHours() +
+    //         ":" +
+    //         now.getMinutes() +
+    //         ":" +
+    //         now.getSeconds() +
+    //         " on " +
+    //         months[now.getMonth()] +
+    //         "-" +
+    //         now.getDate();
+    //
+    //     newMessage.message = this.state.message_to_send;
+    //     chat_log.push(newMessage);
+    //
+    //     this.setState({message_to_send: ""});
+    // };
 
     handleClick = (e, titleProps) => {
         const {index} = titleProps;
@@ -102,10 +83,10 @@ class CSC309A extends React.Component {
         return (
             <Comment key={uid(comment)}>
                 <Comment.Avatar
-                    src={<Avatar name={comment.user} size="42" round={true}/>}
+                    src={<Avatar name={comment.username} size="42" round={true}/>}
                 />
                 <Comment.Content>
-                    <Comment.Author as="a">{comment.user}</Comment.Author>
+                    <Comment.Author as="a">{comment.username}</Comment.Author>
                     <Comment.Metadata>
                         <div>{comment.date}</div>
                     </Comment.Metadata>
@@ -139,7 +120,7 @@ class CSC309A extends React.Component {
     }
 
     render() {
-        const {message_to_send} = this.state;
+        const {message_to_send, chatroom, courseName} = this.state;
         return (
             <div>
                 <NavBar/>
@@ -150,7 +131,7 @@ class CSC309A extends React.Component {
                     <Grid.Column>
                         <div className={"course_header"}>
                             <Header as="h1">
-                                <Header.Content> CSC309A</Header.Content>
+                                <Header.Content> {courseName}</Header.Content>
                             </Header>
                         </div>
                     </Grid.Column>
@@ -158,7 +139,7 @@ class CSC309A extends React.Component {
                 <div className={"chat_room_container"}>
                     <Segment className={"chat_room_messages"}>
                         <Comment.Group>
-                            {chat_log.map(comment => this.plot_comment(comment))}
+                            {chatroom.map(msg => this.plot_comment(msg))}
                         </Comment.Group>
                     </Segment>
                     <Popup
@@ -222,7 +203,7 @@ class CSC309A extends React.Component {
                             🤝
                         </Button>
                     </Popup>
-                    <Form onSubmit={this.handleSubmit} className={"chat_bar"}>
+                    <Form onSubmit={() => postNewMsg(this)} className={"chat_bar"}>
                         <Form.Group>
                             <Form.Input
                                 width={16}
@@ -237,7 +218,7 @@ class CSC309A extends React.Component {
                 </div>
                 <div className={"course_secondary_column"}>
                     <Button
-                        href="/CSC309A/resources"
+                        href={`/courses/${courseName}/resources`}
                         color={"blue"}
                         className={"resources_button"}
                     >
@@ -248,8 +229,7 @@ class CSC309A extends React.Component {
                     </Accordion>
                 </div>
             </div>
+
         );
     }
 }
-
-export default CSC309A;

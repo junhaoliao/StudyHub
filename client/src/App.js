@@ -9,6 +9,7 @@ import dash_board from "./react-components/dash_board";
 import {RegularBB} from "./react-components/bill_board/regular_billboard";
 import {Profile} from "./react-components/Profile";
 import {uploadModule} from "./react-components/uploadModule";
+import {CoursePage} from "./react-components/Courses/CoursePage";
 import {Resources} from "./react-components/Resources";
 //import 'semantic-ui-css/semantic.min.css'
 // import Action functions
@@ -64,7 +65,10 @@ class App extends React.Component {
             <Route path="/upload" exact component={uploadModule}/>
             {/*<Route path="/course/:courseName">*/}
             {/*</Route>*/}
+
             <Route path="/courses/:courseName/resources" component={Resources}/>
+            <Route path="/courses/:courseName/" component={CoursePage}/>
+
             {/*
             <Route
               exact

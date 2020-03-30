@@ -7,36 +7,6 @@ import {uid} from "react-uid";
 
 import {getResources} from "../../actions/resource";
 
-const course_resources = [
-    {
-        name: "How to learn CSC309 well.docx",
-        link: "/*",
-        type: "docx",
-        size: "3.09 MB",
-        date: "February 28, 2020",
-        description: "I am a description",
-        faved: false
-    },
-    {
-        name: "The best plan is no plan.txt",
-        link: "/*",
-        type: "txt",
-        size: "0 KB",
-        date: "February 28, 2020",
-        description: "I am a description",
-        faved: true
-    },
-    {
-        name: "I don't really have those files(YouTube)",
-        link: "noFile",
-        type: "mp4",
-        size: "0 KB",
-        date: "February 28, 2020",
-        description: "I am a description",
-        faved: true
-    }
-];
-
 /* Component for the CSC309A_resources page */
 export class Resources extends React.Component {
     display_items_element = "";
@@ -189,7 +159,7 @@ export class Resources extends React.Component {
                 <NavBar/>
                 <Menu>
 
-                    <Menu.Item href={`/${courseName}`} as='a' icon>
+                    <Menu.Item href={`/courses/${courseName}`} as='a' icon>
                         <Icon name={"left arrow"}/>
                     </Menu.Item>
 
