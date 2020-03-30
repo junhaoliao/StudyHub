@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const AnnouncementSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -23,7 +24,10 @@ const CourseSchema = new mongoose.Schema({
         required: true
     },
     users: [mongoose.Schema.Types.ObjectId],
-    announcements: [AnnouncementSchema]
+    announcements: [AnnouncementSchema],
+
+    // list of resources that are shared in the class
+    resources: [mongoose.Schema.Types.ObjectId]
 });
 
 CourseSchema.statics.findByCourseName = function (courseName) {
