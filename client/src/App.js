@@ -9,7 +9,7 @@ import dash_board from "./react-components/dash_board";
 import {RegularBB} from "./react-components/bill_board/regular_billboard";
 import {Profile} from "./react-components/Profile";
 import {uploadModule} from "./react-components/uploadModule";
-import {CoursePage} from "./react-components/Courses/CoursePage";
+import {CoursePage} from "./react-components/Courses";
 import {Resources} from "./react-components/Resources";
 //import 'semantic-ui-css/semantic.min.css'
 // import Action functions
