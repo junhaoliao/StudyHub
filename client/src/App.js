@@ -9,6 +9,7 @@ import dash_board from "./react-components/dash_board";
 import {RegularBB} from "./react-components/bill_board/regular_billboard";
 import {Profile} from "./react-components/Profile";
 import {uploadModule} from "./react-components/uploadModule";
+import {Resources} from "./react-components/Resources";
 //import 'semantic-ui-css/semantic.min.css'
 // import Action functions
 import {readCookie} from "./actions/RegularUser";
@@ -55,12 +56,15 @@ class App extends React.Component {
             <Route path="/a*" exact component={AdminPage} />
             <Route path="*" component={Page404} />
         */}
-            <Route path="/dash_board" exact component={dash_board} />
-            <Route path="/home" exact component={Home} />
-            <Route path="/" exact component={Home} />
-            <Route path="/bill_board" exact component={RegularBB} />
+            <Route path="/dash_board" exact component={dash_board}/>
+            <Route path="/home" exact component={Home}/>
+            <Route path="/" exact component={Home}/>
+            <Route path="/bill_board" exact component={RegularBB}/>
             <Route path="/profile" exact component={Profile}/>
             <Route path="/upload" exact component={uploadModule}/>
+            {/*<Route path="/course/:courseName">*/}
+            {/*</Route>*/}
+            <Route path="/courses/:courseName/resources" component={Resources}/>
             {/*
             <Route
               exact

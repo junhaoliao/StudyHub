@@ -27,7 +27,7 @@ export class uploadModule extends React.Component {
         formData.append('file', this.state.file);
 
         try {
-            const res = await axios.post('/upload', formData, {
+            const res = await axios.post('/courses/0000/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
