@@ -924,6 +924,38 @@ app.post("/courses/:courseName/chatroom", (req, res) => {
 
 });
 
+//add like to a course
+app.patch("/courses/:courseName/like", (req, res) => {
+    const currentUserID = req.session.currentUserID;
+    if (!currentUserID) {
+        return res.status(403).send();
+    }
+    let theCourse = null;
+    const courseName = req.params.courseName;
+    Course.findByCourseName(courseName).then(course=> {
+         if(!course){
+             log("invalid course name");
+             res.status(404).send(); // could not find this resource
+         }else{
+             //give the course a heart
+             log(currentUserID);
+             course.likes.addToSet(currentUserID);
+             course.save().then((result) => {
+                     return res.send({
+                         message:
+                             "announcement sent successfully"
+                     });
+                 }
+                 , (error) => {
+                     return res.status(400).send(error);
+                 });
+         }
+    }).catch( error =>{
+        consloe.log(error);
+        return res.status(500).send(); //server error
+    });
+});
+
 app.use(express.static(__dirname + "/client/build"));
 
 // All routes other than above will go to index.html
