@@ -8,7 +8,7 @@ import {uid} from "react-uid";
 
 
 import {readCookie} from "../../actions/RegularUser";
-import {getResources} from "../../actions/resource";
+import {getResources, removeFileHandler} from "../../actions/resource";
 
 /* Component for the CSC309A_resources page */
 export class Resources extends React.Component {
@@ -36,6 +36,8 @@ export class Resources extends React.Component {
     }
 
     plot_resource_list(resource) {
+        const {currentUserID, admin} = this.state;
+        const isAdmin = (currentUserID === admin);
         return (
             <Table.Row key={uid(resource)}>
                 <Table.Cell>
@@ -50,6 +52,9 @@ export class Resources extends React.Component {
                 </Table.Cell>
                 <Table.Cell>{resource.size}</Table.Cell>
                 <Table.Cell>{resource.date}</Table.Cell>
+                {isAdmin ? <Table.Cell>
+                    <Button icon={"remove circle"} app={this} file_id={resource.file_id} onClick={removeFileHandler}/>
+                </Table.Cell> : null}
             </Table.Row>
         );
     }
@@ -76,7 +81,8 @@ export class Resources extends React.Component {
     }
 
     display_items() {
-        const {resources, display_style} = this.state;
+        const {resources, display_style, currentUserID, admin} = this.state;
+        const isAdmin = (currentUserID === admin);
         if (display_style === "list") {
             this.display_items_element = <Segment>
                 <Table celled>
@@ -85,6 +91,7 @@ export class Resources extends React.Component {
                             <Table.HeaderCell>File</Table.HeaderCell>
                             <Table.HeaderCell>Size</Table.HeaderCell>
                             <Table.HeaderCell>Date Uploaded</Table.HeaderCell>
+                            {isAdmin ? <Table.HeaderCell>Operations</Table.HeaderCell> : null}
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -93,7 +100,7 @@ export class Resources extends React.Component {
 
                     <Table.Footer>
                         <Table.Row>
-                            <Table.HeaderCell colSpan='3'>
+                            <Table.HeaderCell colSpan='4'>
                                 <Menu floated='right' pagination>
                                     <Menu.Item as='a' icon>
                                         <Icon name='chevron left'/>

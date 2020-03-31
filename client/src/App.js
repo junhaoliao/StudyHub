@@ -2,25 +2,25 @@ import React from "react";
 
 import "./App.css";
 // Importing react-router-dom to use the React Router
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 // Importing pages
 import Home from "./react-components/Home";
 import dash_board from "./react-components/dash_board";
-import { RegularBB } from "./react-components/bill_board/regular_billboard";
-import { Profile } from "./react-components/Profile";
-import { CoursePage } from "./react-components/Courses";
-import { Resources } from "./react-components/Resources";
-import { AdminDashboard } from "./react-components/admin_dashboard";
+import {RegularBB} from "./react-components/bill_board/regular_billboard";
+import {Profile} from "./react-components/Profile";
+import {CoursePage} from "./react-components/Courses";
+import {Resources} from "./react-components/Resources";
+import {AdminDashboard} from "./react-components/admin_dashboard";
 //import 'semantic-ui-css/semantic.min.css'
 // import Action functions
-import { readCookie } from "./actions/RegularUser";
-import { AddAnnouncement } from "./react-components/Courses/AddAnnouncement";
+import {readCookie} from "./actions/RegularUser";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: null
+      currentUser: {},
+      currentUserID: {},
     };
     readCookie(this);
   }
@@ -58,21 +58,21 @@ class App extends React.Component {
             <Route path="/a*" exact component={AdminPage} />
             <Route path="*" component={Page404} />
         */}
-            <Route path="/dash_board" exact component={dash_board} />
-            <Route path="/home" exact component={Home} />
-            <Route path="/" exact component={Home} />
-            <Route path="/bill_board" exact component={RegularBB} />
-            <Route path="/profile" exact component={Profile} />
-            <Route path="/announcement" exact component={AddAnnouncement} />
+            <Route path="/dash_board" exact component={dash_board}/>
+            <Route path="/home" exact component={Home}/>
+            <Route path="/" exact component={Home}/>
+            <Route path="/bill_board" exact component={RegularBB}/>
+            <Route path="/profile" exact component={Profile}/>
+            {/*<Route path="/announcement" exact component={AddAnnouncement}/>*/}
             {/*<Route path="/course/:courseName">*/}
             {/*</Route>*/}
 
             <Route
-              path="/courses/:courseName/resources"
-              component={Resources}
+                path="/courses/:courseName/resources"
+                component={Resources}
             />
-            <Route path="/courses/:courseName/" component={CoursePage} />
-            <Route path="/adash_board" exact component={AdminDashboard} />
+            <Route path="/courses/:courseName/" component={CoursePage}/>
+            <Route path="/adash_board" exact component={AdminDashboard}/>
 
             {/*
             <Route

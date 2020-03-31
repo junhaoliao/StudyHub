@@ -86,3 +86,33 @@ export const fileUploadHandler = async (e, {app}) => {
         }
     }
 };
+
+export const removeFileHandler = (e, {app, file_id}) => {
+    e.preventDefault();
+
+    const url = "/upload/" + file_id;
+
+    const request = new Request(url, {
+        method: "delete",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    // Send the request with fetch()
+    fetch(request)
+        .then(function (res) {
+            // Handle response we get from the API.
+            // Usually check the error codes to see what happened.
+            if (res.status === 200) {
+                getResources(app);
+            } else {
+                alert("Operation Invalid");
+                getResources(app);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};

@@ -9,7 +9,7 @@ import Avatar from "react-avatar";
 
 import {ProfileView} from "../ProfileView";
 import {uid} from "react-uid";
-import {getCourseObject, postNewMsg} from "../../actions/course";
+import {getCourseObject, postNewMsg, removeAnnouncementHandler} from "../../actions/course";
 import {AddAnnouncement} from "./AddAnnouncement";
 import {readCookie} from "../../actions/RegularUser";
 
@@ -34,8 +34,8 @@ export class CoursePage extends React.Component {
             scroll_height: 0,
             activeIndex: 0
         };
-        getCourseObject(this);
         readCookie(this);
+        getCourseObject(this);
     }
 
     componentDidMount() {
@@ -47,6 +47,7 @@ export class CoursePage extends React.Component {
         setTimeout(() => {
             const chatroomSegment = document.querySelector(".chat_room_messages");
             chatroomSegment.scrollTop = chatroomSegment.scrollHeight;
+
         }, 1500);
     }
 
@@ -110,6 +111,8 @@ export class CoursePage extends React.Component {
                                  index={i}
                                  onClick={this.handleClick}
                 >
+                    <Button icon={"remove circle"} app={this} announcement_id={announcements[i]._id}
+                            onClick={removeAnnouncementHandler}/>
                     <Icon name="dropdown"/>
                     {announcements[i].title}
                 </Accordion.Title>
@@ -126,6 +129,8 @@ export class CoursePage extends React.Component {
     render() {
         const {message_to_send, chatroom, courseName, currentUserID, announcements, admin} = this.state;
         const isAdmin = currentUserID === admin;
+        console.log(currentUserID);
+        console.log(admin);
         return (
             <div>
                 <NavBar/>

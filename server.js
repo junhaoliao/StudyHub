@@ -218,82 +218,6 @@ app.post("/RegularUser", (req, res) => {
     );
 });
 
-app.get("/CourseTeaching", (req, res) => {
-    console.log("Check all courses taking");
-    const username = req.body.username;
-    const password = req.body.password;
-    console.log("username: " + username);
-    console.log("password: " + password);
-
-    RegularUser.findByUsernamePassword(username, password)
-        .then(user => {
-            res.send(user.courseTeaching);
-        })
-        .catch(error => {
-            res.status(400).send();
-        });
-});
-
-app.post("/CourseTeaching", (req, res) => {
-    console.log("Add a course to teach");
-    const username = req.body.username;
-    const password = req.body.password;
-    console.log("username: " + username);
-    console.log("password: " + password);
-
-    RegularUser.findByUsernamePassword(username, password)
-        .then(user => {
-            const new_course = {
-                title: req.body.title,
-                admin: req.body.username
-            };
-            user.courseTeaching.push(new_course);
-            user.save();
-            res.send(user);
-        })
-        .catch(error => {
-            res.status(400).send();
-        });
-});
-
-app.get("/CourseTaking", (req, res) => {
-    console.log("Check all courses taking");
-    const username = req.body.username;
-    const password = req.body.password;
-    console.log("username: " + username);
-    console.log("password: " + password);
-
-    RegularUser.findByUsernamePassword(username, password)
-        .then(user => {
-            res.send(user.courseTaking);
-        })
-        .catch(error => {
-            res.status(400).send();
-        });
-});
-
-app.post("/CourseTaking", (req, res) => {
-    console.log("Add a course to take");
-    const username = req.body.username;
-    const password = req.body.password;
-    console.log("username: " + username);
-    console.log("password: " + password);
-
-    RegularUser.findByUsernamePassword(username, password)
-        .then(user => {
-            const new_course = {
-                title: req.body.title,
-                admin: req.body.username
-            };
-            user.courseTaking.push(new_course);
-            user.save();
-            res.send(user);
-        })
-        .catch(error => {
-            res.status(400).send();
-        });
-});
-
 app.get("/courses", (req, res) => {
     const currentUserID = req.session.currentUserID;
     if (!currentUserID) {
@@ -381,8 +305,12 @@ app.get("/getCourses/:courseName", (req, res) => {
             } else {
                 const theCourse = {
                     admin: course.admin,
-                    announcements: course.announcements
+                    announcements: course.announcements,
+                    chatroom: []
                 };
+                if (course.chatroom.length === 0) {
+                    res.send({course: theCourse});
+                }
                 let count = 0;
                 const chatroom = [];
                 course.chatroom.forEach((msg) => {
@@ -424,7 +352,7 @@ app.get("/courses/:courseName/getResources", (req, res) => {
     if (!userID) {
         return res.status(400).send(); // user not logged in
     }
-    const resourcesList = [];
+
     const courseName = req.params.courseName;
     Course.findByCourseName(courseName)
         .then(course => {
@@ -432,10 +360,18 @@ app.get("/courses/:courseName/getResources", (req, res) => {
                 log("invalid course name");
                 res.status(404).send(); // could not find this resource
             } else {
+                const resourcesList = [];
+                if (course.resources.length === 0) {
+                    res.send({
+                        admin: course.admin,
+                        resources: resourcesList
+                    });
+                }
                 let count = 0;
                 course.resources.forEach((fileObjectID) => {
                     File.findById(fileObjectID).then((fileDBEntry) => {
                         const newResource = {};
+                        newResource.file_id = fileDBEntry._id;
                         newResource.name = fileDBEntry.name;
                         newResource.link = `/download/${fileObjectID._id}`;
                         newResource.type = fileDBEntry.type;
@@ -595,7 +531,7 @@ app.delete("/courses/:courseName/:announcement", (req, res) => {
                 log("invalid course name");
                 res.status(404).send(); // could not find this resource
             } else {
-                //find the annuncement
+                //find the announcements
                 const announcement = course.announcements.id(_id);
                     if(!announcement){
                         log("invalid announcement id");
@@ -987,11 +923,11 @@ app.delete('/upload/:file_id', (req, res) => {
     // check whether the user has logged in
     const currentUserID = req.session.currentUserID;
     if (!currentUserID) {
-        res.status(403).send();
+        return res.status(403).send();
     }
     const file_id = req.params.file_id;
     if (!ObjectID.isValid(file_id)) {
-        res.status(400).send();
+        return res.status(400).send();
     }
 
     File.findByIdAndRemove(file_id).then((fileDBEntry)=>{
@@ -1012,54 +948,18 @@ app.delete('/upload/:file_id', (req, res) => {
             course.save();
             fsPromises.unlink(`${__dirname}/uploads/${file_id}`).then(
                 ()=>{
-                    res.send({message:"success"});
+                    return res.send({message: "success"});
                 }
             )
-                .catch((error)=>{
-                    res.status(500).send(error); // server error
-            });
+                .catch((error)=> {
+                    return res.status(500).send(error); // server error
+                });
         })
     }).catch(error => {
         console.log(error);
         res.status(500).send(); // server error
     });
 
-    // get the course name
-
-    const course_id = file_id.course._id;
-    Course.findByCourseName(courseName).then(course => {
-        if (!course) {
-            log("invalid course name");
-            return res.status(404).send(); // could not find the course
-        }else {
-            if (course.admin != currentUserID) {
-                console.log("not admin");
-                console.log(course.admin);
-                console.log(currentUserID);
-                return res.status(403).send();
-            }
-
-            File.findById(file_id).then((fileDBEntry) => {
-                if (!fileDBEntry) {
-                    res.status(404).send();
-                } else {
-                    res.unlink(`${__dirname}/uploads/${file_id}`, (err) => {
-                        if (err) throw err;
-                        console.log('path/file.txt was deleted');
-                    });
-                    //also delete it from the course
-
-                }
-            }).catch(error => {
-                console.log(error);
-                res.status(500).send(); // server error
-            });
-        }
-
-    }).catch(error => {
-            console.log(error);
-            res.status(500).send(); // server error
-        });
 
 });
 

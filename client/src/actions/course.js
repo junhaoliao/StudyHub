@@ -9,7 +9,7 @@ export const getCourseList = (app) => {
                 //this.courseList = res.json();
                 return res.json();
             } else {
-                alert("Could not get courses");
+                console.log(res.status);
             }
         })
         .then(json => {
@@ -96,6 +96,7 @@ export const getCourseObject = (app) => {
         .then(json => {
             // the resolved promise with the JSON body
             const course = json.course;
+            console.log(course.admin);
             app.setState({
                 admin: course.admin,
                 chatroom: course.chatroom,
@@ -185,7 +186,7 @@ export const postNewAnnouncement = (app) => {
                 app.setState({
                     message: {
                         success: true,
-                        header: "The announcement was posted successfully!",
+                        header: "Posted!",
                         content: "Now everyone in this course will be notified."
                     },
                     newAnnouncementTitle: "",
@@ -210,5 +211,36 @@ export const postNewAnnouncement = (app) => {
                     content: error
                 }
             })
+        });
+};
+
+export const removeAnnouncementHandler = (e, {app, announcement_id}) => {
+    e.preventDefault();
+
+    const {courseName} = app.state;
+    const url = `/courses/${courseName}/${announcement_id}`;
+
+    const request = new Request(url, {
+        method: "delete",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    // Send the request with fetch()
+    fetch(request)
+        .then(function (res) {
+            // Handle response we get from the API.
+            // Usually check the error codes to see what happened.
+            if (res.status === 200) {
+                getCourseObject(app);
+            } else {
+                alert("Operation Invalid");
+                getCourseObject(app);
+            }
+        })
+        .catch(error => {
+            console.log(error);
         });
 };
