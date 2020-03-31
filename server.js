@@ -22,17 +22,18 @@ app.use(fileUpload({
 const fs = require("fs");
 const fsPromises = fs.promises;
 
+
 // datetime for converting date to string
-const datetime = require('date-and-time');
+const datetime = require("date-and-time");
 
 // building database
 const { ObjectID } = require("mongodb");
 const { mongoose } = require("./db/mongoose");
 mongoose.set("useFindAndModify", false);
-const {RegularUser} = require("./models/RegularUser");
-const {Course} = require("./models/Course");
-const {BillBoard} = require("./models/BillBoard");
-const {File} = require("./models/File");
+const { RegularUser } = require("./models/RegularUser");
+const { Course } = require("./models/Course");
+const { BillBoard } = require("./models/BillBoard");
+const { File } = require("./models/File");
 console.log("Welcome to server.js");
 
 // Create a session cookie
@@ -74,8 +75,34 @@ app.post("/RegularUser/login", (req, res) => {
         });
 });
 
+// A route for admin to access user information
+app.post("/RegularUser/access", (req, res) => {
+  const userid = req.body.userid;
+  RegularUser.findById(userid)
+    .then(user => {
+      req.session.username = user.username;
+      req.session.currentUserID = user._id;
+      res.send({ currentUser: user.username });
+    })
+    .catch(error => {
+      res.status(400).send();
+    });
+});
+
+// A route for admin to delete a user
+app.post("/RegularUser/remove", (req, res) => {
+  const userid = req.body.userid;
+  RegularUser.findByIdAndDelete(userid)
+    .then(result => {
+      res.send(result);
+    })
+    .catch(error => {
+      res.status(400).send();
+    });
+});
+
 app.post("/RegularUser/signup", (req, res) => {
-    const username = req.body.username;
+  const username = req.body.username;
 
     console.log("Create a new user");
     console.log("username: " + username);
@@ -605,7 +632,6 @@ app.delete("/courses/:courseName/:announcement", (req, res) => {
         });
 });
 
-
 /* Bill Board API Route */
 // return all bill board content
 app.get("/BillBoard/content", (req, res) => {
@@ -884,6 +910,7 @@ app.post('/courses/:courseName/upload', (req, res) => {
                 }
 
                 const file = req.files.file;
+
                 // if the file is over the uploading limit, the file should not be saved
                 if (file.truncated) {
                     console.log("File larger than limit");
@@ -1069,38 +1096,40 @@ app.post("/courses/:courseName/chatroom", (req, res) => {
     }).catch(error => {
         return res.status(500).send();
     });
-
 });
 
 //add like to a course
 app.patch("/courses/:courseName/like", (req, res) => {
-    const currentUserID = req.session.currentUserID;
-    if (!currentUserID) {
-        return res.status(403).send();
-    }
-    let theCourse = null;
-    const courseName = req.params.courseName;
-    Course.findByCourseName(courseName).then(course=> {
-         if(!course){
-             log("invalid course name");
-             res.status(404).send(); // could not find this resource
-         }else{
-             //give the course a heart
-             log(currentUserID);
-             course.likes.addToSet(currentUserID);
-             course.save().then((result) => {
-                     return res.send({
-                         message:
-                             "You have liked this course!"
-                     });
-                 }
-                 , (error) => {
-                     return res.status(400).send(error);
-                 });
-         }
-    }).catch( error =>{
-        consloe.log(error);
-        return res.status(500).send(); //server error
+  const currentUserID = req.session.currentUserID;
+  if (!currentUserID) {
+    return res.status(403).send();
+  }
+  let theCourse = null;
+  const courseName = req.params.courseName;
+  Course.findByCourseName(courseName)
+    .then(course => {
+      if (!course) {
+        log("invalid course name");
+        res.status(404).send(); // could not find this resource
+      } else {
+        //give the course a heart
+        log(currentUserID);
+        course.likes.addToSet(currentUserID);
+        course.save().then(
+          result => {
+            return res.send({
+              message: "You have liked this course!"
+            });
+          },
+          error => {
+            return res.status(400).send(error);
+          }
+        );
+      }
+    })
+    .catch(error => {
+      consloe.log(error);
+      return res.status(500).send(); //server error
     });
 });
 

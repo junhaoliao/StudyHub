@@ -240,3 +240,98 @@ export const SaveButton = Profile => {
     }
   );
 };
+
+export const SaveButton_admin = Profile => {
+  Profile.setState({ save: true });
+  const newProfile = {};
+  let correct = true;
+  newProfile.username = Profile.state.username;
+  newProfile.password = Profile.state.oldPassword;
+  // check password
+  if (
+    Profile.state.newPassword === "" &&
+    Profile.state.confirmNewPassword !== ""
+  ) {
+    console.log("Please enter a new password");
+    correct = false;
+    Profile.setState({ match: false });
+  } else if (
+    Profile.state.newPassword !== "" &&
+    Profile.state.confirmNewPassword === ""
+  ) {
+    console.log("Please confirm a new password");
+    correct = false;
+    Profile.setState({ match: false });
+  } else if (
+    Profile.state.newPassword !== "" &&
+    Profile.state.confirmNewPassword !== ""
+  ) {
+    if (Profile.state.newPassword === Profile.state.confirmNewPassword) {
+      console.log("New password match");
+      correct = true;
+      newProfile.password = Profile.state.newPassword;
+      Profile.setState({ match: true });
+    }
+  } else {
+    console.log("No change on the password");
+    correct = true;
+    //newProfile.password = Profile.state.oldPassword;
+    Profile.setState({ match: false });
+  }
+
+  if (Profile.state.newPassword !== Profile.state.confirmNewPassword) {
+    console.log("New password NOT match");
+    correct = false;
+    //newProfile.password = Profile.state.newPassword;
+    Profile.setState({ match: false });
+  }
+
+  //check level of education
+  if (Profile.state.levelOfEducation === "") {
+    console.log("Please select level of education");
+    correct = false;
+  }
+
+  //check field of study
+  if (Profile.state.fieldOfStudy === "") {
+    console.log("Please select field of study");
+    correct = false;
+  }
+
+  if (correct) {
+    newProfile.GPA = Profile.state.GPA;
+    newProfile.gender = Profile.state.gender;
+    newProfile.levelOfEducation = Profile.state.levelOfEducation;
+    newProfile.fieldOfStudy = Profile.state.fieldOfStudy;
+    newProfile.courseTaking = [];
+    newProfile.courseTeaching = [];
+    for (let i = 0; i < Profile.state.courseTaking.length; i++) {
+      newProfile.courseTaking.push(Profile.state.courseTaking[i].id);
+    }
+    for (let i = 0; i < Profile.state.courseTeaching.length; i++) {
+      newProfile.courseTeaching.push(Profile.state.courseTeaching[i].id);
+    }
+    console.log(newProfile);
+    const url = "/RegularUser/Profile";
+    const request = new Request(url, {
+      method: "post",
+      body: JSON.stringify(newProfile),
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json"
+      }
+    });
+    console.log(JSON.stringify(newProfile));
+    fetch(request)
+      .then(res => {
+        if (res.status === 200) {
+          console.log("Successfully updated user information");
+          readCookie(Profile);
+          switchView(Profile);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+};

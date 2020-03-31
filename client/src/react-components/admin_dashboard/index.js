@@ -1,192 +1,84 @@
 import React from "react";
-import {AdminNavBar} from "../admin_navbar/index";
-import {AlterWindow} from "../AlterWindow/index";
-
+import { AdminNavBar } from "../admin_navbar/index";
+import { AlterWindow } from "../AlterWindow/index";
+import { readCookie, getUserAccess, removeUser } from "../../actions/Admin";
+import { ProfileAdmin } from "../Profile/admin";
+import { Button, Confirm } from "semantic-ui-react";
 export class AdminDashboard extends React.Component {
-    render() {
-        return (
-            <div>
-                <AdminNavBar/>
+  constructor(props) {
+    super(props);
+    this.state = {
+      allUsers: [],
+      explore: false,
+      open: false
+    };
+    readCookie(this);
+  }
 
-                <table class="ui celled padded table">
-                    <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Courses Taking</th>
-                        <th>Courses Teaching</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <button className="ui yellow button">Kevin</button>
-                        </td>
-                        <td>
-                            <a className="ui black button" href="/a*">
-                                CSC309B
-                            </a>
-                            <a className="ui black button" href="/a*">
-                                CSC343
-                            </a>
-                            <a className="ui black button" href="/a*">
-                                ECE361
-                            </a>
-                        </td>
-                        <td>
-                            <a className="ui black button" href="/CSC309A">
-                                CSC309A
-                            </a>
-                        </td>
-                        <td>
-                            <div className="ui two buttons">
-                                <div>
-                                    <button className="ui  yellow  button">Explore</button>
-                                    {" "}
-                                </div>
-                                <AlterWindow
-                                    className="ui black button"
-                                    buttonName="Remove"
-                                    content="Confirmation to Remove the Student"
-                                    cancelButtonContent="Cancel"
-                                    confirmButtonContent="Confirm"
-                                ></AlterWindow>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <button className="ui yellow button">Junhao</button>
-                        </td>
-                        <td>
-                            <a className="ui black button" href="/CSC309A">
-                                CSC309A
-                            </a>
-                            <a className="ui black button" href="/a*">
-                                CSC343
-                            </a>
-                            <a className="ui black button" href="/a*">
-                                CSC309B
-                            </a>
-                        </td>
-                        <td>
-                            <a className="ui black button" href="/a*">
-                                ECE361
-                            </a>
-                        </td>
-                        <td>
-                            <div className="ui two buttons">
-                                <div>
-                                    <button className="ui  yellow  button">Explore</button>
-                                    {" "}
-                                </div>
-                                <AlterWindow
-                                    className="ui black button"
-                                    buttonName="Remove"
-                                    content="Confirmation to Remove the Student"
-                                    cancelButtonContent="Cancel"
-                                    confirmButtonContent="Confirm"
-                                ></AlterWindow>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <button className="ui yellow button">Kruzer</button>
-                        </td>
-                        <td>
-                            <a className="ui black button" href="/a*">
-                                CSC309B
-                            </a>
-                            <a className="ui black button" href="/CSC309A">
-                                CSC309A
-                            </a>
-                            <a className="ui black button" href="/a*">
-                                ECE361
-                            </a>
-                        </td>
-                        <td>
-                            <a className="ui black button" href="/a*">
-                                CSC343
-                            </a>
-                        </td>
-                        <td>
-                            <div className="ui two buttons">
-                                <div>
-                                    <button className="ui  yellow  button">Explore</button>
-                                    {" "}
-                                </div>
-                                <AlterWindow
-                                    className="ui black button"
-                                    buttonName="Remove"
-                                    content="Confirmation to Remove the Student"
-                                    cancelButtonContent="Cancel"
-                                    confirmButtonContent="Confirm"
-                                ></AlterWindow>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <button className="ui yellow button">Ashley</button>
-                        </td>
-                        <td>
-                            <a className="ui black button" href="/CSC309A">
-                                CSC309A
-                            </a>
-                            <a className="ui black button" href="/a*">
-                                CSC343
-                            </a>
-                            <a className="ui black button" href="/a*">
-                                ECE361
-                            </a>
-                        </td>
-                        <td>
-                            <a className="ui black button" href="/a*">
-                                CSC309B
-                            </a>
-                        </td>
-                        <td>
-                            <div className="ui two buttons">
-                                <div>
-                                    <button className="ui  yellow  button">Explore</button>
-                                    {" "}
-                                </div>
-                                <AlterWindow
-                                    className="ui black button"
-                                    buttonName="Remove"
-                                    content="Confirmation to Remove the Student"
-                                    cancelButtonContent="Cancel"
-                                    confirmButtonContent="Confirm"
-                                ></AlterWindow>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-
-                    <tfoot>
-                    <tr>
-                        <th colspan="5">
-                            <div className="ui right floated pagination menu">
-                                <a className="icon item">
-                                    <i className="left chevron icon"></i>
-                                </a>
-                                <a className="item">1</a>
-                                <a className="item">2</a>
-                                <a className="item">3</a>
-                                <a className="item">4</a>
-                                <a className="icon item">
-                                    <i className="right chevron icon"></i>
-                                </a>
-                            </div>
-                        </th>
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
-        );
-    }
+  render() {
+    console.log("Admin state:");
+    console.log(this.state.allUsers);
+    return (
+      <div>
+        <AdminNavBar />
+        {this.state.explore ? (
+          <ProfileAdmin
+            back={() => {
+              this.setState({ explore: false });
+              readCookie(this);
+            }}
+          ></ProfileAdmin>
+        ) : (
+          <table class="ui celled padded table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.allUsers.map(user => (
+                <tr>
+                  <td>
+                    <button className="ui yellow button">
+                      {user.username}
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className="ui yellow button"
+                      onClick={() => getUserAccess(user, this)}
+                    >
+                      Explore
+                    </button>
+                    <Button
+                      className="ui black button"
+                      onClick={() => {
+                        this.setState({ open: true });
+                      }}
+                    >
+                      Remove
+                    </Button>
+                    <Confirm
+                      open={this.state.open}
+                      content={
+                        "Please Confirm to Removew User: " + user.username
+                      }
+                      cancelButton="Cancel"
+                      confirmButton="Confirm"
+                      onCancel={() => {
+                        this.setState({ open: false });
+                        console.log("cancel clicked");
+                      }}
+                      onConfirm={() => removeUser(user._id, this)}
+                    ></Confirm>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    );
+  }
 }
