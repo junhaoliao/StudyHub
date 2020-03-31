@@ -22,45 +22,45 @@ export const readCookie = Profile => {
         });
       }
     })
-    .catch(error => {
-      console.log(error);
-    });
+      .catch(error => {
+        console.log(error);
+      });
 
   console.log("check course taking");
-  const url_courseTaking = "/RegularUser/profile/courseTaking";
-  fetch(url_courseTaking)
-    .then(res => {
-      if (res.status === 200) {
-        console.log("find course taking");
-        return res.json();
-      }
-    })
-    .then(json => {
-      if (json && json.courses) {
-        console.log(json);
-        Profile.setState({
-          courseTaking: json.courses
-        });
-      }
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  const url_coursesTaking = "/RegularUser/profile/coursesTaking";
+  fetch(url_coursesTaking)
+      .then(res => {
+        if (res.status === 200) {
+          console.log("find course taking");
+          return res.json();
+        }
+      })
+      .then(json => {
+        if (json && json.courses) {
+          console.log(json);
+          Profile.setState({
+            coursesTaking: json.courses
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
   console.log("check course teaching");
-  const url_courseTeaching = "/RegularUser/profile/courseTeaching";
-  fetch(url_courseTeaching)
-    .then(res => {
-      if (res.status === 200) {
-        console.log("find course teaching");
-        return res.json();
-      }
-    })
-    .then(json => {
-      if (json && json.courses) {
-        console.log(json);
-        Profile.setState({
-          courseTeaching: json.courses
+  const url_coursesTeaching = "/RegularUser/profile/coursesTeaching";
+  fetch(url_coursesTeaching)
+      .then(res => {
+        if (res.status === 200) {
+          console.log("find course teaching");
+          return res.json();
+        }
+      })
+      .then(json => {
+        if (json && json.courses) {
+          console.log(json);
+          Profile.setState({
+            coursesTeaching: json.courses
         });
       }
     })
@@ -99,9 +99,9 @@ export const switchView = Profile => {
   }
 };
 
-export const remove_courseTaking = (Profile, course) => {
+export const remove_coursesTaking = (Profile, course) => {
   console.log(course);
-  const courseList = Profile.state.courseTaking;
+  const courseList = Profile.state.coursesTaking;
   for (let i = 0; i < courseList.length; i++) {
     if (courseList[i] === course) {
       courseList.splice(i, 1);
@@ -110,13 +110,13 @@ export const remove_courseTaking = (Profile, course) => {
   console.log("removed course");
   console.log(courseList);
   Profile.setState({
-    courseTaking: courseList
+    coursesTaking: courseList
   });
 };
 
-export const remove_courseTeaching = (Profile, course) => {
+export const remove_coursesTeaching = (Profile, course) => {
   console.log(course);
-  const courseList = Profile.state.courseTeaching;
+  const courseList = Profile.state.coursesTeaching;
   for (let i = 0; i < courseList.length; i++) {
     if (courseList[i] === course) {
       courseList.splice(i, 1);
@@ -125,7 +125,7 @@ export const remove_courseTeaching = (Profile, course) => {
   console.log("removed course");
   console.log(courseList);
   Profile.setState({
-    courseTeaching: courseList
+    coursesTeaching: courseList
   });
 };
 
@@ -202,13 +202,13 @@ export const SaveButton = Profile => {
           newProfile.gender = Profile.state.gender;
           newProfile.levelOfEducation = Profile.state.levelOfEducation;
           newProfile.fieldOfStudy = Profile.state.fieldOfStudy;
-          newProfile.courseTaking = [];
-          newProfile.courseTeaching = [];
-          for (let i = 0; i < Profile.state.courseTaking.length; i++) {
-            newProfile.courseTaking.push(Profile.state.courseTaking[i].id);
+          newProfile.coursesTaking = [];
+          newProfile.coursesTeaching = [];
+          for (let i = 0; i < Profile.state.coursesTaking.length; i++) {
+            newProfile.coursesTaking.push(Profile.state.coursesTaking[i].id);
           }
-          for (let i = 0; i < Profile.state.courseTeaching.length; i++) {
-            newProfile.courseTeaching.push(Profile.state.courseTeaching[i].id);
+          for (let i = 0; i < Profile.state.coursesTeaching.length; i++) {
+            newProfile.coursesTeaching.push(Profile.state.coursesTeaching[i].id);
           }
           console.log(newProfile);
           const url = "/RegularUser/Profile";
@@ -303,13 +303,13 @@ export const SaveButton_admin = Profile => {
     newProfile.gender = Profile.state.gender;
     newProfile.levelOfEducation = Profile.state.levelOfEducation;
     newProfile.fieldOfStudy = Profile.state.fieldOfStudy;
-    newProfile.courseTaking = [];
-    newProfile.courseTeaching = [];
-    for (let i = 0; i < Profile.state.courseTaking.length; i++) {
-      newProfile.courseTaking.push(Profile.state.courseTaking[i].id);
+    newProfile.coursesTaking = [];
+    newProfile.coursesTeaching = [];
+    for (let i = 0; i < Profile.state.coursesTaking.length; i++) {
+      newProfile.coursesTaking.push(Profile.state.coursesTaking[i].id);
     }
-    for (let i = 0; i < Profile.state.courseTeaching.length; i++) {
-      newProfile.courseTeaching.push(Profile.state.courseTeaching[i].id);
+    for (let i = 0; i < Profile.state.coursesTeaching.length; i++) {
+      newProfile.coursesTeaching.push(Profile.state.coursesTeaching[i].id);
     }
     console.log(newProfile);
     const url = "/RegularUser/Profile";

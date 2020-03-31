@@ -41,7 +41,7 @@ const CourseSchema = new mongoose.Schema({
         required: true
     },
     users: [mongoose.Schema.Types.ObjectId],
-    likes: [mongoose.Schema.Types.ObjectId],
+    likes: {type: Number, default: 0},
     announcements: [AnnouncementSchema],
 
     // list of resources that are shared in the class

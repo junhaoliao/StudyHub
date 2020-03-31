@@ -6,7 +6,7 @@ import Courses from "../Courses/courses";
 
 import {Button, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
 
-import {createCourse, getCourseList} from "../../actions/course";
+import {createCourse, getCourseList, joinCourse} from "../../actions/course";
 
 // function addCourseMessage(props) {
 //   const {message} = props;
@@ -35,7 +35,7 @@ class dash_board extends React.Component {
     super(props);
     this.state = {
 
-
+      join_course_name: "",
       courseList: [],
       adding_course: false,
       add_course_name: "",
@@ -57,12 +57,12 @@ class dash_board extends React.Component {
   }
 
   course_panel() {
-    const {adding_course, add_course_name, add_course_info, terms_confirmed} = this.state;
+    const {adding_course, add_course_name, add_course_info, terms_confirmed, join_course_name} = this.state;
     if (adding_course) {
       return (
         <div className={"add_course_container"}>
           <Segment inverted>
-            <Header as={"h1"}>Adding a new course...</Header>
+            <Header as={"h1"}>Creating a new course...</Header>
             <Form onSubmit={() => createCourse(this)} inverted>
               <Form.Group widths="equal">
                 <Form.Input
@@ -84,6 +84,32 @@ class dash_board extends React.Component {
                     placeholder="Course Info (Optional)"
                 />
               </Form.Group>
+              <Form.Checkbox
+                  onChange={() =>
+                      this.setState(prevState => ({
+                        terms_confirmed: !prevState.terms_confirmed
+                      }))
+                  }
+                  checked={terms_confirmed}
+                  required
+                  label="I agree to the Terms and Conditions"
+              />
+              <Button type="submit">Submit</Button>
+            </Form>
+
+            <Header as={"h1"}>Joining a new course...</Header>
+            <Form onSubmit={() => joinCourse(this)} inverted>
+
+              <Form.Input
+                  name="join_course_name"
+                  value={join_course_name}
+                  onChange={this.handleChange}
+                  required
+                  fluid
+                  label="Course Name"
+                  placeholder="Course Name"
+              />
+
               <Form.Checkbox
                   onChange={() =>
                       this.setState(prevState => ({

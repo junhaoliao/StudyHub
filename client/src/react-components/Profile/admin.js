@@ -1,16 +1,15 @@
 import React from "react";
-import { AdminNavBar } from "../admin_navbar/index";
-import { Grid, Button, Segment } from "semantic-ui-react";
+import {Grid} from "semantic-ui-react";
 import {
-  readCookie,
-  switchView,
-  updateProfileForm,
-  CancelButton,
-  SaveButton_admin,
-  remove_courseTaking,
-  remove_courseTeaching
+    CancelButton,
+    readCookie,
+    remove_coursesTaking,
+    remove_coursesTeaching,
+    SaveButton_admin,
+    switchView,
+    updateProfileForm
 } from "../../actions/Profile";
-import { Visibility } from "semantic-ui-react";
+
 //import "./styles.css";
 
 export class ProfileAdmin extends React.Component {
@@ -20,30 +19,30 @@ export class ProfileAdmin extends React.Component {
     this.state = {
       login: false,
       edit: false,
-      match: true,
-      username: "",
-      password: "",
-      oldPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-      gender: "",
-      GPA: "",
-      levelOfEducation: "",
-      fieldOfStudy: "",
-      courseTaking: [],
-      courseTeaching: []
+        match: true,
+        username: "",
+        password: "",
+        oldPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
+        gender: "",
+        GPA: "",
+        levelOfEducation: "",
+        fieldOfStudy: "",
+        coursesTaking: [],
+        coursesTeaching: []
     };
   }
 
   profilePage() {
     const {
-      username,
-      gender,
-      GPA,
-      levelOfEducation,
-      fieldOfStudy,
-      courseTaking,
-      courseTeaching
+        username,
+        gender,
+        GPA,
+        levelOfEducation,
+        fieldOfStudy,
+        coursesTaking,
+        coursesTeaching
     } = this.state;
 
     console.log(this.state);
@@ -101,11 +100,11 @@ export class ProfileAdmin extends React.Component {
                   Courses Teaching
                 </div>
 
-                {courseTeaching.map(course => (
-                  <div className="ui huge yellow horizontal label">
-                    {course.name}
-                  </div>
-                ))}
+                  {coursesTeaching.map(course => (
+                      <div className="ui huge yellow horizontal label">
+                          {course.name}
+                      </div>
+                  ))}
               </Grid.Column>
             </Grid.Row>
 
@@ -115,11 +114,11 @@ export class ProfileAdmin extends React.Component {
                   Courses Taking
                 </div>
 
-                {courseTaking.map(course => (
-                  <div className="ui huge yellow horizontal label">
-                    {course.name}
-                  </div>
-                ))}
+                  {coursesTaking.map(course => (
+                      <div className="ui huge yellow horizontal label">
+                          {course.name}
+                      </div>
+                  ))}
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -144,13 +143,13 @@ export class ProfileAdmin extends React.Component {
 
   ProfilePageEdit() {
     const {
-      username,
-      gender,
-      GPA,
-      levelOfEducation,
-      fieldOfStudy,
-      courseTaking,
-      courseTeaching
+        username,
+        gender,
+        GPA,
+        levelOfEducation,
+        fieldOfStudy,
+        coursesTaking,
+        coursesTeaching
     } = this.state;
 
     console.log(this.state);
@@ -293,15 +292,15 @@ export class ProfileAdmin extends React.Component {
                   Courses Teaching
                 </div>
 
-                {courseTeaching.map(course => (
-                  <div
-                    className="ui huge yellow horizontal label"
-                    onClick={() => remove_courseTeaching(this, course)}
-                  >
-                    {course.name}
-                    <i className="delete icon"></i>
-                  </div>
-                ))}
+                  {coursesTeaching.map(course => (
+                      <div
+                          className="ui huge yellow horizontal label"
+                          onClick={() => remove_coursesTeaching(this, course)}
+                      >
+                          {course.name}
+                          <i className="delete icon"></i>
+                      </div>
+                  ))}
               </Grid.Column>
             </Grid.Row>
 
@@ -311,14 +310,14 @@ export class ProfileAdmin extends React.Component {
                   Courses Taking
                 </div>
 
-                {courseTaking.map(course => (
-                  <div
-                    className="ui huge yellow horizontal label"
-                    onClick={() => remove_courseTaking(this, course)}
-                  >
-                    {course.name} <i className="delete icon"></i>
-                  </div>
-                ))}
+                  {coursesTaking.map(course => (
+                      <div
+                          className="ui huge yellow horizontal label"
+                          onClick={() => remove_coursesTaking(this, course)}
+                      >
+                          {course.name} <i className="delete icon"></i>
+                      </div>
+                  ))}
               </Grid.Column>
             </Grid.Row>
           </Grid>

@@ -1,6 +1,8 @@
 import React from "react";
 import {Button, Card} from "semantic-ui-react";
 
+import {toggleLikeStatus} from "../../actions/course";
+
 class Course extends React.Component {
     LikedButton = "";
 
@@ -11,31 +13,28 @@ class Course extends React.Component {
         }
     }
 
-    toggle_like = event => {
-        // console.log(this.state)
-        this.setState({
-            liked: !this.state.liked
-        });
-        if (this.state.liked) {
-            this.LikedButton = <Button className="mr-auto" variant="danger" onClick={this.toggle_like}>
-                <span role={"img"} aria-label="red-heart">❤</span>
-                Liked</Button>;
-        } else {
-            this.LikedButton = <Button className="mr-auto" variant="secondary" onClick={this.toggle_like}>
-                <span role={"img"} aria-label="white-heart">🤍</span>
-                Like</Button>;
-        }
-    };
+    // toggle_like = event => {
+    //     // console.log(this.state)
+    //     event.preventDefault();
+    //     this.setState({
+    //         liked: !this.state.liked
+    //     });
+    //
+    // };
 
     render() {
         const {course} = this.props;
 
         if (this.state.liked) {
-            this.LikedButton = <Button color={"red"} onClick={this.toggle_like}>
-                ❤️ Liked</Button>;
+            this.LikedButton = <Button className="mr-auto" color={"red"} app={this} courseName={course.name}
+                                       onClick={toggleLikeStatus}>
+                <span role={"img"} aria-label="red-heart">❤</span>
+                Liked</Button>;
         } else {
-            this.LikedButton = <Button color={"grey"} onClick={this.toggle_like}>
-                🤍 Like</Button>;
+            this.LikedButton = <Button className="mr-auto" color={"grey"} app={this} courseName={course.name}
+                                       onClick={toggleLikeStatus}>
+                <span role={"img"} aria-label="white-heart">🤍</span>
+                Like</Button>;
         }
 
         return (

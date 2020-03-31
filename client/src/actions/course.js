@@ -1,3 +1,5 @@
+import React from "react";
+
 export const getCourseList = (app) => {
     // the URL for the request
     const url = "/courses";
@@ -65,6 +67,55 @@ export const createCourse = (app) => {
 
             } else {
                 alert("Course was not added. There may have been a course with a same name.");
+                app.setState({
+                    terms_confirmed: false
+                });
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+};
+
+export const joinCourse = (app) => {
+    const {join_course_name, terms_confirmed} = app.state;
+
+    // ensure the user have understand the rules
+    if (!terms_confirmed) {
+        return;
+    }
+
+    // the URL for the request
+    const url = `/courses/${join_course_name}`;
+
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: "PATCH",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    // Send the request with fetch()
+    fetch(request)
+        .then(function (res) {
+            // Handle response we get from the API.
+            // Usually check the error codes to see what happened.
+            if (res.status === 200) {
+                alert("Course joined successfully. Now you can go to the dashboard to access the course!");
+                getCourseList(app);
+                app.setState({
+                    join_course_name: "",
+                    adding_course: false,
+                    add_course_name: "",
+                    add_course_info: "",
+                    terms_confirmed: false
+                });
+
+            } else {
+                alert("Please check the course name and try submitting again.");
                 app.setState({
                     terms_confirmed: false
                 });
@@ -239,6 +290,42 @@ export const removeAnnouncementHandler = (e, {app, announcement_id}) => {
                 alert("Operation Invalid");
                 getCourseObject(app);
             }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
+export const toggleLikeStatus = (e, {app, courseName}) => {
+    e.preventDefault();
+
+    const url = `/like/courses/${courseName}`;
+
+    const request = new Request(url, {
+        method: "PATCH",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    // Send the request with fetch()
+    fetch(request)
+        .then(function (res) {
+            // Handle response we get from the API.
+            // Usually check the error codes to see what happened.
+
+            if (res.status === 200) {
+                return res.json();
+            } else {
+                console.log(res.status);
+            }
+        })
+        .then(json => {
+            // the resolved promise with the JSON body
+            app.setState({
+                liked: json.liked
+            })
         })
         .catch(error => {
             console.log(error);

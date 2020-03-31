@@ -1,16 +1,16 @@
 import React from "react";
 import NavBar from "../NavBar/navbar";
-import { Grid, Button, Segment } from "semantic-ui-react";
+import {Grid} from "semantic-ui-react";
 import {
-  readCookie,
-  switchView,
-  updateProfileForm,
   CancelButton,
+  readCookie,
+  remove_coursesTaking,
+  remove_coursesTeaching,
   SaveButton,
-  remove_courseTaking,
-  remove_courseTeaching
+  switchView,
+  updateProfileForm
 } from "../../actions/Profile";
-import { Visibility } from "semantic-ui-react";
+
 //import "./styles.css";
 
 export class Profile extends React.Component {
@@ -31,8 +31,8 @@ export class Profile extends React.Component {
       GPA: "",
       levelOfEducation: "",
       fieldOfStudy: "",
-      courseTaking: [],
-      courseTeaching: []
+      coursesTaking: [],
+      coursesTeaching: []
     };
   }
 
@@ -43,8 +43,8 @@ export class Profile extends React.Component {
       GPA,
       levelOfEducation,
       fieldOfStudy,
-      courseTaking,
-      courseTeaching
+      coursesTaking,
+      coursesTeaching
     } = this.state;
 
     console.log(this.state);
@@ -101,10 +101,10 @@ export class Profile extends React.Component {
                   Courses Teaching
                 </div>
 
-                {courseTeaching.map(course => (
-                  <div className="ui huge blue horizontal label">
-                    {course.name}
-                  </div>
+                {coursesTeaching.map(course => (
+                    <div className="ui huge blue horizontal label">
+                      {course.name}
+                    </div>
                 ))}
               </Grid.Column>
             </Grid.Row>
@@ -115,10 +115,10 @@ export class Profile extends React.Component {
                   Courses Taking
                 </div>
 
-                {courseTaking.map(course => (
-                  <div className="ui huge blue horizontal label">
-                    {course.name}
-                  </div>
+                {coursesTaking.map(course => (
+                    <div className="ui huge blue horizontal label">
+                      {course.name}
+                    </div>
                 ))}
               </Grid.Column>
             </Grid.Row>
@@ -141,8 +141,8 @@ export class Profile extends React.Component {
       GPA,
       levelOfEducation,
       fieldOfStudy,
-      courseTaking,
-      courseTeaching
+      coursesTaking,
+      coursesTeaching
     } = this.state;
 
     console.log(this.state);
@@ -310,14 +310,14 @@ export class Profile extends React.Component {
                   Courses Teaching
                 </div>
 
-                {courseTeaching.map(course => (
-                  <div
-                    className="ui huge blue horizontal label"
-                    onClick={() => remove_courseTeaching(this, course)}
-                  >
-                    {course.name}
-                    <i className="delete icon"></i>
-                  </div>
+                {coursesTeaching.map(course => (
+                    <div
+                        className="ui huge blue horizontal label"
+                        onClick={() => remove_coursesTeaching(this, course)}
+                    >
+                      {course.name}
+                      <i className="delete icon"></i>
+                    </div>
                 ))}
               </Grid.Column>
             </Grid.Row>
@@ -328,13 +328,13 @@ export class Profile extends React.Component {
                   Courses Taking
                 </div>
 
-                {courseTaking.map(course => (
-                  <div
-                    className="ui huge blue horizontal label"
-                    onClick={() => remove_courseTaking(this, course)}
-                  >
-                    {course.name} <i className="delete icon"></i>
-                  </div>
+                {coursesTaking.map(course => (
+                    <div
+                        className="ui huge blue horizontal label"
+                        onClick={() => remove_coursesTaking(this, course)}
+                    >
+                      {course.name} <i className="delete icon"></i>
+                    </div>
                 ))}
               </Grid.Column>
             </Grid.Row>

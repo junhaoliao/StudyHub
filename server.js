@@ -27,13 +27,13 @@ const fsPromises = fs.promises;
 const datetime = require("date-and-time");
 
 // building database
-const { ObjectID } = require("mongodb");
-const { mongoose } = require("./db/mongoose");
+const {ObjectID} = require("mongodb");
+const {mongoose} = require("./db/mongoose");
 mongoose.set("useFindAndModify", false);
-const { RegularUser } = require("./models/RegularUser");
-const { Course } = require("./models/Course");
-const { BillBoard } = require("./models/BillBoard");
-const { File } = require("./models/File");
+const {RegularUser} = require("./models/RegularUser");
+const {Course} = require("./models/Course");
+const {BillBoard} = require("./models/BillBoard");
+const {File} = require("./models/File");
 console.log("Welcome to server.js");
 
 // Create a session cookie
@@ -77,32 +77,32 @@ app.post("/RegularUser/login", (req, res) => {
 
 // A route for admin to access user information
 app.post("/RegularUser/access", (req, res) => {
-  const userid = req.body.userid;
-  RegularUser.findById(userid)
-    .then(user => {
-      req.session.username = user.username;
-      req.session.currentUserID = user._id;
-      res.send({ currentUser: user.username });
-    })
-    .catch(error => {
-      res.status(400).send();
-    });
+    const userid = req.body.userid;
+    RegularUser.findById(userid)
+        .then(user => {
+            req.session.username = user.username;
+            req.session.currentUserID = user._id;
+            res.send({currentUser: user.username});
+        })
+        .catch(error => {
+            res.status(400).send();
+        });
 });
 
 // A route for admin to delete a user
 app.post("/RegularUser/remove", (req, res) => {
-  const userid = req.body.userid;
-  RegularUser.findByIdAndDelete(userid)
-    .then(result => {
-      res.send(result);
-    })
-    .catch(error => {
-      res.status(400).send();
-    });
+    const userid = req.body.userid;
+    RegularUser.findByIdAndDelete(userid)
+        .then(result => {
+            res.send(result);
+        })
+        .catch(error => {
+            res.status(400).send();
+        });
 });
 
 app.post("/RegularUser/signup", (req, res) => {
-  const username = req.body.username;
+    const username = req.body.username;
 
     console.log("Create a new user");
     console.log("username: " + username);
@@ -117,8 +117,8 @@ app.post("/RegularUser/signup", (req, res) => {
                     gender: req.body.gender,
                     levelOfEducation: req.body.levelOfEducation,
                     fieldOfStudy: req.body.fieldOfStudy,
-                    courseTeaching: [],
-                    courseTaking: []
+                    coursesTeaching: [],
+                    coursesTaking: []
                 });
                 new_RegularUser.save().then(
                     user => {
@@ -205,8 +205,8 @@ app.post("/RegularUser", (req, res) => {
         gender: req.body.gender,
         levelOfEducation: req.body.levelOfEducation,
         fieldOfStudy: req.body.fieldOfStudy,
-        courseTeaching: [],
-        courseTaking: []
+        coursesTeaching: [],
+        coursesTaking: []
     });
     new_RegularUser.save().then(
         result => {
@@ -232,8 +232,8 @@ app.get("/courses", (req, res) => {
             } else {
                 let count = 0;
                 const list = [];
-                const rawList = user.courseTeaching.concat(user.courseTaking);
-                if(rawList.length === 0){
+                const rawList = user.coursesTeaching.concat(user.coursesTaking);
+                if (rawList.length === 0) {
                     res.send({courses: list});
                 }
                 //console.log(rawList);
@@ -244,7 +244,7 @@ app.get("/courses", (req, res) => {
                             thisCourse.name = course.name;
                             thisCourse.info = course.description;
                             thisCourse.admin = admin.username;
-                            thisCourse.liked = true;
+                            thisCourse.liked = user.coursesLiked.includes(course._id);
                             list.push(thisCourse);
                             count++;
                             if (count === rawList.length) {
@@ -280,7 +280,7 @@ app.post("/courses", (req, res) => {
             RegularUser.findById(currentUserID).then(user => {
                 log(user);
                 log(course._id);
-                user.courseTeaching.push(course._id);
+                user.coursesTeaching.push(course._id);
                 user.save();
                 res.send(result);
             });
@@ -406,7 +406,6 @@ app.get("/courses/:courseName/getResources", (req, res) => {
 // function to add a user to a course given a course name
 // things to be done: the api is not protected
 app.patch("/courses/:courseName", (req, res) => {
-
     const userID = req.session.currentUserID;
     if (!userID) {
         return res.status(400).send(); // user not logged in
@@ -426,7 +425,7 @@ app.patch("/courses/:courseName", (req, res) => {
                     () => {
                         RegularUser.findById(userID)
                             .then(user => {
-                                user.courseTaking.addToSet(course._id);
+                                user.coursesTaking.addToSet(course._id);
                                 user.save().then(
                                     () => {
                                         res.send({
@@ -464,54 +463,54 @@ app.patch("/courses/:courseName", (req, res) => {
 // 3. push the announcement into course.announcements
 // 4. delete the first announcement whenever there are more than 3 announcements
 app.post("/courses/:courseName/announcement", (req, res) => {
-  const currentUserID = req.session.currentUserID;
-  if (!currentUserID) {
-    res.status(400).send();
-    return;
-  }
-  let theCourse = null;
-  const courseName = req.params.courseName;
+    const currentUserID = req.session.currentUserID;
+    if (!currentUserID) {
+        res.status(400).send();
+        return;
+    }
+    let theCourse = null;
+    const courseName = req.params.courseName;
 
-  Course.findByCourseName(courseName)
-    .then(course => {
-      if (!course) {
-        log("invalid course name");
-        res.status(404).send(); // could not find this resource
-      } else {
-        // check whether the current user is the admin of the course
-        if (course.admin != currentUserID) {
-          return res.status(403).send();
-        } else {
-          const newAnnouncement = {
-            title: req.body.title,
-            content: req.body.content
-          };
-          course.announcements.push(newAnnouncement);
+    Course.findByCourseName(courseName)
+        .then(course => {
+            if (!course) {
+                log("invalid course name");
+                res.status(404).send(); // could not find this resource
+            } else {
+                // check whether the current user is the admin of the course
+                if (course.admin != currentUserID) {
+                    return res.status(403).send();
+                } else {
+                    const newAnnouncement = {
+                        title: req.body.title,
+                        content: req.body.content
+                    };
+                    course.announcements.push(newAnnouncement);
 
-          //see if there are more than 3 announcements
-          if (course.announcements.length > 3) {
-            //delete the oldest announcement
-            course.announcements.shift();
-          }
+                    //see if there are more than 3 announcements
+                    if (course.announcements.length > 3) {
+                        //delete the oldest announcement
+                        course.announcements.shift();
+                    }
 
-          //save the course
-          course.save().then(
-            result => {
-              return res.send({
-                message: "announcement sent successfully"
-              });
-            },
-            error => {
-              return res.status(400).send(error);
+                    //save the course
+                    course.save().then(
+                        result => {
+                            return res.send({
+                                message: "announcement sent successfully"
+                            });
+                        },
+                        error => {
+                            return res.status(400).send(error);
+                        }
+                    );
+                }
             }
-          );
-        }
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      return res.status(500).send(); // server error
-    });
+        })
+        .catch(error => {
+            console.log(error);
+            return res.status(500).send(); // server error
+        });
 });
 
 app.delete("/courses/:courseName/:announcement", (req, res) => {
@@ -533,32 +532,32 @@ app.delete("/courses/:courseName/:announcement", (req, res) => {
             } else {
                 //find the announcements
                 const announcement = course.announcements.id(_id);
-                    if(!announcement){
-                        log("invalid announcement id");
-                        res.status(404).send(); // could not find this resource
-                    }else{
-                        // check whether the current user is the admin of the course
-                        if (course.admin != currentUserID) {
-                            return res.status(403).send();
-                        } else {
-                            //find the macthed announcement (by id)
-                          //  const theAnnouncement = course.announcements.id(_id);
-                                course.announcements.pull(announcement);
-                            //save the course
-                            course.save().then(
-                                result => {
-                                    return res.send({
-                                        message: "announcement deleted successfully"
-                                    });
-                                },
-                                error => {
-                                    return res.status(400).send(error);
-                                }
-                            );
+                if (!announcement) {
+                    log("invalid announcement id");
+                    res.status(404).send(); // could not find this resource
+                } else {
+                    // check whether the current user is the admin of the course
+                    if (course.admin != currentUserID) {
+                        return res.status(403).send();
+                    } else {
+                        //find the macthed announcement (by id)
+                        //  const theAnnouncement = course.announcements.id(_id);
+                        course.announcements.pull(announcement);
+                        //save the course
+                        course.save().then(
+                            result => {
+                                return res.send({
+                                    message: "announcement deleted successfully"
+                                });
+                            },
+                            error => {
+                                return res.status(400).send(error);
+                            }
+                        );
 
-                        }
                     }
-                    //hi i am working here
+                }
+                //hi i am working here
             }
         })
         .catch(error => {
@@ -672,85 +671,85 @@ app.get("/RegularUser/profile", (req, res) => {
 });
 
 // return regular user course taking
-app.get("/RegularUser/profile/courseTaking", (req, res) => {
-  const userid = req.session.currentUserID;
-  if (userid != undefined) {
-    RegularUser.findById(userid)
-      .then(user => {
-        if (!user) {
-          console.log("Regular user does not exist");
-          res.status(404).send();
-        } else {
-          let count = 0;
-          const list = [];
-          const rawList = user.courseTaking;
-          rawList.forEach(courseObjectID =>
-            Course.findById(courseObjectID).then(course => {
-              RegularUser.findById(course.admin).then(admin => {
-                const thisCourse = {};
-                thisCourse.id = courseObjectID;
-                thisCourse.name = course.name;
-                thisCourse.info = course.description;
-                thisCourse.admin = admin.username;
-                thisCourse.liked = true;
-                list.push(thisCourse);
-                count++;
-                if (count === rawList.length) {
-                  res.send({ courses: list });
+app.get("/RegularUser/profile/coursesTaking", (req, res) => {
+    const userid = req.session.currentUserID;
+    if (userid != undefined) {
+        RegularUser.findById(userid)
+            .then(user => {
+                if (!user) {
+                    console.log("Regular user does not exist");
+                    res.status(404).send();
+                } else {
+                    let count = 0;
+                    const list = [];
+                    const rawList = user.coursesTaking;
+                    rawList.forEach(courseObjectID =>
+                        Course.findById(courseObjectID).then(course => {
+                            RegularUser.findById(course.admin).then(admin => {
+                                const thisCourse = {};
+                                thisCourse.id = courseObjectID;
+                                thisCourse.name = course.name;
+                                thisCourse.info = course.description;
+                                thisCourse.admin = admin.username;
+                                thisCourse.liked = true;
+                                list.push(thisCourse);
+                                count++;
+                                if (count === rawList.length) {
+                                    res.send({courses: list});
+                                }
+                            });
+                        })
+                    );
                 }
-              });
             })
-          );
-        }
-      })
-      .catch(error => {
-        res.status(400).send();
-      });
-  } else {
-    console.log("Unauthorized access to profile course taking");
-    res.status(401).send();
-  }
+            .catch(error => {
+                res.status(400).send();
+            });
+    } else {
+        console.log("Unauthorized access to profile course taking");
+        res.status(401).send();
+    }
 });
 
 // return regular user course teaching
-app.get("/RegularUser/profile/courseTeaching", (req, res) => {
-  const userid = req.session.currentUserID;
-  if (userid != undefined) {
-    RegularUser.findById(userid)
-      .then(user => {
-        if (!user) {
-          console.log("Regular user does not exist");
-          res.status(404).send();
-        } else {
-          let count = 0;
-          const list = [];
-          const rawList = user.courseTeaching;
-          rawList.forEach(courseObjectID =>
-            Course.findById(courseObjectID).then(course => {
-              RegularUser.findById(course.admin).then(admin => {
-                const thisCourse = {};
-                thisCourse.id = courseObjectID;
-                thisCourse.name = course.name;
-                thisCourse.info = course.description;
-                thisCourse.admin = admin.username;
-                thisCourse.liked = true;
-                list.push(thisCourse);
-                count++;
-                if (count === rawList.length) {
-                  res.send({ courses: list });
+app.get("/RegularUser/profile/coursesTeaching", (req, res) => {
+    const userid = req.session.currentUserID;
+    if (userid != undefined) {
+        RegularUser.findById(userid)
+            .then(user => {
+                if (!user) {
+                    console.log("Regular user does not exist");
+                    res.status(404).send();
+                } else {
+                    let count = 0;
+                    const list = [];
+                    const rawList = user.coursesTeaching;
+                    rawList.forEach(courseObjectID =>
+                        Course.findById(courseObjectID).then(course => {
+                            RegularUser.findById(course.admin).then(admin => {
+                                const thisCourse = {};
+                                thisCourse.id = courseObjectID;
+                                thisCourse.name = course.name;
+                                thisCourse.info = course.description;
+                                thisCourse.admin = admin.username;
+                                thisCourse.liked = false;
+                                list.push(thisCourse);
+                                count++;
+                                if (count === rawList.length) {
+                                    res.send({courses: list});
+                                }
+                            });
+                        })
+                    );
                 }
-              });
             })
-          );
-        }
-      })
-      .catch(error => {
-        res.status(400).send();
-      });
-  } else {
-    console.log("Unauthorized access to profile course teaching");
-    res.status(401).send();
-  }
+            .catch(error => {
+                res.status(400).send();
+            });
+    } else {
+        console.log("Unauthorized access to profile course teaching");
+        res.status(401).send();
+    }
 });
 // update user information
 /* request body:
@@ -764,42 +763,42 @@ app.get("/RegularUser/profile/courseTeaching", (req, res) => {
   }
   */
 app.post("/RegularUser/Profile", (req, res) => {
-  const userid = req.session.currentUserID;
-  //const userid = req.body.userid;
-  if (userid !== undefined) {
-    RegularUser.findById(userid).then(user => {
-      if (!user) {
-        console.log("Regular user does not exist");
-        res.status(404).send();
-      } else {
-        user.username = req.body.username;
-        user.password = req.body.password;
-        user.GPA = req.body.GPA;
-        user.gender = req.body.gender;
-        user.levelOfEducation = req.body.levelOfEducation;
-        user.fieldOfStudy = req.body.fieldOfStudy;
-        user.courseTaking = req.body.courseTaking;
-        user.courseTeaching = req.body.courseTeaching;
-        console.log("test1");
-        user
-          .save()
-          .then(
-            result => {
-              console.log("Saving new user profile");
-              res.send(result);
-            },
-            error => {
-              console.log("test2");
-              res.send(400).send();
+    const userid = req.session.currentUserID;
+    //const userid = req.body.userid;
+    if (userid !== undefined) {
+        RegularUser.findById(userid).then(user => {
+            if (!user) {
+                console.log("Regular user does not exist");
+                res.status(404).send();
+            } else {
+                user.username = req.body.username;
+                user.password = req.body.password;
+                user.GPA = req.body.GPA;
+                user.gender = req.body.gender;
+                user.levelOfEducation = req.body.levelOfEducation;
+                user.fieldOfStudy = req.body.fieldOfStudy;
+                user.coursesTaking = req.body.coursesTaking;
+                user.coursesTeaching = req.body.coursesTeaching;
+                console.log("test1");
+                user
+                    .save()
+                    .then(
+                        result => {
+                            console.log("Saving new user profile");
+                            res.send(result);
+                        },
+                        error => {
+                            console.log("test2");
+                            res.send(400).send();
+                        }
+                    )
+                    .catch(error => {
+                        console.log("test3");
+                        res.status(400).send();
+                    });
             }
-          )
-          .catch(error => {
-            console.log("test3");
-            res.status(400).send();
-          });
-      }
-    });
-  }
+        });
+    }
 });
 
 // handling upload requests
@@ -914,8 +913,6 @@ app.get('/download/:file_id', (req, res) => {
         console.log(error);
         res.status(500).send(); // server error
     });
-
-
 });
 
 
@@ -930,28 +927,28 @@ app.delete('/upload/:file_id', (req, res) => {
         return res.status(400).send();
     }
 
-    File.findByIdAndRemove(file_id).then((fileDBEntry)=>{
-        if(!fileDBEntry){
+    File.findByIdAndRemove(file_id).then((fileDBEntry) => {
+        if (!fileDBEntry) {
             return res.status(404).send();
         }
         const courseID = fileDBEntry.course;
-        Course.findById(courseID).then((course)=>{
-            if(!course){
+        Course.findById(courseID).then((course) => {
+            if (!course) {
                 fileDBEntry.save();
                 return res.status(404).send();
             }
-            if(course.admin!=currentUserID){
+            if (course.admin != currentUserID) {
                 fileDBEntry.save();
                 return res.status(403).send();
             }
             course.resources.pull(ObjectID(file_id));
             course.save();
             fsPromises.unlink(`${__dirname}/uploads/${file_id}`).then(
-                ()=>{
+                () => {
                     return res.send({message: "success"});
                 }
             )
-                .catch((error)=> {
+                .catch((error) => {
                     return res.status(500).send(error); // server error
                 });
         })
@@ -999,72 +996,99 @@ app.post("/courses/:courseName/chatroom", (req, res) => {
 });
 
 //add like to a course
-app.patch("/courses/:courseName/like", (req, res) => {
-  const currentUserID = req.session.currentUserID;
-  if (!currentUserID) {
-    return res.status(403).send();
-  }
-  let theCourse = null;
-  const courseName = req.params.courseName;
-  Course.findByCourseName(courseName)
-    .then(course => {
-      if (!course) {
-        log("invalid course name");
-        res.status(404).send(); // could not find this resource
-      } else {
-        //give the course a heart
-        log(currentUserID);
-        course.likes.addToSet(currentUserID);
-        course.save().then(
-          result => {
-            return res.send({
-              message: "You have liked this course!"
-            });
-          },
-          error => {
-            return res.status(400).send(error);
-          }
-        );
-      }
-    })
-    .catch(error => {
-      consloe.log(error);
-      return res.status(500).send(); //server error
-    });
-});
-
-//add like to a course
-app.delete("/courses/:courseName/like", (req, res) => {
+app.patch("/like/courses/:courseName", (req, res) => {
     const currentUserID = req.session.currentUserID;
     if (!currentUserID) {
         return res.status(403).send();
     }
-    let theCourse = null;
+
     const courseName = req.params.courseName;
-    Course.findByCourseName(courseName).then(course=> {
-        if(!course){
-            log("invalid course name");
-            res.status(404).send(); // could not find this resource
-        }else{
-            //give the course a heart
-            log(currentUserID);
-            //course.likes.addToSet(currentUserID);
-            course.likes.pull(currentUserID);
-            course.save().then((result) => {
-                    return res.send({
-                        message:
-                            "You have unliked this course."
-                    });
+    Course.findByCourseName(courseName)
+        .then(course => {
+            if (!course) {
+                log("invalid course name");
+                res.status(404).send(); // could not find this resource
+            } else {
+                //give the course a heart
+                //log(currentUserID);
+                if (!course.users.includes(currentUserID)) {
+                    return res.status(403).send();
                 }
-                , (error) => {
-                    return res.status(400).send(error);
+
+                RegularUser.findById(currentUserID).then((user) => {
+                    if (!user) {
+                        return res.status(404).send();
+                    } else {
+                        let liked = false;
+                        if (user.coursesLiked.includes(course._id)) {
+                            user.coursesLiked.pull(course._id);
+                            course.likes--;
+                        } else {
+                            liked = true;
+                            user.coursesLiked.push(course._id);
+                            course.likes++;
+                        }
+                        course.save().then(
+                            result => {
+                                user.save().then(result => {
+                                        return res.send({
+                                            liked: liked
+                                        });
+                                    },
+                                    error => {
+                                        return res.status(500).send(error);
+                                    })
+                            },
+                            error => {
+                                return res.status(500).send(error);
+                            }
+                        );
+                    }
+                }).catch(error => {
+                    console.log(error);
+                    return res.status(500).send(); //server error
                 });
-        }
-    }).catch( error =>{
-        consloe.log(error);
-        return res.status(500).send(); //server error
-    });
+
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            return res.status(500).send(); //server error
+        });
 });
+//
+// //add like to a course
+// app.delete("/courses/:courseName/like", (req, res) => {
+//     const currentUserID = req.session.currentUserID;
+//     if (!currentUserID) {
+//         return res.status(403).send();
+//     }
+//     let theCourse = null;
+//     const courseName = req.params.courseName;
+//     Course.findByCourseName(courseName).then(course => {
+//         if (!course) {
+//             log("invalid course name");
+//             res.status(404).send(); // could not find this resource
+//         } else {
+//             //give the course a heart
+//             log(currentUserID);
+//             //course.likes.addToSet(currentUserID);
+//             course.likes.pull(currentUserID);
+//             course.save().then((result) => {
+//                     return res.send({
+//                         message:
+//                             "You have unliked this course."
+//                     });
+//                 }
+//                 , (error) => {
+//                     return res.status(400).send(error);
+//                 });
+//         }
+//     }).catch(error => {
+//         consloe.log(error);
+//         return res.status(500).send(); //server error
+//     });
+// });
 
 app.use(express.static(__dirname + "/client/build"));
 
