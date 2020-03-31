@@ -19,6 +19,8 @@ const fileUpload = require('express-fileupload');
 app.use(fileUpload({
     limits: {fileSize: 500 * 1024 * 1024}
 }));
+const fs = require("fs");
+const fsPromises = fs.promises;
 
 // datetime for converting date to string
 const datetime = require('date-and-time');
@@ -280,6 +282,9 @@ app.get("/courses", (req, res) => {
                 let count = 0;
                 const list = [];
                 const rawList = user.courseTeaching.concat(user.courseTaking);
+                if(rawList.length === 0){
+                    res.send({courses: list});
+                }
                 //console.log(rawList);
                 rawList.forEach(courseObjectID =>
                     Course.findById(courseObjectID).then(course => {
@@ -879,7 +884,6 @@ app.post('/courses/:courseName/upload', (req, res) => {
                 }
 
                 const file = req.files.file;
-
                 // if the file is over the uploading limit, the file should not be saved
                 if (file.truncated) {
                     console.log("File larger than limit");
@@ -948,6 +952,87 @@ app.get('/download/:file_id', (req, res) => {
         res.status(500).send(); // server error
     });
 
+
+});
+
+
+app.delete('/upload/:file_id', (req, res) => {
+    // check whether the user has logged in
+    const currentUserID = req.session.currentUserID;
+    if (!currentUserID) {
+        res.status(403).send();
+    }
+    const file_id = req.params.file_id;
+    if (!ObjectID.isValid(file_id)) {
+        res.status(400).send();
+    }
+
+    File.findByIdAndRemove(file_id).then((fileDBEntry)=>{
+        if(!fileDBEntry){
+            return res.status(404).send();
+        }
+        const courseID = fileDBEntry.course;
+        Course.findById(courseID).then((course)=>{
+            if(!course){
+                fileDBEntry.save();
+                return res.status(404).send();
+            }
+            if(course.admin!=currentUserID){
+                fileDBEntry.save();
+                return res.status(403).send();
+            }
+            course.resources.pull(ObjectID(file_id));
+            course.save();
+            fsPromises.unlink(`${__dirname}/uploads/${file_id}`).then(
+                ()=>{
+                    res.send({message:"success"});
+                }
+            )
+                .catch((error)=>{
+                    res.status(500).send(error); // server error
+            });
+        })
+    }).catch(error => {
+        console.log(error);
+        res.status(500).send(); // server error
+    });
+
+    // get the course name
+
+    const course_id = file_id.course._id;
+    Course.findByCourseName(courseName).then(course => {
+        if (!course) {
+            log("invalid course name");
+            return res.status(404).send(); // could not find the course
+        }else {
+            if (course.admin != currentUserID) {
+                console.log("not admin");
+                console.log(course.admin);
+                console.log(currentUserID);
+                return res.status(403).send();
+            }
+
+            File.findById(file_id).then((fileDBEntry) => {
+                if (!fileDBEntry) {
+                    res.status(404).send();
+                } else {
+                    res.unlink(`${__dirname}/uploads/${file_id}`, (err) => {
+                        if (err) throw err;
+                        console.log('path/file.txt was deleted');
+                    });
+                    //also delete it from the course
+
+                }
+            }).catch(error => {
+                console.log(error);
+                res.status(500).send(); // server error
+            });
+        }
+
+    }).catch(error => {
+            console.log(error);
+            res.status(500).send(); // server error
+        });
 
 });
 
