@@ -1,30 +1,30 @@
 import React from "react";
 
-import {Button, Form, Header, Icon, Progress, Segment} from "semantic-ui-react";
+import {Button, Form, Header, Icon, Message, Progress, Segment} from "semantic-ui-react";
 import {fileUploadHandler} from "../../actions/resource";
 
 export class UploadModule extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            fileInputKey: null,
             courseName: this.props.courseName,
             file: "",
-            fileName: "",
             uploadedFile: false,
-            message: "",
+            message: {},
             uploadPercentage: ""
         };
     }
 
     onChange = e => {
         this.setState({
-            file: e.target.files[0],
-            fileName: e.target.files[0].name
+            file: e.target.files[0]
         });
     };
 
 
     render() {
+        const {message, uploadPercentage, fileInputKey} = this.state;
         return (
             <Segment placeholder>
                 <Header icon>
@@ -32,12 +32,17 @@ export class UploadModule extends React.Component {
                 </Header>
                 <Form app={this} onSubmit={fileUploadHandler}>
                     <Form.Field>
-                        <input onChange={this.onChange} type={"file"} id='customFile'/>
+                        <input key={fileInputKey || ''} onChange={this.onChange} type={"file"}/>
                     </Form.Field>
-                    <Progress percent={this.state.uploadPercentage} indicating progress/>
+                    <Progress percent={uploadPercentage} indicating progress/>
                     <Button primary>Upload</Button>
                 </Form>
-
+                {message.header ? <Message positive={message.success} negative={!message.success}>
+                    <Message.Header>{message.header}</Message.Header>
+                    <p>
+                        {message.content}
+                    </p>
+                </Message> : null}
             </Segment>
         );
     }

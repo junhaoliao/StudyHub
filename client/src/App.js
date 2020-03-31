@@ -8,12 +8,12 @@ import Home from "./react-components/Home";
 import dash_board from "./react-components/dash_board";
 import {RegularBB} from "./react-components/bill_board/regular_billboard";
 import {Profile} from "./react-components/Profile";
-import {UploadModule} from "./react-components/UploadModule";
 import {CoursePage} from "./react-components/Courses";
 import {Resources} from "./react-components/Resources";
 //import 'semantic-ui-css/semantic.min.css'
 // import Action functions
 import {readCookie} from "./actions/RegularUser";
+import {AddAnnouncement} from "./react-components/Courses/AddAnnouncement";
 
 class App extends React.Component {
   constructor(props) {
@@ -62,7 +62,7 @@ class App extends React.Component {
             <Route path="/" exact component={Home}/>
             <Route path="/bill_board" exact component={RegularBB}/>
             <Route path="/profile" exact component={Profile}/>
-            <Route path="/upload" exact component={UploadModule}/>
+            <Route path="/announcement" exact component={AddAnnouncement}/>
             {/*<Route path="/course/:courseName">*/}
             {/*</Route>*/}
 

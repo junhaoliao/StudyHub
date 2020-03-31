@@ -1,4 +1,5 @@
 import axios from "axios";
+import {uid} from "react-uid";
 
 export const getResources = (app) => {
     // the URL for the request
@@ -51,17 +52,36 @@ export const fileUploadHandler = async (e, {app}) => {
             }
         });
 
-        const {resFileName, resFilePath} = res.data;
 
-        app.setState({filename: resFileName, filePath: resFilePath, message: "File Uploaded"});
+        app.setState({
+            fileInputKey: uid(Math.random()),
+            file: "",
+            message: {
+                success: true,
+                header: "File uploaded successfully!",
+                content: "The file is now available on this course page."
+            }
+        });
     } catch (err) {
         if (err.response.status === 500) {
             app.setState({
-                message: 'There was a problem with the server'
+
+                uploadPercentage: "",
+                message: {
+                    success: false,
+                    header: 'There was a problem with the server',
+                    content: "Please check and try again at a later time"
+                }
             });
         } else {
             app.setState({
-                message: err.response.data.msg
+
+                uploadPercentage: "",
+                message: {
+                    success: false,
+                    header: 'Error occurs',
+                    content: err.response.data.message
+                }
             });
         }
     }

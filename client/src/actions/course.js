@@ -98,7 +98,8 @@ export const getCourseObject = (app) => {
             const course = json.course;
             app.setState({
                 admin: course.admin,
-                chatroom: course.chatroom
+                chatroom: course.chatroom,
+                announcements: course.announcements
             });
             setTimeout(() => {
                 const chatroomSegment = document.querySelector(".chat_room_messages");
@@ -149,5 +150,65 @@ export const postNewMsg = (app) => {
         })
         .catch(error => {
             console.log(error);
+        });
+};
+
+export const postNewAnnouncement = (app) => {
+
+    const {courseName, newAnnouncementTitle, newAnnouncementContent} = app.state;
+
+    // the URL for the request
+    const url = "/courses/" + courseName + "/announcement";
+
+    const newAnnouncement = {
+        title: newAnnouncementTitle,
+        content: newAnnouncementContent
+    };
+
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: "post",
+        body: JSON.stringify(newAnnouncement),
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    // Send the request with fetch()
+    fetch(request)
+        .then(function (res) {
+            // Handle response we get from the API.
+            // Usually check the error codes to see what happened.
+            if (res.status === 200) {
+                getCourseObject(app);
+                app.setState({
+                    message: {
+                        success: true,
+                        header: "The announcement was posted successfully!",
+                        content: "Now everyone in this course will be notified."
+                    },
+                    newAnnouncementTitle: "",
+                    newAnnouncementContent: ""
+                });
+            } else {
+                app.setState({
+                    message: {
+                        success: false,
+                        header: "The announcement was not posted for unknown reasons!",
+                        content: "You may want to try again later."
+                    }
+                })
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            app.setState({
+                message: {
+                    success: false,
+                    header: "The announcement was not posted!",
+                    content: error
+                }
+            })
         });
 };

@@ -40,9 +40,24 @@
     font-size: 26px;
 }
 
-.announcements_container {
-    margin-top: 50px;
+.post_announcements_button_container {
+    margin-top: 60px;
 }
+
+.post_announcements_button {
+    height: 80px;
+    width: 100%;
+}
+
+.post_announcements_button_text {
+    line-height: 20px;
+    font-size: 22px;
+}
+
+.announcements_container {
+    margin-top: 20px;
+}
+
 
 .resources_header_text {
     font-size: 24px;

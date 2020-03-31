@@ -496,19 +496,16 @@ app.patch("/courses/:courseName", (req, res) => {
 // 3. push the announcement into course.announcements
 // 4. delete the first announcement whenever there are more than 3 announcements
 app.post("/courses/:courseName/announcement", (req, res) => {
-  console.log("rock your body");
   const currentUserID = req.session.currentUserID;
   if (!currentUserID) {
     res.status(400).send();
     return;
   }
   let theCourse = null;
-  console.log("rock your body right");
   const courseName = req.params.courseName;
 
   Course.findByCourseName(courseName)
     .then(course => {
-      console.log("backstreet boy alright");
       if (!course) {
         log("invalid course name");
         res.status(404).send(); // could not find this resource
@@ -544,7 +541,6 @@ app.post("/courses/:courseName/announcement", (req, res) => {
       }
     })
     .catch(error => {
-      console.log("hi i am here");
       console.log(error);
       return res.status(111).send(); // server error
     });
@@ -798,10 +794,14 @@ const sizeToString = (size) => {
 app.post('/courses/:courseName/upload', (req, res) => {
     const currentUserID = req.session.currentUserID;
     if (!currentUserID) {
-        return res.status(403).send();
+        return res.status(403).send({
+            message: 'Your session has expired. Please log in and try again.'
+        });
     }
     if (req.files === null) {
-        return res.status(400).send();
+        return res.status(400).send({
+            message: 'No file selected.'
+        });
     }
 
     const courseName = req.params.courseName;
@@ -810,13 +810,17 @@ app.post('/courses/:courseName/upload', (req, res) => {
         .then(course => {
             if (!course) {
                 log("invalid course name");
-                return res.status(404).send(); // could not find the course
+                return res.status(404).send({
+                    message: "This course is not find in the database."
+                }); // could not find the course
             } else {
                 if (course.admin != currentUserID) {
                     console.log("not admin");
                     console.log(course.admin);
                     console.log(currentUserID);
-                    return res.status(403).send(); // not the admin uploading
+                    return res.status(403).send({
+                        message: "You are not the admin of this course"
+                    }); // not the admin uploading
                 }
 
                 const file = req.files.file;

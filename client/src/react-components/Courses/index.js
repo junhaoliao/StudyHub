@@ -10,12 +10,13 @@ import Avatar from "react-avatar";
 import {ProfileView} from "../ProfileView";
 import {uid} from "react-uid";
 import {getCourseObject, postNewMsg} from "../../actions/course";
+import {AddAnnouncement} from "./AddAnnouncement";
+import {readCookie} from "../../actions/RegularUser";
 
-
-const announcements = [
-    {title: "Announcement 1", content: "I am the first announcement."},
-    {title: "Announcement 2", content: "I am another announcement."}
-];
+// const announcements = [
+//     {title: "Announcement 1", content: "I am the first announcement."},
+//     {title: "Announcement 2", content: "I am another announcement."}
+// ];
 
 /* Component for the Home page */
 export class CoursePage extends React.Component {
@@ -26,12 +27,15 @@ export class CoursePage extends React.Component {
         this.state = {
             courseName: params.courseName,
             admin: {},
+            currentUserID: {},
             chatroom: [],
+            announcements: [],
             message_to_send: "",
             scroll_height: 0,
             activeIndex: 0
         };
         getCourseObject(this);
+        readCookie(this);
     }
 
     componentDidMount() {
@@ -39,7 +43,7 @@ export class CoursePage extends React.Component {
         setInterval(() => {
             const app = this;
             getCourseObject(app);
-        }, 5000);
+        }, 3000);
         setTimeout(() => {
             const chatroomSegment = document.querySelector(".chat_room_messages");
             chatroomSegment.scrollTop = chatroomSegment.scrollHeight;
@@ -120,7 +124,8 @@ export class CoursePage extends React.Component {
     }
 
     render() {
-        const {message_to_send, chatroom, courseName} = this.state;
+        const {message_to_send, chatroom, courseName, currentUserID, announcements, admin} = this.state;
+        const isAdmin = currentUserID === admin;
         return (
             <div>
                 <NavBar/>
@@ -224,6 +229,26 @@ export class CoursePage extends React.Component {
                     >
                         <div className={"resources_button_text"}>📐 Resources</div>
                     </Button>
+                    <div className={"post_announcements_button_container"}>
+                        <Popup
+                            on='click'
+
+                            disabled={!isAdmin}
+                            pinned
+                            trigger={
+                                <Button
+                                    className={"post_announcements_button"}
+                                    color='yellow'
+                                    disabled={!isAdmin}
+                                >
+                                    <div
+                                        className={"post_announcements_button_text"}>{isAdmin ? "📢 Post Announcements" : "📢 Only Course Admin can post announcements"}</div>
+                                </Button>
+                            }>
+                            <AddAnnouncement courseName={courseName}/>
+                        </Popup>
+                    </div>
+
                     <Accordion className={"announcements_container"} styled>
                         {this.plot_announcements(announcements)}
                     </Accordion>
