@@ -2,7 +2,7 @@ import React from "react";
 
 import "./styles.css";
 import NavBar from "../NavBar/navbar";
-import {UploadModule} from "../UploadModule/";
+import {UploadModule} from "./UploadModule";
 import {Button, Card, Grid, Icon, Image, Menu, Popup, Segment, Table} from 'semantic-ui-react'
 import {uid} from "react-uid";
 
