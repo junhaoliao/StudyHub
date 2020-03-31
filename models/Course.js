@@ -11,6 +11,7 @@ const AnnouncementSchema = new mongoose.Schema({
     }
 });
 
+
 const msgSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -40,6 +41,7 @@ const CourseSchema = new mongoose.Schema({
         required: true
     },
     users: [mongoose.Schema.Types.ObjectId],
+    likes: [mongoose.Schema.Types.ObjectId],
     announcements: [AnnouncementSchema],
 
     // list of resources that are shared in the class
@@ -65,4 +67,6 @@ CourseSchema.statics.findByCourseName = function (courseName) {
 
 const Course = mongoose.model('Course', CourseSchema);
 
+
 module.exports = {Course, CourseSchema};
+
