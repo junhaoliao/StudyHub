@@ -116,3 +116,89 @@ export const removeFileHandler = (e, {app, file_id}) => {
             console.log(error);
         });
 };
+
+export const favourFileHandler = (e, {app, file_id}) => {
+    e.preventDefault();
+
+    const url = `/resources/${file_id}/favour`;
+
+    const request = new Request(url, {
+        method: "PATCH",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    // Send the request with fetch()
+    fetch(request)
+        .then(function (res) {
+            // Handle response we get from the API.
+            // Usually check the error codes to see what happened.
+            if (res.status === 200) {
+                getResources(app);
+            } else {
+                alert("Operation Invalid");
+                getResources(app);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
+export const getFavourites = (app) => {
+    // the URL for the request
+
+    const url = "/resources/favourites";
+    // Since this is a GET request, simply call fetch on the URL
+    fetch(url)
+        .then(res => {
+            if (res.status === 200) {
+                // return a promise that resolves with the JSON body
+                //this.courseList = res.json();
+                return res.json();
+            } else {
+                alert("Could not get favoured resources");
+            }
+        })
+        .then(json => {
+            // the resolved promise with the JSON body
+            app.setState({
+                filesFavoured: json.filesFavoured
+            });
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
+export const unfavourFileOnFavouritesPage = (e, {app, file_id}) => {
+    e.preventDefault();
+
+    const url = `/resources/${file_id}/favour`;
+
+    const request = new Request(url, {
+        method: "PATCH",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    // Send the request with fetch()
+    fetch(request)
+        .then(function (res) {
+            // Handle response we get from the API.
+            // Usually check the error codes to see what happened.
+            if (res.status === 200) {
+                getFavourites(app);
+            } else {
+                alert("Operation Invalid");
+                getFavourites(app);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};

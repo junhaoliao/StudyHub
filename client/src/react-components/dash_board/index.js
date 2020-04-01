@@ -4,9 +4,10 @@ import "./styles.css";
 import NavBar from "../NavBar/navbar";
 import Courses from "../Courses/courses";
 
-import {Button, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
+import {Button, Divider, Form, Header, Icon, Menu, Segment} from "semantic-ui-react";
 
 import {createCourse, getCourseList, joinCourse} from "../../actions/course";
+import {readCookie} from "../../actions/RegularUser";
 
 // function addCourseMessage(props) {
 //   const {message} = props;
@@ -43,7 +44,7 @@ class dash_board extends React.Component {
       terms_confirmed: false
     };
     getCourseList(this);
-    this.props.history.push("/dash_board");
+    readCookie(this);
   }
 
 
@@ -78,7 +79,6 @@ class dash_board extends React.Component {
                     name="add_course_info"
                     value={add_course_info}
                     onChange={this.handleChange}
-                    required
                     fluid
                     label="Course Info (Optional)"
                     placeholder="Course Info (Optional)"
@@ -96,6 +96,8 @@ class dash_board extends React.Component {
               />
               <Button type="submit">Submit</Button>
             </Form>
+
+            <Divider horizontal inverted>Or</Divider>
 
             <Header as={"h1"}>Joining a new course...</Header>
             <Form onSubmit={() => joinCourse(this)} inverted>

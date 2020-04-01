@@ -1,4 +1,5 @@
 import React from "react";
+import {readCookie} from "./RegularUser";
 
 export const getCourseList = (app) => {
     // the URL for the request
@@ -129,7 +130,7 @@ export const joinCourse = (app) => {
 
 export const getCourseObject = (app) => {
     // the URL for the request
-
+    readCookie(app);
     const courseName = app.state.courseName;
     const url = "/getCourses/" + courseName;
 
@@ -299,7 +300,7 @@ export const removeAnnouncementHandler = (e, {app, announcement_id}) => {
 export const toggleLikeStatus = (e, {app, courseName}) => {
     e.preventDefault();
 
-    const url = `/like/courses/${courseName}`;
+    const url = `/courses/${courseName}/like`;
 
     const request = new Request(url, {
         method: "PATCH",

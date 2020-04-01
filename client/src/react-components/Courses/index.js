@@ -3,15 +3,13 @@ import React from "react";
 import "./styles.css";
 import NavBar from "../NavBar/navbar";
 
-import {Accordion, Button, Comment, Form, Grid, Header, Icon, Popup, Segment} from "semantic-ui-react";
+import {Accordion, Button, Comment, Divider, Form, Grid, Header, Icon, Popup, Segment} from "semantic-ui-react";
 
 import Avatar from "react-avatar";
 
 import {ProfileView} from "../ProfileView";
-import {uid} from "react-uid";
 import {getCourseObject, postNewMsg, removeAnnouncementHandler} from "../../actions/course";
 import {AddAnnouncement} from "./AddAnnouncement";
-import {readCookie} from "../../actions/RegularUser";
 
 // const announcements = [
 //     {title: "Announcement 1", content: "I am the first announcement."},
@@ -34,7 +32,7 @@ export class CoursePage extends React.Component {
             scroll_height: 0,
             activeIndex: 0
         };
-        readCookie(this);
+
         getCourseObject(this);
     }
 
@@ -86,7 +84,7 @@ export class CoursePage extends React.Component {
 
     plot_comment(comment) {
         return (
-            <Comment key={uid(comment)}>
+            <Comment>
                 <Comment.Avatar
                     src={<Avatar name={comment.username} size="42" round={true}/>}
                 />
@@ -104,22 +102,22 @@ export class CoursePage extends React.Component {
     plot_announcements(announcements) {
         const {activeIndex} = this.state;
         let result = [];
-        for (let i = 0; i < announcements.length && i < 3; i++) {
+        for (let i = 0; i < announcements.length; i++) {
             result.push(
-                <Accordion.Title key={uid(announcements[i]) + "_title"}
-                                 active={activeIndex === i}
-                                 index={i}
-                                 onClick={this.handleClick}
+                <Accordion.Title
+                    active={activeIndex === i}
+                    index={i}
+                    onClick={this.handleClick}
                 >
                     <Button icon={"remove circle"} app={this} announcement_id={announcements[i]._id}
                             onClick={removeAnnouncementHandler}/>
                     <Icon name="dropdown"/>
-                    {announcements[i].title}
+                    <span>{announcements[i].title}</span>
                 </Accordion.Title>
             );
             result.push(
-                <Accordion.Content active={activeIndex === i} key={uid(announcements[i]) + "_content"}>
-                    <p>{announcements[i].content}</p>
+                <Accordion.Content active={activeIndex === i}>
+                    <div className={"announcement_content"}><p>{announcements[i].content}</p></div>
                 </Accordion.Content>
             );
         }
@@ -216,6 +214,7 @@ export class CoursePage extends React.Component {
                     <Form onSubmit={() => postNewMsg(this)} className={"chat_bar"}>
                         <Form.Group>
                             <Form.Input
+                                required
                                 width={16}
                                 placeholder="Enter your message here"
                                 name="message_to_send"
@@ -234,6 +233,7 @@ export class CoursePage extends React.Component {
                     >
                         <div className={"resources_button_text"}>📐 Resources</div>
                     </Button>
+                    <Divider horizontal>Or</Divider>
                     <div className={"post_announcements_button_container"}>
                         <Popup
                             on='click'

@@ -1,11 +1,10 @@
 .bill_board_header {
-    margin-top: 20px;
-    width: 180px;
-}
-
-.bill_board {
-    text-align: center;
-    font-size: 36px;
+    height: 80px;
+    position: relative;
+    left: 6vh;
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 50px;
 }
 
 .input_outline {
@@ -16,4 +15,10 @@
 .container_design {
     margin-top: 30px;
     margin: 10px;
+}
+
+.billboard_segment {
+    overflow: auto;
+    max-height: 75vh;
+    scroll-behavior: smooth;
 }

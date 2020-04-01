@@ -7,7 +7,10 @@ export const readCookie = app => {
   fetch(url)
     .then(res => {
       if (res.status === 200) {
-        return res.json();
+          return res.json();
+      } else {
+          alert("Session expired. Please try logging in again.");
+          window.location.href = "/";
       }
     })
     .then(json => {

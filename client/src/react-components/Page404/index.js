@@ -5,7 +5,12 @@ import NavBar from "../NavBar/navbar";
 import "./styles.css";
 
 /* Component for the Home page */
-class Page404 extends React.Component {
+export class Page404 extends React.Component {
+    componentDidMount() {
+        document.title = "Page Not Found";
+    }
+
+
     render() {
         return (
             <div>
@@ -21,5 +26,3 @@ class Page404 extends React.Component {
         );
     }
 }
-
-export default Page404;
