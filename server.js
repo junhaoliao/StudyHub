@@ -39,7 +39,7 @@ console.log("Welcome to server.js");
 // Create a session cookie
 app.use(
     session({
-        secret: "oursecret",
+        secret: "csc309", // using this for now, may have a security concern
         resave: false,
         saveUninitialized: false,
         cookie: {
@@ -66,7 +66,6 @@ app.post("/RegularUser/login", (req, res) => {
             req.session.username = user.username;
             req.session.currentUserID = user._id;
             console.log("ready to send response1");
-            //req.seesion.user = user._id;
             console.log("ready to send response2");
             res.send({currentUser: user.username});
         })
@@ -267,28 +266,41 @@ app.post("/courses", (req, res) => {
         res.status(403).send();
         return;
     }
-    const course = new Course({
-        name: req.body.name,
-        description: req.body.description,
-        admin: currentUserID,
-        users: [currentUserID]
+
+    const courseName = req.body.name.toUpperCase();
+
+    Course.findByCourseName(courseName).then((existedCourse) => {
+        if (existedCourse) {
+            res.status(400).send(); // server error
+        } else {
+            const course = new Course({
+                name: courseName,
+                description: req.body.description,
+                admin: currentUserID,
+                users: [currentUserID]
+            });
+
+            // Save the course
+            course.save().then(
+                result => {
+                    RegularUser.findById(currentUserID).then(user => {
+                        log(user);
+                        log(course._id);
+                        user.coursesTeaching.push(course._id);
+                        user.save();
+                        res.send(result);
+                    });
+                },
+                error => {
+                    res.status(400).send(error); // 400 for bad request
+                }
+            );
+        }
+    }).catch(error => {
+        console.log(error);
+        res.status(500).send(); // server error
     });
 
-    // Save the course
-    course.save().then(
-        result => {
-            RegularUser.findById(currentUserID).then(user => {
-                log(user);
-                log(course._id);
-                user.coursesTeaching.push(course._id);
-                user.save();
-                res.send(result);
-            });
-        },
-        error => {
-            res.status(400).send(error); // 400 for bad request
-        }
-    );
 });
 
 app.get("/getCourses/:courseName", (req, res) => {
@@ -421,7 +433,7 @@ app.patch("/courses/:courseName", (req, res) => {
     if (!userID) {
         return res.status(400).send(); // user not logged in
     }
-    const courseName = req.params.courseName;
+    const courseName = req.params.courseName.toUpperCase();
     let theCourse = null;
     Course.findByCourseName(courseName)
         .then(course => {

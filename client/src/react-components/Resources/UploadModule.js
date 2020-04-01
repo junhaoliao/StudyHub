@@ -16,7 +16,7 @@ export class UploadModule extends React.Component {
         };
     }
 
-    onChange = e => {
+    handleFileInputChange = e => {
         this.setState({
             file: e.target.files[0]
         });
@@ -32,7 +32,7 @@ export class UploadModule extends React.Component {
                 </Header>
                 <Form app={this} onSubmit={fileUploadHandler}>
                     <Form.Field>
-                        <input key={fileInputKey || ''} onChange={this.onChange} type={"file"}/>
+                        <input key={fileInputKey || ''} onChange={this.handleFileInputChange} type={"file"}/>
                     </Form.Field>
                     <Progress percent={uploadPercentage} indicating progress/>
                     <Button primary>Upload</Button>

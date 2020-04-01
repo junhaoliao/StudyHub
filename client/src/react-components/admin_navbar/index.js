@@ -18,7 +18,7 @@ export class AdminNavBar extends React.Component {
                         className="ui inverted yellow basic button"
                         page="/"
                         button_name="Log Out"
-                    ></RedirectButton>
+                    />
                 </Menu.Item>
             </Menu>
         );

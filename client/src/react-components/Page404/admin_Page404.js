@@ -4,6 +4,11 @@ import {AdminNavBar} from "../admin_navbar/index";
 
 /* Component for the Home page */
 export class AdminPage extends React.Component {
+
+    componentDidMount() {
+        document.title = "Page Not Found";
+    }
+
     render() {
         return (
             <div>

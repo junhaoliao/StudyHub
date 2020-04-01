@@ -11,11 +11,6 @@ import {ProfileView} from "../ProfileView";
 import {getCourseObject, postNewMsg, removeAnnouncementHandler} from "../../actions/course";
 import {AddAnnouncement} from "./AddAnnouncement";
 
-// const announcements = [
-//     {title: "Announcement 1", content: "I am the first announcement."},
-//     {title: "Announcement 2", content: "I am another announcement."}
-// ];
-
 /* Component for the Home page */
 export class CoursePage extends React.Component {
     constructor(props) {
@@ -50,29 +45,6 @@ export class CoursePage extends React.Component {
     }
 
     handleChange = (e, {name, value}) => this.setState({[name]: value});
-    //
-    // handleSubmit = () => {
-    //     const newMessage = {};
-    //     newMessage.user = "RegularUser";
-    //
-    //     const now = new Date();
-    //
-    //     newMessage.date =
-    //         now.getHours() +
-    //         ":" +
-    //         now.getMinutes() +
-    //         ":" +
-    //         now.getSeconds() +
-    //         " on " +
-    //         months[now.getMonth()] +
-    //         "-" +
-    //         now.getDate();
-    //
-    //     newMessage.message = this.state.message_to_send;
-    //     chat_log.push(newMessage);
-    //
-    //     this.setState({message_to_send: ""});
-    // };
 
     handleClick = (e, titleProps) => {
         const {index} = titleProps;

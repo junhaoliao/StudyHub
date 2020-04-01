@@ -10,7 +10,7 @@ import {uid} from "react-uid";
 import {readCookie} from "../../actions/RegularUser";
 import {favourFileHandler, getResources, removeFileHandler} from "../../actions/resource";
 
-/* Component for the CSC309A_resources page */
+/* Component for the Resources page */
 export class Resources extends React.Component {
     display_items_element = "";
 
