@@ -80,7 +80,7 @@ class hub_Billboard extends React.Component {
     setInterval(() => {
       load_content(this);
     }, 3000);
-
+    document.title = "BillBoard";
   }
 
   handleChange = (e, {name, value}) => this.setState({[name]: value});

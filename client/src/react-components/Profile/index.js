@@ -36,6 +36,10 @@ export class Profile extends React.Component {
     };
   }
 
+  componentDidMount() {
+    document.title = "My Profile";
+  }
+
   profilePage() {
     const {
       username,

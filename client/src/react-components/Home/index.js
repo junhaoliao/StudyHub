@@ -15,15 +15,19 @@ class Home extends React.Component {
         };
     }
 
-  render() {
-    return (
-      <div className={"home_page_container"}>
-        <div className="ui attached message">
-          <h2 className="ui blue center aligned icon header">
-            <i className=" circular users icon"></i>
-            Welcome to StudentHub
-          </h2>
-        </div>
+    componentDidMount() {
+        document.title = "StudyHub";
+    }
+
+    render() {
+        return (
+            <div className={"home_page_container"}>
+                <div className="ui attached message">
+                    <h2 className="ui blue center aligned icon header">
+                        <i className=" circular users icon"></i>
+                        Welcome to StudentHub
+                    </h2>
+                </div>
         <div className="sign_up_box_container">
           {this.state.sign_up ? <SignupBox /> : <LoginBox />}
         </div>

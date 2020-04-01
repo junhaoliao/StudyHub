@@ -6,6 +6,11 @@ import "./styles.css";
 
 /* Component for the Home page */
 export class Page404 extends React.Component {
+    componentDidMount() {
+        document.title = "Page Not Found";
+    }
+
+
     render() {
         return (
             <div>
