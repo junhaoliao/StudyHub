@@ -1128,41 +1128,44 @@ app.get("/resources/favourites", (req, res) => {
         rawList.forEach((file_id) => {
             File.findById(file_id).then((fileDBEntry) => {
                 if (!fileDBEntry) {
-                    return res.status(404).send();
-                }
-                Course.findById(fileDBEntry.course).then((course) => {
-                    if (!course) {
-                        return res.status(404).send();
-                    }
-                    const courseName = course.name;
-                    if (!filesFavoured.has(courseName)) {
-                        filesFavoured.set(courseName, []);
-                    }
-                    const filesInTheCourse = filesFavoured.get(courseName);
-                    filesInTheCourse.push({
-                        file_id: fileDBEntry._id,
-                        name: fileDBEntry.name,
-                        link: `/download/${fileDBEntry._id}`,
-                        size: fileDBEntry.size,
-                        date: datetime.format(fileDBEntry.date, "M/D/Y h:mm A")
-                    });
-                    filesFavoured.set(courseName, filesInTheCourse);
-                    count++;
-                    if (count === rawList.length) {
-                        //console.log(filesFavoured);
-                        const finalList = [];
-                        filesFavoured.forEach((list, key) => {
-                            finalList.push({
-                                courseName: key,
-                                files: list
-                            });
+                    user.filesFavoured.pull(file_id);
+                } else {
+                    Course.findById(fileDBEntry.course).then((course) => {
+                        if (!course) {
+                            return res.status(404).send();
+                        }
+                        const courseName = course.name;
+                        if (!filesFavoured.has(courseName)) {
+                            filesFavoured.set(courseName, []);
+                        }
+                        const filesInTheCourse = filesFavoured.get(courseName);
+                        filesInTheCourse.push({
+                            file_id: fileDBEntry._id,
+                            name: fileDBEntry.name,
+                            link: `/download/${fileDBEntry._id}`,
+                            size: fileDBEntry.size,
+                            date: datetime.format(fileDBEntry.date, "M/D/Y h:mm A")
                         });
-                        return res.send({filesFavoured: finalList});
-                    }
-                }).catch(error => {
-                    console.log(error);
-                    return res.status(500).send(); //server error
-                });
+                        filesFavoured.set(courseName, filesInTheCourse);
+                        count++;
+                        if (count === rawList.length) {
+                            user.save();
+                            //console.log(filesFavoured);
+                            const finalList = [];
+                            filesFavoured.forEach((list, key) => {
+                                finalList.push({
+                                    courseName: key,
+                                    files: list
+                                });
+                            });
+                            return res.send({filesFavoured: finalList});
+                        }
+                    }).catch(error => {
+                        console.log(error);
+                        return res.status(500).send(); //server error
+                    });
+                }
+
             }).catch(error => {
                 console.log(error);
                 return res.status(500).send(); //server error
@@ -1175,39 +1178,7 @@ app.get("/resources/favourites", (req, res) => {
         return res.status(500).send(); //server error
     });
 });
-//
-// //add like to a course
-// app.delete("/courses/:courseName/like", (req, res) => {
-//     const currentUserID = req.session.currentUserID;
-//     if (!currentUserID) {
-//         return res.status(403).send();
-//     }
-//     let theCourse = null;
-//     const courseName = req.params.courseName;
-//     Course.findByCourseName(courseName).then(course => {
-//         if (!course) {
-//             log("invalid course name");
-//             res.status(404).send(); // could not find this resource
-//         } else {
-//             //give the course a heart
-//             log(currentUserID);
-//             //course.likes.addToSet(currentUserID);
-//             course.likes.pull(currentUserID);
-//             course.save().then((result) => {
-//                     return res.send({
-//                         message:
-//                             "You have unliked this course."
-//                     });
-//                 }
-//                 , (error) => {
-//                     return res.status(400).send(error);
-//                 });
-//         }
-//     }).catch(error => {
-//         consloe.log(error);
-//         return res.status(500).send(); //server error
-//     });
-// });
+
 
 app.use(express.static(__dirname + "/client/build"));
 

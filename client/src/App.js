@@ -40,22 +40,18 @@ class App extends React.Component {
                         <Route path="/bill_board" exact component={RegularBB}/>
                         <Route path="/favourites" exact component={Favourites}/>
                         <Route path="/profile" exact component={Profile}/>
-                        {/*<Route path="/announcement" exact component={AddAnnouncement}/>*/}
-                        {/*<Route path="/course/:courseName">*/}
-                        {/*</Route>*/}
-
                         <Route
                             path="/courses/:courseName/resources"
                             component={Resources}
-            />
-            <Route path="/courses/:courseName/" component={CoursePage}/>
+                        />
+                        <Route path="/courses/:courseName/" component={CoursePage}/>
                         <Route path="/adash_board" exact component={AdminDashboard}/>
                         <Route path="*" component={Page404}/>
-          </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
+                    </Switch>
+                </BrowserRouter>
+            </div>
+        );
+    }
 }
 
 export default App;
