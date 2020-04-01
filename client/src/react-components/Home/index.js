@@ -2,19 +2,18 @@ import React from "react";
 
 import "./styles.css";
 
-import { SignupBox } from "../SignupBox";
-import { LoginBox } from "../LoginBox";
-import { Button } from "semantic-ui-react";
+import {SignupBox} from "../SignupBox";
+import {LoginBox} from "../LoginBox";
+import {Button} from "semantic-ui-react";
 
 /* Component for the Home page */
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.props.history.push("/home");
-    this.state = {
-      sign_up: false
-    };
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            sign_up: false
+        };
+    }
 
   render() {
     return (

@@ -20,7 +20,7 @@ export const readCookie = BillBoard => {
         });
 };
 
-export const updateMessage = (BillBoard, field) => {
+export const handleChange = (BillBoard, field) => {
     const value = field.value;
     const name = field.name;
     BillBoard.setState({

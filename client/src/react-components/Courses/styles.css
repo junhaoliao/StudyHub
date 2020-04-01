@@ -1,4 +1,6 @@
 /* Styles for the coursepage React component */
+
+
 .course_header {
     margin-top: 12px;
     margin-bottom: 20px;
@@ -41,7 +43,7 @@
 }
 
 .post_announcements_button_container {
-    margin-top: 60px;
+    margin-top: 20px;
 }
 
 .post_announcements_button {
@@ -58,11 +60,23 @@
     margin-top: 20px;
 }
 
-
-.resources_header_text {
-    font-size: 24px;
+.announcement_content {
+    max-height: 26vh;
+    overflow: auto;
+    scroll-behavior: smooth;
 }
+
 
 .inline {
     float: left;
+}
+
+p {
+    word-break: break-all;
+    white-space: normal;
+}
+
+span {
+    word-break: break-all;
+    white-space: normal;
 }

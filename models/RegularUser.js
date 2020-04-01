@@ -14,6 +14,7 @@ const RegularUserSchema = new mongoose.Schema({
     coursesTeaching: [mongoose.Schema.Types.ObjectId], // the courses being administrated by this user
     coursesTaking: [mongoose.Schema.Types.ObjectId], // the courses being taken by this user
     coursesLiked: [mongoose.Schema.Types.ObjectId], // the courses liked by this user
+    filesFavoured: [mongoose.Schema.Types.ObjectId] // filed that were favoured by the user, for making the favourite page
 });
 
 RegularUserSchema.pre("save", function (next) {

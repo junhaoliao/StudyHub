@@ -1,16 +1,17 @@
 import React from "react";
-import { Button, Menu } from "semantic-ui-react";
+import {Button, Menu} from "semantic-ui-react";
 import "./styles.css";
-import { logout } from "../../actions/NavBar";
+import {logout} from "../../actions/NavBar";
+
 /* Component for the NavBar */
 class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeItem: "dash_board",
-      course: ""
-    };
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeItem: "dash_board",
+            course: ""
+        };
+    }
 
   // handleItemClick = (e, { name }) => {
   //
@@ -22,23 +23,27 @@ class NavBar extends React.Component {
     switch (currentPage) {
       case "dash_board": {
         this.setState({ activeItem: "dash_board" });
-        break;
+          break;
       }
-      case "bill_board": {
-        this.setState({ activeItem: "bill_board" });
-        break;
-      }
-      case "ranking": {
-        this.setState({ activeItem: "ranking" });
-        break;
-      }
-      case "user_profile": {
-        this.setState({ activeItem: "user_profile" });
-        break;
-      }
-      default:
-        this.setState({ activeItem: "course" });
-        this.setState({ course: currentPage });
+        case "bill_board": {
+            this.setState({activeItem: "bill_board"});
+            break;
+        }
+        case "ranking": {
+            this.setState({activeItem: "ranking"});
+            break;
+        }
+        case "favourites": {
+            this.setState({activeItem: "favourites"});
+            break;
+        }
+        case "profile": {
+            this.setState({activeItem: "profile"});
+            break;
+        }
+        default:
+            this.setState({activeItem: "course"});
+            this.setState({course: currentPage});
     }
   }
 
@@ -61,33 +66,39 @@ class NavBar extends React.Component {
           color={"blue"}
         />
         <Menu.Item
-          name="BillBoard"
-          href={"/bill_board"}
-          active={activeItem === "bill_board"}
-          color={"blue"}
+            name="BillBoard"
+            href={"/bill_board"}
+            active={activeItem === "bill_board"}
+            color={"blue"}
         />
-        <Menu.Item
-          name="Ranking"
-          href={"/ranking"}
-          active={activeItem === "ranking"}
-          //onClick={this.handleItemClick}
-          color={"blue"}
-        />
+          <Menu.Item
+              name="Ranking"
+              href={"/ranking"}
+              active={activeItem === "ranking"}
+              //onClick={this.handleItemClick}
+              color={"blue"}
+          />
 
-        <Menu.Item
-          name="Profile"
-          href={"/profile"}
-          active={activeItem === "user_profile"}
-          //onClick={this.handleItemClick}
-          color={"blue"}
-          position="right"
-        />
+          <Menu.Item
+              name="Favourites"
+              href={"/favourites"}
+              active={activeItem === "favourites"}
+              //onClick={this.handleItemClick}
+              color={"blue"}
+              position="right"
+          />
+          <Menu.Item
+              name="profile"
+              href={"/profile"}
+              active={activeItem === "profile"}
+              color={"blue"}
+          />
 
-        <Menu.Item>
-          <Button href={"/"} onClick={() => logout()} inverted color={"blue"}>
-            Logout
-          </Button>
-        </Menu.Item>
+          <Menu.Item>
+              <Button href={"/"} onClick={() => logout()} inverted color={"blue"}>
+                  Logout
+              </Button>
+          </Menu.Item>
       </Menu>
       // <Navbar bg="primary">
       //     <Navbar.Brand className="text-white" href="/">StudyHub</Navbar.Brand>

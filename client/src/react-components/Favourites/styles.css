@@ -1,0 +1,14 @@
+.resources_header_container {
+    height: 80px;
+    position: relative;
+    left: 5vh;
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 50px;
+}
+
+.favourites_container {
+    margin-top: 18px;
+    margin-left: 5vh;
+    margin-right: 5vh;
+}

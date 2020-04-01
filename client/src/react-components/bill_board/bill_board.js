@@ -1,8 +1,8 @@
 import React from "react";
 
 import "./styles.css";
-import { Comment, Container, Form } from "semantic-ui-react";
-import { readCookie, updateMessage } from "../../actions/BillBoard";
+import {Comment, Container, Form} from "semantic-ui-react";
+import {handleChange, readCookie} from "../../actions/BillBoard";
 
 // const billboard_content = [
 //   {
@@ -31,20 +31,20 @@ import { readCookie, updateMessage } from "../../actions/BillBoard";
 //   }
 // ];
 
-let billboard_content = [];
-
-function load_content() {
+function load_content(app) {
   const url = "/BillBoard/content";
   fetch(url)
-    .then(res => {
-      if (res.status === 200) {
-        return res.json();
-      }
-    })
-    .then(json => {
-      billboard_content = json;
-      console.log(billboard_content);
-    });
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      })
+      .then(json => {
+        app.setState({
+          billboard_content: json
+        });
+        //console.log(billboard_content);
+      });
 }
 const months = [
   "January",
@@ -60,7 +60,7 @@ const months = [
   "November",
   "December"
 ];
-load_content();
+
 class hub_Billboard extends React.Component {
   constructor(props) {
     super(props);
@@ -69,11 +69,21 @@ class hub_Billboard extends React.Component {
       username: "",
       date: "",
       message: "",
-      image: "https://react.semantic-ui.com/images/avatar/small/matthew.png"
+      image: "https://react.semantic-ui.com/images/avatar/small/matthew.png",
+      billboard_content: []
     };
     readCookie(this);
+    load_content(this);
   }
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+
+  componentDidMount() {
+    setInterval(() => {
+      load_content(this);
+    }, 3000);
+
+  }
+
+  handleChange = (e, {name, value}) => this.setState({[name]: value});
 
   handleSubmit = () => {
     // const newMessage = {};
@@ -128,8 +138,9 @@ class hub_Billboard extends React.Component {
 
     // newMessage.message = this.state.message_to_send;
     // billboard_content.push(newMessage);
+    load_content(this);
+    this.setState({message: ""});
 
-    this.setState({ message: "" });
   };
 
   plot_comment(comment) {
@@ -149,17 +160,18 @@ class hub_Billboard extends React.Component {
 
   billboard_page() {
     const message_to_send = "";
+    const {billboard_content} = this.state;
     if (this.state.login) {
       console.log("Welcome to BillBoard");
       return (
         <div>
           <Container fluid>
             <div className={"bill_board_header"}>
-              <header className={"bill_board"}>Billboard</header>
+              Billboard
             </div>
 
             <div className={"container_design"}>
-              <div className={"ui yellow segment"}>
+              <div className={"ui yellow segment billboard_segment"}>
                 <Comment.Group>
                   {billboard_content.map(comment => this.plot_comment(comment))}
                 </Comment.Group>
@@ -171,11 +183,11 @@ class hub_Billboard extends React.Component {
             <Form onSubmit={this.handleSubmit}>
               <Form.Group>
                 <Form.Input
-                  width={16}
-                  placeholder="Type in your thought..."
-                  name="message"
-                  value={this.state.message}
-                  onChange={e => updateMessage(this, e.target)}
+                    width={16}
+                    placeholder="Type in your thought..."
+                    name="message"
+                    value={this.state.message}
+                    onChange={e => handleChange(this, e.target)}
                 />
                 <Form.Button color={"black"} content="Submit" />
               </Form.Group>
