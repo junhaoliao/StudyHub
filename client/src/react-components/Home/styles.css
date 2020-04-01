@@ -10,8 +10,19 @@
     background-image: url("/background.jpg");
     background-position: center;
     background-size: cover;
-    height: 100vh;
+    height: 250vh;
 }
+
+.info_container {
+     width: 95%;
+     margin: 3vh auto 6vh;
+ }
+
+.info_container1 {
+    width: 60%;
+    margin: 3vh auto 3vh;
+}
+
 
 .signup_prompt {
     position: fixed;
