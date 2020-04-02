@@ -271,7 +271,7 @@ app.post("/courses", (req, res) => {
 
     console.log(courseName);
     Course.findOne({name: courseName}).then((existedCourse) => {
-        if (existedCourse){
+        if (existedCourse) {
             return res.status(400).send(); // server error
         }
 
@@ -306,8 +306,8 @@ app.post("/courses", (req, res) => {
 });
 
 app.get("/getCourses/:courseName", (req, res) => {
-    const userID = req.session.currentUserID;
-    if (!userID) {
+    const currentUserID = req.session.currentUserID;
+    if (!currentUserID) {
         return res.status(403).send(); // user not logged in
     }
     const courseName = req.params.courseName;
@@ -356,6 +356,52 @@ app.get("/getCourses/:courseName", (req, res) => {
             console.log(error);
             res.status(500).send(); // server error
         });
+
+
+});
+
+app.get("/getRankings", (req, res) => {
+    const currentUserID = req.session.currentUserID;
+    if (!currentUserID) {
+        return res.status(403).send(); // user not logged in
+    }
+
+    Course.find().then((courses) => {
+        courses.sort((a, b) => {
+            if (a.likes > b.likes) {
+                return -1;
+            } else if (a.likes < b.likes) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        RegularUser.find().then((users) => {
+            users.sort((a, b) => {
+                if (a.coursesTeaching > b.coursesTeaching) {
+                    return -1;
+                } else if (a.coursesTeaching < b.coursesTeaching) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+
+            return res.send({
+                likesRankings: courses.slice(0, 8),
+                coursesRankings: users.splice(0, 8)
+            });
+        }).catch((error) => {
+            console.log(error);
+            return res.status(500).send();
+        });
+
+
+    }).catch((error) => {
+        console.log(error);
+        return res.status(500).send();
+    });
 
 
 });
@@ -450,7 +496,7 @@ app.patch("/courses/:courseName", (req, res) => {
                     () => {
                         RegularUser.findById(userID)
                             .then(user => {
-                                if (user.coursesTeaching.includes(course._id)||user.coursesTaking.includes(course._id)){
+                                if (user.coursesTeaching.includes(course._id) || user.coursesTaking.includes(course._id)) {
                                     return res.status(400).send();
                                 }
                                 user.coursesTaking.addToSet(course._id);
@@ -585,7 +631,7 @@ app.delete("/courses/:courseName/:announcement", (req, res) => {
 
                     }
                 }
-                //hi i am working here
+
             }
         })
         .catch(error => {

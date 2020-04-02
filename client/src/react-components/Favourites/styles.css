@@ -1,7 +1,7 @@
 .resources_header_container {
     height: 80px;
     position: relative;
-    left: 5vh;
+    left: 5vw;
     display: table-cell;
     vertical-align: middle;
     font-size: 50px;
@@ -9,6 +9,6 @@
 
 .favourites_container {
     margin-top: 18px;
-    margin-left: 5vh;
-    margin-right: 5vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
 }

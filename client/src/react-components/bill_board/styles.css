@@ -1,7 +1,7 @@
 .bill_board_header {
     height: 80px;
     position: relative;
-    left: 6vh;
+    left: 5vw;
     display: table-cell;
     vertical-align: middle;
     font-size: 50px;

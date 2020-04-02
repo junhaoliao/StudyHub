@@ -1,0 +1,10 @@
+.rankings_header {
+    position: relative;
+    left: -4vw;
+    font-size: 50px;
+}
+
+.rankings_container {
+    margin-left: 5vw;
+    margin-right: 5vw;
+}

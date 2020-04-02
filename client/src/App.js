@@ -13,7 +13,7 @@ import {CoursePage} from "./react-components/Courses";
 import {Resources} from "./react-components/Resources";
 import {AdminDashboard} from "./react-components/admin_dashboard";
 import {Page404} from "./react-components/Page404";
-import  {Ranking} from "./react-components/ranking";
+import  {Rankings} from "./react-components/Rankings";
 
 //import 'semantic-ui-css/semantic.min.css'
 // import Action functions
@@ -48,7 +48,7 @@ class App extends React.Component {
                         />
                         <Route path="/courses/:courseName/" component={CoursePage}/>
                         <Route path="/adash_board" exact component={AdminDashboard}/>
-                        <Route path="/ranking" component={Ranking}/>
+                        <Route path="/rankings" component={Rankings}/>
                         <Route path="*" component={Page404}/>
                     </Switch>
                 </BrowserRouter>

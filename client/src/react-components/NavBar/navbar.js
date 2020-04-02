@@ -24,8 +24,8 @@ class NavBar extends React.Component {
                 this.setState({activeItem: "bill_board"});
                 break;
             }
-            case "ranking": {
-                this.setState({activeItem: "ranking"});
+            case "rankings": {
+                this.setState({activeItem: "rankings"});
                 break;
             }
             case "favourites": {
@@ -67,9 +67,9 @@ class NavBar extends React.Component {
                     color={"blue"}
                 />
                 <Menu.Item
-                    name="Ranking"
-                    href={"/ranking"}
-                    active={activeItem === "ranking"}
+                    name="Rankings"
+                    href={"/rankings"}
+                    active={activeItem === "rankings"}
                     color={"blue"}
                 />
 

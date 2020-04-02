@@ -17,8 +17,8 @@ export class Favourites extends React.Component {
             currentUserID: {},
             filesFavoured: []
         };
-        getFavourites(this);
         readCookie(this);
+        getFavourites(this);
     }
 
     componentDidMount() {
