@@ -71,7 +71,8 @@ export class CoursePage extends React.Component {
     }
 
     plot_announcements(announcements) {
-        const {activeIndex} = this.state;
+        const {activeIndex, currentUserID, admin} = this.state;
+        const isAdmin = currentUserID === admin;
         let result = [];
         for (let i = 0; i < announcements.length; i++) {
             result.push(
@@ -80,8 +81,8 @@ export class CoursePage extends React.Component {
                     index={i}
                     onClick={this.handleClick}
                 >
-                    <Button icon={"remove circle"} app={this} announcement_id={announcements[i]._id}
-                            onClick={removeAnnouncementHandler}/>
+                    {isAdmin ? <Button icon={"remove circle"} app={this} announcement_id={announcements[i]._id}
+                                       onClick={removeAnnouncementHandler}/> : null}
                     <Icon name="dropdown"/>
                     <span>{announcements[i].title}</span>
                 </Accordion.Title>
