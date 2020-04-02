@@ -116,7 +116,7 @@ export const joinCourse = (app) => {
                 });
 
             } else {
-                alert("Please check the course name and try submitting again.");
+                alert("This course may not exist. Or you have already enrolled into this course.");
                 app.setState({
                     terms_confirmed: false
                 });

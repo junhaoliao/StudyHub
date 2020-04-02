@@ -8,7 +8,7 @@ import {Button, Header, Icon, Menu, Table} from "semantic-ui-react";
 
 
 /* Component for the Ranking page */
-class Ranking extends React.Component {
+export class Ranking extends React.Component {
 
     render() {
         return (
@@ -95,11 +95,6 @@ class Ranking extends React.Component {
 
 
 }
-
-export default Ranking;
-
-
-
 
 
 

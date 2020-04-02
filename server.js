@@ -269,36 +269,38 @@ app.post("/courses", (req, res) => {
 
     const courseName = req.body.name.toUpperCase();
 
-    Course.findByCourseName(courseName).then((existedCourse) => {
-        if (existedCourse) {
-            res.status(400).send(); // server error
-        } else {
-            const course = new Course({
-                name: courseName,
-                description: req.body.description,
-                admin: currentUserID,
-                users: [currentUserID]
-            });
-
-            // Save the course
-            course.save().then(
-                result => {
-                    RegularUser.findById(currentUserID).then(user => {
-                        log(user);
-                        log(course._id);
-                        user.coursesTeaching.push(course._id);
-                        user.save();
-                        res.send(result);
-                    });
-                },
-                error => {
-                    res.status(400).send(error); // 400 for bad request
-                }
-            );
+    console.log(courseName);
+    Course.findOne({name: courseName}).then((existedCourse) => {
+        if (existedCourse){
+            return res.status(400).send(); // server error
         }
+
+        const course = new Course({
+            name: courseName,
+            description: req.body.description,
+            admin: currentUserID,
+            users: [currentUserID]
+        });
+
+        // Save the course
+        course.save().then(
+            result => {
+                RegularUser.findById(currentUserID).then(user => {
+                    log(user);
+                    log(course._id);
+                    user.coursesTeaching.push(course._id);
+                    user.save();
+                    res.send(result);
+                });
+            },
+            error => {
+                res.status(400).send(error); // 400 for bad request
+            }
+        );
+
     }).catch(error => {
         console.log(error);
-        res.status(500).send(); // server error
+        return res.status(500).send(); // server error
     });
 
 });
@@ -448,12 +450,15 @@ app.patch("/courses/:courseName", (req, res) => {
                     () => {
                         RegularUser.findById(userID)
                             .then(user => {
+                                if (user.coursesTeaching.includes(course._id)||user.coursesTaking.includes(course._id)){
+                                    return res.status(400).send();
+                                }
                                 user.coursesTaking.addToSet(course._id);
                                 user.save().then(
                                     () => {
-                                        res.send({
+                                        return res.send({
                                             message:
-                                                "successfully added the course to the current user"
+                                                "Successfully enrolled!"
                                         });
                                     },
                                     error => {
