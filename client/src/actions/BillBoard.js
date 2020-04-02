@@ -1,3 +1,18 @@
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+
 export const readCookie = BillBoard => {
   const url = "/RegularUser/check-session";
 
@@ -29,4 +44,73 @@ export const handleChange = (BillBoard, field) => {
   BillBoard.setState({
     [name]: value
   });
+};
+
+export const handleSubmit = BillBoard => {
+  const now = new Date();
+
+  BillBoard.state.date =
+    now.getHours() +
+    ":" +
+    now.getMinutes() +
+    ":" +
+    now.getSeconds() +
+    " on " +
+    months[now.getMonth()] +
+    "-" +
+    now.getDate();
+
+  const newContent = {};
+  newContent.username = BillBoard.state.username;
+  newContent.date = BillBoard.state.date;
+  newContent.message = BillBoard.state.message;
+  newContent.image = BillBoard.state.image;
+  //newContent.userid = BillBoard.state.userid;
+  console.log("state ready to send a request:");
+  console.log(newContent);
+
+  console.log(JSON.stringify(newContent));
+  const url = "/BillBoard/new";
+  const request = new Request(url, {
+    method: "post",
+    body: JSON.stringify(newContent),
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json"
+    }
+  });
+  fetch(request)
+    .then(res => {
+      if (res.status === 200) {
+        console.log("Successfully record to the database");
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+  console.log("Loading new Billboard content");
+  //load_content();
+
+  // newMessage.message = BillBoard.state.message_to_send;
+  // billboard_content.push(newMessage);
+  load_content(BillBoard);
+  BillBoard.setState({ message: "" });
+  window.location.reload(true);
+};
+
+export const load_content = BillBoard => {
+  const url = "/BillBoard/content";
+  fetch(url)
+    .then(res => {
+      if (res.status === 200) {
+        return res.json();
+      }
+    })
+    .then(json => {
+      BillBoard.setState({
+        billboard_content: json
+      });
+      //console.log(billboard_content);
+    });
 };

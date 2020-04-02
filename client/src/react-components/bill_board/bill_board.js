@@ -2,38 +2,43 @@ import React from "react";
 
 import "./styles.css";
 import { Comment, Container, Form } from "semantic-ui-react";
-import { handleChange, readCookie } from "../../actions/BillBoard";
+import {
+  handleChange,
+  readCookie,
+  load_content,
+  handleSubmit
+} from "../../actions/BillBoard";
 
-function load_content(app) {
-  const url = "/BillBoard/content";
-  fetch(url)
-    .then(res => {
-      if (res.status === 200) {
-        return res.json();
-      }
-    })
-    .then(json => {
-      app.setState({
-        billboard_content: json
-      });
-      //console.log(billboard_content);
-    });
-}
+// function load_content(app) {
+//   const url = "/BillBoard/content";
+//   fetch(url)
+//     .then(res => {
+//       if (res.status === 200) {
+//         return res.json();
+//       }
+//     })
+//     .then(json => {
+//       app.setState({
+//         billboard_content: json
+//       });
+//       //console.log(billboard_content);
+//     });
+// }
 
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
+// const months = [
+//   "January",
+//   "February",
+//   "March",
+//   "April",
+//   "May",
+//   "June",
+//   "July",
+//   "August",
+//   "September",
+//   "October",
+//   "November",
+//   "December"
+// ];
 
 class hub_Billboard extends React.Component {
   constructor(props) {
@@ -59,62 +64,62 @@ class hub_Billboard extends React.Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  handleSubmit = () => {
-    // const newMessage = {};
-    // newMessage.username = "RegularUser";
-    // newMessage.image =
-    //   "https://react.semantic-ui.com/images/avatar/small/matthew.png";
+  // handleSubmit = () => {
+  //   // const newMessage = {};
+  //   // newMessage.username = "RegularUser";
+  //   // newMessage.image =
+  //   //   "https://react.semantic-ui.com/images/avatar/small/matthew.png";
 
-    const now = new Date();
+  //   const now = new Date();
 
-    this.state.date =
-      now.getHours() +
-      ":" +
-      now.getMinutes() +
-      ":" +
-      now.getSeconds() +
-      " on " +
-      months[now.getMonth()] +
-      "-" +
-      now.getDate();
+  //   this.state.date =
+  //     now.getHours() +
+  //     ":" +
+  //     now.getMinutes() +
+  //     ":" +
+  //     now.getSeconds() +
+  //     " on " +
+  //     months[now.getMonth()] +
+  //     "-" +
+  //     now.getDate();
 
-    const newContent = {};
-    newContent.username = this.state.username;
-    newContent.date = this.state.date;
-    newContent.message = this.state.message;
-    newContent.image = this.state.image;
-    //newContent.userid = this.state.userid;
-    console.log("state ready to send a request:");
-    console.log(newContent);
+  //   const newContent = {};
+  //   newContent.username = this.state.username;
+  //   newContent.date = this.state.date;
+  //   newContent.message = this.state.message;
+  //   newContent.image = this.state.image;
+  //   //newContent.userid = this.state.userid;
+  //   console.log("state ready to send a request:");
+  //   console.log(newContent);
 
-    console.log(JSON.stringify(newContent));
-    const url = "/BillBoard/new";
-    const request = new Request(url, {
-      method: "post",
-      body: JSON.stringify(newContent),
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json"
-      }
-    });
-    fetch(request)
-      .then(res => {
-        if (res.status === 200) {
-          console.log("Successfully record to the database");
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  //   console.log(JSON.stringify(newContent));
+  //   const url = "/BillBoard/new";
+  //   const request = new Request(url, {
+  //     method: "post",
+  //     body: JSON.stringify(newContent),
+  //     headers: {
+  //       Accept: "application/json, text/plain, */*",
+  //       "Content-Type": "application/json"
+  //     }
+  //   });
+  //   fetch(request)
+  //     .then(res => {
+  //       if (res.status === 200) {
+  //         console.log("Successfully record to the database");
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
 
-    console.log("Loading new Billboard content");
-    //load_content();
+  //   console.log("Loading new Billboard content");
+  //   //load_content();
 
-    // newMessage.message = this.state.message_to_send;
-    // billboard_content.push(newMessage);
-    load_content(this);
-    this.setState({ message: "" });
-  };
+  //   // newMessage.message = this.state.message_to_send;
+  //   // billboard_content.push(newMessage);
+  //   load_content(this);
+  //   this.setState({ message: "" });
+  // };
 
   plot_comment(comment) {
     return (
@@ -132,7 +137,7 @@ class hub_Billboard extends React.Component {
   }
 
   billboard_page() {
-    const message_to_send = "";
+    //const message_to_send = "";
     const { billboard_content } = this.state;
     if (this.state.login) {
       console.log("Welcome to BillBoard");
@@ -151,7 +156,7 @@ class hub_Billboard extends React.Component {
           </Container>
 
           <div className={"input_outline"}>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={() => handleSubmit(this)}>
               <Form.Group>
                 <Form.Input
                   width={16}
