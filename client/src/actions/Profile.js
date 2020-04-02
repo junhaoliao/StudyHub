@@ -327,3 +327,30 @@ export const SaveButton_admin = Profile => {
             });
     }
 };
+
+export const getUserProfileById = (app, user_id) => {
+    const url = `/RegularUser/getProfileById/${user_id}`;
+
+    fetch(url)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            } else {
+                return console.log("cannot get user profile info");
+            }
+        })
+        .then(json => {
+            app.setState({
+                username: json.username,
+                gender: json.gender,
+                GPA: json.GPA,
+                levelOfEducation: json.levelOfEducation,
+                fieldOfStudy: json.fieldOfStudy,
+                coursesTaking: json.coursesTaking,
+                coursesTeaching: json.coursesTeaching
+            });
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};

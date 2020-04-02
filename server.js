@@ -722,26 +722,109 @@ app.post("/BillBoard/new", (req, res) => {
 });
 
 /* Profile API routes*/
-// return regular user profile by user id
+// return regular user profile of the current user
 app.get("/RegularUser/profile", (req, res) => {
-    const userid = req.session.currentUserID;
-    if (userid !== undefined) {
-        RegularUser.findById(userid)
-            .then(user => {
-                if (!user) {
-                    console.log("Regular user does not exist");
-                    res.status(404).send();
-                } else {
-                    res.send(user);
-                }
-            })
-            .catch(error => {
-                res.status(500).send();
-            });
-    } else {
+    const currentUserID = req.session.currentUserID;
+    if (!currentUserID) {
         console.log("Unauthorized access to user profile");
         res.status(401).send();
     }
+    RegularUser.findById(currentUserID)
+        .then(user => {
+            if (!user) {
+                console.log("Regular user does not exist");
+                res.status(404).send();
+            } else {
+                res.send(user);
+            }
+        })
+        .catch(error => {
+            res.status(500).send();
+        });
+});
+
+// return regular user profile of the current user
+app.get("/RegularUser/getProfileById/:user_id", (req, res) => {
+    const currentUserID = req.session.currentUserID;
+    if (!currentUserID) {
+        console.log("Unauthorized access to user profile");
+        return res.status(401).send();
+    }
+    const user_id = req.params.user_id;
+    RegularUser.findById(user_id)
+        .then(user => {
+            if (!user) {
+                console.log("Regular user does not exist");
+                return res.status(404).send();
+            }
+            console.log(user);
+            const userProfile = {
+                username: user.username,
+                gender: user.gender,
+                GPA: user.GPA,
+                levelOfEducation: user.levelOfEducation,
+                fieldOfStudy: user.fieldOfStudy,
+                coursesTaking: [],
+                coursesTeaching: []
+            };
+            if (user.coursesTaking.length === 0 && user.coursesTeaching.length === 0) {
+                return res.send(userProfile);
+            }
+            if (user.coursesTaking.length === 0) {
+                let count = 0;
+                user.coursesTeaching.forEach((courseTeaching_id) => {
+                    Course.findById(courseTeaching_id).then((courseTeaching) => {
+                        userProfile.coursesTeaching.push(courseTeaching.name);
+                        count++;
+                        if (count === user.coursesTeaching.length) {
+                            return res.send(userProfile);
+                        }
+                    }).catch(error => {
+                        return res.status(500).send();
+                    });
+                });
+            }
+            if (user.coursesTeaching.length === 0) {
+                let count = 0;
+                user.coursesTaking.forEach((courseTaking_id) => {
+                    Course.findById(courseTaking_id).then((courseTaking) => {
+                        userProfile.coursesTaking.push(courseTaking.name);
+                        count++;
+                        if (count === user.coursesTaking.length) {
+                            return res.send(userProfile);
+                        }
+                    }).catch(error => {
+                        return res.status(500).send();
+                    });
+                });
+            }
+            let coursesTakingCount = 0;
+            user.coursesTaking.forEach((courseTaking_id) => {
+                Course.findById(courseTaking_id).then((courseTaking) => {
+                    userProfile.coursesTaking.push(courseTaking.name);
+                    coursesTakingCount++;
+                    if (coursesTakingCount === user.coursesTaking.length) {
+                        let coursesTeachingCount = 0;
+                        user.coursesTeaching.forEach((courseTeaching_id) => {
+                            Course.findById(courseTeaching_id).then((courseTeaching) => {
+                                userProfile.coursesTeaching.push(courseTeaching.name);
+                                coursesTeachingCount++;
+                                if (coursesTeachingCount === user.coursesTeaching.length) {
+                                    return res.send(userProfile);
+                                }
+                            }).catch(error => {
+                                return res.status(500).send();
+                            });
+                        });
+                    }
+                }).catch(error => {
+                    return res.status(500).send();
+                });
+            });
+        })
+        .catch(error => {
+            return res.status(500).send();
+        });
 });
 
 // return regular user course taking

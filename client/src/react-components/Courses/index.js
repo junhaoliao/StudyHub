@@ -19,7 +19,7 @@ export class CoursePage extends React.Component {
 
         this.state = {
             courseName: params.courseName,
-            admin: {},
+            admin: "",
             currentUserID: {},
             chatroom: [],
             announcements: [],
@@ -27,7 +27,6 @@ export class CoursePage extends React.Component {
             scroll_height: 0,
             activeIndex: 0
         };
-
         getCourseObject(this);
     }
 
@@ -99,14 +98,16 @@ export class CoursePage extends React.Component {
     render() {
         const {message_to_send, chatroom, courseName, currentUserID, announcements, admin} = this.state;
         const isAdmin = currentUserID === admin;
-        console.log(currentUserID);
-        console.log(admin);
+        if (admin === "") {
+            return (<div/>);
+        }
+
         return (
             <div>
                 <NavBar/>
                 <Grid padded={"horizontally"} relaxed={"very"}>
                     <Grid.Column>
-                        <ProfileView/>
+                        <ProfileView user_id={admin}/>
                     </Grid.Column>
                     <Grid.Column>
                         <div className={"course_header"}>

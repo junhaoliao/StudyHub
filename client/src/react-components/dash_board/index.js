@@ -103,7 +103,7 @@ class dash_board extends React.Component {
                 </div>
             );
         } else {
-
+            const {courseList} = this.state;
             return (
                 <div className={"courses_container"}>
                     <Menu secondary>
@@ -119,7 +119,9 @@ class dash_board extends React.Component {
                             </Button>
                         </Menu.Item>
                     </Menu>
-                    <Courses course_list={this.state.courseList}/>
+                    {courseList.length !== 0 ? <Courses course_list={courseList}/> :
+                        <Header>Seems you haven't enrolled in any courses yet. Click the yellow button to add a course
+                            to your DashBoard.</Header>}
                 </div>
             );
         }
