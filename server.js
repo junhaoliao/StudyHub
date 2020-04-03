@@ -89,9 +89,56 @@ app.post("/RegularUser/access", (req, res) => {
         });
 });
 
-// A route for admin to delete a user
+// A route for admin to delete a user ///////////////////////////////////////////////to be done
 app.post("/RegularUser/remove", (req, res) => {
     const userid = req.body.userid;
+    RegularUser.findById(userid)
+        .then(user => {
+            if (!user) {
+                res.status(404).send();
+            } else {
+                const teachingList = user.coursesTeaching;
+                const takingList = user.coursesTaking;
+
+                // find all courses the user to be removed was teaching
+                teachingList.forEach(courseObjectID => {
+                    Course.findById(courseObjectID).then(course => {
+
+                        // remove the user from the course's list
+                        course.users.shift();
+
+                        // if there's another user in course, that user will be the new course admin
+                        if (course.users[0] !== undefined) {
+                            RegularUser.findById(course.users[0]).then(newUser => {
+                                // remove the new admin from course taking
+                                newUser.coursesTaking.pull(course);
+
+                                // put the new admin into the course he/she will instruct
+                                newUser.coursesTeaching.push(course);
+                                newUser.save();
+                            });
+                        }
+                        // otherwise, there will be no course admin until next user join the course
+                        course.save();
+                    });
+                });
+
+                // deal with the course admin to be removed
+                //  remove it from all the courses he/she was taking
+                //  to prevent unnecessary problem when switching course admin
+                takingList.forEach(courseObjectID => {
+                    Course.findById(courseObjectID).then(course => {
+                        user.coursesTaking.pull(course);
+
+                        course.users.pull(user);
+                        course.save();
+                        user.save();
+                    });
+                });
+            }
+        })
+        .catch(error => res.status(500).send());
+
     RegularUser.findByIdAndDelete(userid)
         .then(result => {
             res.send(result);
@@ -195,7 +242,7 @@ app.get("/RegularUser/username/password", (req, res) => {
             res.status(400).send();
         });
 });
-
+////////////////////////////////////////////////////////////wut's the difference between signup and this
 app.post("/RegularUser", (req, res) => {
     console.log("post a new regular user");
     const new_RegularUser = new RegularUser({
@@ -218,6 +265,9 @@ app.post("/RegularUser", (req, res) => {
     );
 });
 
+
+// regular users can get courses thru this request, so that their course list will be displayed
+//  on their dashboard
 app.get("/courses", (req, res) => {
     const currentUserID = req.session.currentUserID;
     if (!currentUserID) {
@@ -233,16 +283,19 @@ app.get("/courses", (req, res) => {
                 let count = 0;
                 const list = [];
                 const rawList = user.coursesTeaching.concat(user.coursesTaking);
+
                 if (rawList.length === 0) {
                     res.send({courses: list});
                 }
                 //console.log(rawList);
                 rawList.forEach(courseObjectID =>
                     Course.findById(courseObjectID).then(course => {
-                        RegularUser.findById(course.admin).then(admin => {
+                        // users[0] is always the course admin, who is also a regular user
+                        RegularUser.findById(course.users[0]).then(admin => {
                             const thisCourse = {};
                             thisCourse.name = course.name;
                             thisCourse.info = course.description;
+                            // admin: for displaying the admin on the dashboard
                             thisCourse.admin = admin.username;
                             thisCourse.liked = user.coursesLiked.includes(course._id);
                             list.push(thisCourse);
@@ -261,6 +314,9 @@ app.get("/courses", (req, res) => {
 
 });
 
+// users can create a course thru this request. since she/he creates the course,
+//  she/he is the first user in the "users" array. Therefore, users[0] is the
+//  course admin.
 app.post("/courses", (req, res) => {
     const currentUserID = req.session.currentUserID;
     if (!currentUserID) {
@@ -270,7 +326,6 @@ app.post("/courses", (req, res) => {
     const course = new Course({
         name: req.body.name,
         description: req.body.description,
-        admin: currentUserID,
         users: [currentUserID]
     });
 
@@ -278,8 +333,6 @@ app.post("/courses", (req, res) => {
     course.save().then(
         result => {
             RegularUser.findById(currentUserID).then(user => {
-                log(user);
-                log(course._id);
                 user.coursesTeaching.push(course._id);
                 user.save();
                 res.send(result);
@@ -291,6 +344,8 @@ app.post("/courses", (req, res) => {
     );
 });
 
+// a user can get the course tuple from the DB thru this request, which typically includes
+//  the course admin, chatroom, messages, and announcements in this course
 app.get("/getCourses/:courseName", (req, res) => {
     const userID = req.session.currentUserID;
     if (!userID) {
@@ -304,7 +359,9 @@ app.get("/getCourses/:courseName", (req, res) => {
                 res.status(404).send(); // could not find this resource
             } else {
                 const theCourse = {
-                    admin: course.admin,
+                    // admin: for checking whether the current user has permission to post announcements
+                    //  also, it would be used for displaying the admin's profile
+                    admin: course.users[0],
                     announcements: course.announcements,
                     chatroom: []
                 };
@@ -316,11 +373,13 @@ app.get("/getCourses/:courseName", (req, res) => {
                 course.chatroom.forEach((msg) => {
                     RegularUser.findById(msg.user_id).then(
                         (user) => {
+                            // if the user does not exist, it is very likely she/he has been deleted
+                            //  after sending this message
                             const updatedMsg = {
-                                user_id: msg.user_id,
+                                user_id: user ? msg.user_id : 0,
                                 date: datetime.format(msg.date, "h:mm:s on MMM D"),
                                 message: msg.message,
-                                username: user.username
+                                username: user ? user.username : "User has been removed"
                             };
                             chatroom.push(updatedMsg);
                             count++;
@@ -369,9 +428,11 @@ app.get("/courses/:courseName/getResources", (req, res) => {
                 }
 
                 const resourcesList = [];
+                // if this courses does not have any resources, simply send an empty array
                 if (course.resources.length === 0) {
                     res.send({
-                        admin: course.admin,
+                        // for checking whether the current user has permission to upload
+                        admin: course.users[0],
                         resources: resourcesList
                     });
                 }
@@ -390,7 +451,8 @@ app.get("/courses/:courseName/getResources", (req, res) => {
                         count++;
                         if (count === course.resources.length) {
                             return res.send({
-                                admin: course.admin,
+                                // for checking whether the current user has permission to upload
+                                admin: course.users[0],
                                 resources: resourcesList
                             });
                         }
@@ -414,8 +476,7 @@ app.get("/courses/:courseName/getResources", (req, res) => {
 
 });
 
-// function to add a user to a course given a course name
-// things to be done: the api is not protected
+// function for a user to join a course given a course name
 app.patch("/courses/:courseName", (req, res) => {
     const userID = req.session.currentUserID;
     if (!userID) {
@@ -488,8 +549,9 @@ app.post("/courses/:courseName/announcement", (req, res) => {
                 log("invalid course name");
                 res.status(404).send(); // could not find this resource
             } else {
-                // check whether the current user is the admin of the course
-                if (course.admin != currentUserID) {
+                // check whether the current user is the admin of the course,
+                //  given course.users[0] is always the course admin
+                if (course.users[0] != currentUserID) {
                     return res.status(403).send();
                 } else {
                     const newAnnouncement = {
@@ -547,8 +609,9 @@ app.delete("/courses/:courseName/:announcement", (req, res) => {
                     log("invalid announcement id");
                     res.status(404).send(); // could not find this resource
                 } else {
-                    // check whether the current user is the admin of the course
-                    if (course.admin != currentUserID) {
+                    // check whether the current user is the admin of the course,
+                    //  given course.users[0] is always the course admin
+                    if (course.users[0] != currentUserID) {
                         return res.status(403).send();
                     } else {
                         //find the macthed announcement (by id)
@@ -572,7 +635,6 @@ app.delete("/courses/:courseName/:announcement", (req, res) => {
             }
         })
         .catch(error => {
-            console.log("clacp");
             console.log(error);
             return res.status(500).send(); // server error
         });
@@ -684,7 +746,7 @@ app.get("/RegularUser/profile", (req, res) => {
 // return regular user course taking
 app.get("/RegularUser/profile/coursesTaking", (req, res) => {
     const userid = req.session.currentUserID;
-    if (userid != undefined) {
+    if (userid) {
         RegularUser.findById(userid)
             .then(user => {
                 if (!user) {
@@ -696,7 +758,8 @@ app.get("/RegularUser/profile/coursesTaking", (req, res) => {
                     const rawList = user.coursesTaking;
                     rawList.forEach(courseObjectID =>
                         Course.findById(courseObjectID).then(course => {
-                            RegularUser.findById(course.admin).then(admin => {
+                            // course.users[0] is always the course admin
+                            RegularUser.findById(course.users[0]).then(admin => {
                                 const thisCourse = {};
                                 thisCourse.id = courseObjectID;
                                 thisCourse.name = course.name;
@@ -725,7 +788,7 @@ app.get("/RegularUser/profile/coursesTaking", (req, res) => {
 // return regular user course teaching
 app.get("/RegularUser/profile/coursesTeaching", (req, res) => {
     const userid = req.session.currentUserID;
-    if (userid != undefined) {
+    if (userid) {
         RegularUser.findById(userid)
             .then(user => {
                 if (!user) {
@@ -737,7 +800,8 @@ app.get("/RegularUser/profile/coursesTeaching", (req, res) => {
                     const rawList = user.coursesTeaching;
                     rawList.forEach(courseObjectID =>
                         Course.findById(courseObjectID).then(course => {
-                            RegularUser.findById(course.admin).then(admin => {
+                            // course.users[0] is always the course admin
+                            RegularUser.findById(course.users[0]).then(admin => {
                                 const thisCourse = {};
                                 thisCourse.id = courseObjectID;
                                 thisCourse.name = course.name;
@@ -823,6 +887,8 @@ const sizeToString = (size) => {
         return `${Math.round(size / 1024 / 1024 * 100) / 100} MB`;
     }
 };
+
+// upload resources onto some course's Resources page
 app.post('/courses/:courseName/upload', (req, res) => {
     const currentUserID = req.session.currentUserID;
     if (!currentUserID) {
@@ -846,10 +912,8 @@ app.post('/courses/:courseName/upload', (req, res) => {
                     message: "This course is not find in the database."
                 }); // could not find the course
             } else {
-                if (course.admin != currentUserID) {
-                    console.log("not admin");
-                    console.log(course.admin);
-                    console.log(currentUserID);
+                // course.users[0] is always the course admin
+                if (course.users[0] != currentUserID) {
                     return res.status(403).send({
                         message: "You are not the admin of this course"
                     }); // not the admin uploading
@@ -948,7 +1012,8 @@ app.delete('/upload/:file_id', (req, res) => {
                 fileDBEntry.save();
                 return res.status(404).send();
             }
-            if (course.admin != currentUserID) {
+            // course.users[0] is always the course admin
+            if (course.users[0] != currentUserID) {
                 fileDBEntry.save();
                 return res.status(403).send();
             }

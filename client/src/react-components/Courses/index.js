@@ -24,7 +24,7 @@ export class CoursePage extends React.Component {
 
         this.state = {
             courseName: params.courseName,
-            admin: {},
+            admin: params.admin,
             currentUserID: {},
             chatroom: [],
             announcements: [],

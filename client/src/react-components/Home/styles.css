@@ -10,7 +10,7 @@
     background-image: url("/background.jpg");
     background-position: center;
     background-size: cover;
-    height: 250vh;
+    height: 280vh;
 }
 
 .info_container {
@@ -20,7 +20,7 @@
 
 .info_container1 {
     width: 60%;
-    margin: 3vh auto 3vh;
+    margin: 3vh auto 6vh;
 }
 
 

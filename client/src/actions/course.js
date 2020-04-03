@@ -148,7 +148,6 @@ export const getCourseObject = (app) => {
         .then(json => {
             // the resolved promise with the JSON body
             const course = json.course;
-            console.log(course.admin);
             app.setState({
                 admin: course.admin,
                 chatroom: course.chatroom,

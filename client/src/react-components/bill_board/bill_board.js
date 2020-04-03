@@ -4,32 +4,6 @@ import "./styles.css";
 import {Comment, Container, Form} from "semantic-ui-react";
 import {handleChange, readCookie} from "../../actions/BillBoard";
 
-// const billboard_content = [
-//   {
-//     image: "https://react.semantic-ui.com/images/avatar/small/matthew.png",
-//     user: "Kevin",
-//     date: "00:00:00 on February-28",
-//     message: "Welcome to the new class!😀"
-//   },
-//   {
-//     image: "https://react.semantic-ui.com/images/avatar/small/matthew.png",
-//     user: "Junhao",
-//     date: "00:00:00 on February-28",
-//     message: "What a nice day!😂"
-//   },
-//   {
-//     image: "https://react.semantic-ui.com/images/avatar/small/matthew.png",
-//     user: "Kruzer",
-//     date: "00:00:00 on February-28",
-//     message: "😆Let's come and finish the project tonight!"
-//   },
-//   {
-//     image: "https://react.semantic-ui.com/images/avatar/small/matthew.png",
-//     user: "Ashley",
-//     date: "00:00:00 on February-28",
-//     message: "No problem! I will start with the profile.😎"
-//   }
-// ];
 
 function load_content(app) {
   const url = "/BillBoard/content";

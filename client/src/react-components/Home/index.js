@@ -15,12 +15,14 @@ import List from "semantic-ui-react/dist/commonjs/elements/List";
 class Home extends React.Component {
     constructor(props) {
         super(props);
-        this.props.history.push("/home");
         this.state = {
             sign_up: false
         };
     }
 
+    componentDidMount() {
+        document.title = "StudyHub";
+    }
 
     render() {
 
@@ -32,20 +34,9 @@ class Home extends React.Component {
                         Welcome to StudentHub
                     </h2>
                 </div>
-
-
                 <div className="sign_up_box_container">
                     {this.state.sign_up ? <SignupBox/> : <LoginBox/>}
                 </div>
-
-
-
-
-
-
-
-
-
                 {this.state.sign_up ? (
                     <div className="ui signup_prompt  warning ">
                         <i className="icon help"></i>
