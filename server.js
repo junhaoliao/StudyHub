@@ -391,6 +391,9 @@ app.get("/getRankings", (req, res) => {
 
       RegularUser.find()
         .then(users => {
+            // exclude admin from the list
+            users.splice(0,1);
+
           users.sort((a, b) => {
             if (a.coursesTeaching > b.coursesTeaching) {
               return -1;
