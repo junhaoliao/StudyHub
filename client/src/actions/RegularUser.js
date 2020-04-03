@@ -47,7 +47,7 @@ export const loginSubmit = loginBox => {
     })
     .then(json => {
       console.log(json);
-      if (json.currentUser === "Admin") {
+      if (json.currentUser === "admin") {
         loginBox.setState({ login_admin: true });
       }
       if (json.currentUser !== undefined) {

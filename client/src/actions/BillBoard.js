@@ -52,7 +52,7 @@ export const readCookie_admin = BillBoard => {
     })
     .then(json => {
       if (json && json.currentUser) {
-        if (json.currentUser === "Admin") {
+        if (json.currentUser === "admin") {
           BillBoard.setState({
             login: true,
             username: json.currentUser
