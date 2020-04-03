@@ -86,7 +86,7 @@ export const signupSubmit = (e, signupBox) => {
     console.log("Password does NOT match");
     correct = false;
   }
-  if (correct) {
+  if (correct && !signupBox.state.used_username) {
     console.log("sign up for new user");
     const request = new Request("/RegularUser/signup", {
       method: "post",
@@ -114,8 +114,10 @@ export const signupSubmit = (e, signupBox) => {
       .catch(error => {
         console.log(error);
       });
+  } else {
+    alert("Signup Failed. Please Try Again");
+    window.location.href = "/";
   }
-  window.location.reload(false);
 };
 
 export const username_verifier = (username, signupBox) => {
