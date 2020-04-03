@@ -1,22 +1,22 @@
 .bill_board_header {
-    height: 80px;
-    position: relative;
-    left: 5vw;
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 50px;
+  height: 80px;
+  position: relative;
+  left: 5vw;
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 50px;
 }
 
 .input_outline {
-    margin: 5px 5px 5px 10px;
+  margin: 5px 5px 5px 10px;
 }
 
 .container_design {
-    margin: 10px;
+  margin: 10px;
 }
 
 .billboard_segment {
-    overflow: auto;
-    max-height: 75vh;
-    scroll-behavior: smooth;
+  overflow: auto;
+  max-height: 75vh;
+  scroll-behavior: smooth;
 }

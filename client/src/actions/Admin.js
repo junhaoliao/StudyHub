@@ -14,7 +14,7 @@ export const readCookie = AdminDashboard => {
       if (json.currentUser === "Admin") {
         AdminDashboard.setState({ login: true });
       } else {
-        alert("Unauthorized to Admin Page");
+        alert("Unauthorized to Admin Page.");
         window.location.href = "/";
       }
     })

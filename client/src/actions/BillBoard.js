@@ -38,6 +38,36 @@ export const readCookie = BillBoard => {
     });
 };
 
+export const readCookie_admin = BillBoard => {
+  const url = "/RegularUser/check-session";
+
+  fetch(url)
+    .then(res => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        alert("Session expired. Please try logging in again.");
+        window.location.href = "/";
+      }
+    })
+    .then(json => {
+      if (json && json.currentUser) {
+        if (json.currentUser === "Admin") {
+          BillBoard.setState({
+            login: true,
+            username: json.currentUser
+          });
+        } else {
+          alert("Unauthorized to Admin Page.");
+          window.location.href = "/";
+        }
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 export const handleChange = (BillBoard, field) => {
   const value = field.value;
   const name = field.name;
@@ -113,4 +143,30 @@ export const load_content = BillBoard => {
       });
       //console.log(billboard_content);
     });
+};
+
+export const comment_remove = Comment => {
+  const url = "/BillBoard/delete";
+  const id = {};
+  id._id = Comment._id;
+  console.log(Comment._id);
+  console.log(JSON.stringify(id));
+  const request = new Request(url, {
+    method: "post",
+    body: JSON.stringify(id),
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json"
+    }
+  });
+  fetch(request)
+    .then(res => {
+      if (res.status === 200) {
+        console.log("Successfully delete comment");
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  window.location.reload(true);
 };
