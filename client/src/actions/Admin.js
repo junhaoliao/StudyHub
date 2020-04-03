@@ -11,7 +11,7 @@ export const readCookie = AdminDashboard => {
       }
     })
     .then(json => {
-      if (json.currentUser === "Admin") {
+      if (json.currentUser === "admin") {
         AdminDashboard.setState({ login: true });
       } else {
         alert("Unauthorized to Admin Page.");
@@ -31,7 +31,7 @@ export const readCookie = AdminDashboard => {
     })
     .then(json => {
       if (json) {
-        json = json.filter(user => user.username !== "Admin");
+        json = json.filter(user => user.username !== "admin");
         AdminDashboard.setState({
           allUsers: json
         });
