@@ -59,7 +59,9 @@ export const loginSubmit = loginBox => {
     });
 };
 
-export const signupSubmit = signupBox => {
+export const signupSubmit = (e, signupBox) => {
+  e.preventDefault();
+  window.location.reload(false);
   let correct = true;
   if (signupBox.state.username === "") {
     console.log("Username cannot be empty");
@@ -113,4 +115,31 @@ export const signupSubmit = signupBox => {
         console.log(error);
       });
   }
+  window.location.reload(false);
+};
+
+export const username_verifier = (username, signupBox) => {
+  const body = {};
+  body.username = username;
+  console.log(body);
+  const url = "/RegularUser/username";
+  const request = new Request(url, {
+    method: "post",
+    body: JSON.stringify(body),
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json"
+    }
+  });
+  fetch(request)
+    .then(res => {
+      if (res.status === 404) {
+        signupBox.setState({ used_username: false });
+      } else {
+        signupBox.setState({ used_username: true });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
 };

@@ -35,7 +35,7 @@ const { RegularUser } = require("./models/RegularUser");
 const { Course } = require("./models/Course");
 const { BillBoard } = require("./models/BillBoard");
 const { File } = require("./models/File");
-console.log("Welcome to server.js");
+//console.log("Welcome to server.js");
 
 // Create a session cookie
 app.use(
@@ -58,16 +58,16 @@ app.post("/RegularUser/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  console.log("username: " + username);
-  console.log("password: " + password);
+  //console.log("username: " + username);
+  //console.log("password: " + password);
 
   RegularUser.findByUsernamePassword(username, password)
     .then(user => {
-      console.log("found user");
+      //console.log("found user");
       req.session.username = user.username;
       req.session.currentUserID = user._id;
-      console.log("ready to send response1");
-      console.log("ready to send response2");
+      //console.log("ready to send response1");
+      //console.log("ready to send response2");
       res.send({ currentUser: user.username });
     })
     .catch(error => {
@@ -104,8 +104,8 @@ app.post("/RegularUser/remove", (req, res) => {
 app.post("/RegularUser/signup", (req, res) => {
   const username = req.body.username;
 
-  console.log("Create a new user");
-  console.log("username: " + username);
+  //console.log("Create a new user");
+  //console.log("username: " + username);
 
   RegularUser.findOne({ username: username })
     .then(result => {
@@ -131,7 +131,7 @@ app.post("/RegularUser/signup", (req, res) => {
           }
         );
       } else {
-        console.log("Username already exists");
+        //console.log("Username already exists");
         res.status(400).send();
       }
     })
@@ -181,11 +181,11 @@ app.get("/AllRegularUser", (req, res) => {
 // API rountes start here
 
 app.get("/RegularUser/username/password", (req, res) => {
-  console.log("Access User");
+  //console.log("Access User");
   const username = req.body.username;
   const password = req.body.password;
-  console.log("username: " + username);
-  console.log("password: " + password);
+  //console.log("username: " + username);
+  //console.log("password: " + password);
 
   RegularUser.findByUsernamePassword(username, password)
     .then(user => {
@@ -196,8 +196,23 @@ app.get("/RegularUser/username/password", (req, res) => {
     });
 });
 
+app.post("/RegularUser/username", (req, res) => {
+  const username = req.body.username;
+  //console.log(username);
+  RegularUser.findOne({ username: username })
+    .then(user => {
+      if (user) {
+        res.send(user);
+      } else {
+        res.status(404).send();
+      }
+    })
+    .catch(error => {
+      req.status(400).send();
+    });
+});
 app.post("/RegularUser", (req, res) => {
-  console.log("post a new regular user");
+  //console.log("post a new regular user");
   const new_RegularUser = new RegularUser({
     username: req.body.username,
     password: req.body.password,
@@ -692,7 +707,7 @@ app.post("/BillBoard/new", (req, res) => {
         if (!user) {
           res.status(404).send();
         } else {
-          console.log("Found user, add billlboard content");
+          //console.log("Found user, add billlboard content");
           const new_BillBoard_content = new BillBoard({
             userid: req.session.currentUserID,
             username: req.body.username,
@@ -700,11 +715,11 @@ app.post("/BillBoard/new", (req, res) => {
             message: req.body.message,
             image: req.body.image
           });
-          console.log("Creating new content");
+          //console.log("Creating new content");
           console.log(new_BillBoard_content);
           new_BillBoard_content.save().then(
             result => {
-              console.log("Saving new content");
+              //console.log("Saving new content");
               res.send(result);
             },
             error => {
@@ -717,7 +732,7 @@ app.post("/BillBoard/new", (req, res) => {
         res.status(400).send();
       });
   } else {
-    console.log("Unauthorized access to BillBoard");
+    //console.log("Unauthorized access to BillBoard");
     res.send(401).send();
   }
 });
@@ -738,13 +753,13 @@ app.post("/BillBoard/delete", (req, res) => {
 app.get("/RegularUser/profile", (req, res) => {
   const currentUserID = req.session.currentUserID;
   if (!currentUserID) {
-    console.log("Unauthorized access to user profile");
+    //console.log("Unauthorized access to user profile");
     res.status(401).send();
   }
   RegularUser.findById(currentUserID)
     .then(user => {
       if (!user) {
-        console.log("Regular user does not exist");
+        //console.log("Regular user does not exist");
         res.status(404).send();
       } else {
         res.send(user);
@@ -759,17 +774,17 @@ app.get("/RegularUser/profile", (req, res) => {
 app.get("/RegularUser/getProfileById/:user_id", (req, res) => {
   const currentUserID = req.session.currentUserID;
   if (!currentUserID) {
-    console.log("Unauthorized access to user profile");
+    //console.log("Unauthorized access to user profile");
     return res.status(401).send();
   }
   const user_id = req.params.user_id;
   RegularUser.findById(user_id)
     .then(user => {
       if (!user) {
-        console.log("Regular user does not exist");
+        //console.log("Regular user does not exist");
         return res.status(404).send();
       }
-      console.log(user);
+      //console.log(user);
       const userProfile = {
         username: user.username,
         gender: user.gender,
@@ -857,7 +872,7 @@ app.get("/RegularUser/profile/coursesTaking", (req, res) => {
     RegularUser.findById(userid)
       .then(user => {
         if (!user) {
-          console.log("Regular user does not exist");
+          //console.log("Regular user does not exist");
           res.status(404).send();
         } else {
           let count = 0;
@@ -886,7 +901,7 @@ app.get("/RegularUser/profile/coursesTaking", (req, res) => {
         res.status(400).send();
       });
   } else {
-    console.log("Unauthorized access to profile course taking");
+    //console.log("Unauthorized access to profile course taking");
     res.status(401).send();
   }
 });
@@ -898,7 +913,7 @@ app.get("/RegularUser/profile/coursesTeaching", (req, res) => {
     RegularUser.findById(userid)
       .then(user => {
         if (!user) {
-          console.log("Regular user does not exist");
+          //console.log("Regular user does not exist");
           res.status(404).send();
         } else {
           let count = 0;
@@ -927,7 +942,7 @@ app.get("/RegularUser/profile/coursesTeaching", (req, res) => {
         res.status(400).send();
       });
   } else {
-    console.log("Unauthorized access to profile course teaching");
+    //console.log("Unauthorized access to profile course teaching");
     res.status(401).send();
   }
 });
@@ -948,7 +963,7 @@ app.post("/RegularUser/Profile", (req, res) => {
   if (userid !== undefined) {
     RegularUser.findById(userid).then(user => {
       if (!user) {
-        console.log("Regular user does not exist");
+        //console.log("Regular user does not exist");
         res.status(404).send();
       } else {
         user.username = req.body.username;
@@ -959,21 +974,21 @@ app.post("/RegularUser/Profile", (req, res) => {
         user.fieldOfStudy = req.body.fieldOfStudy;
         user.coursesTaking = req.body.coursesTaking;
         user.coursesTeaching = req.body.coursesTeaching;
-        console.log("test1");
+        //console.log("test1");
         user
           .save()
           .then(
             result => {
-              console.log("Saving new user profile");
+              //console.log("Saving new user profile");
               res.send(result);
             },
             error => {
-              console.log("test2");
+              //console.log("test2");
               res.send(400).send();
             }
           )
           .catch(error => {
-            console.log("test3");
+            //console.log("test3");
             res.status(400).send();
           });
       }

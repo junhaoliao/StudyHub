@@ -1,6 +1,5 @@
 import React from "react";
 import { Menu } from "semantic-ui-react";
-import { RedirectButton } from "../RedirectButton/index";
 import { Button } from "semantic-ui-react";
 import { logout } from "../../actions/NavBar";
 //import "./styles.css";

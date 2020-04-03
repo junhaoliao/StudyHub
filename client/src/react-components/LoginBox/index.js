@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.css";
 import { Redirect } from "react-router-dom";
 import { Form, Segment } from "semantic-ui-react";
-import { loginSubmit } from "../../actions/RegularUser";
+import { loginSubmit, username_verifier } from "../../actions/RegularUser";
 
 export class LoginBox extends React.Component {
   constructor(props) {
