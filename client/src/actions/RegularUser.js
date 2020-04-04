@@ -1,11 +1,11 @@
 // Functions to help with user actions.
 
 // A function to check if a user is logged in on the session cookie
-export const readCookie = app => {
+export const readCookie = (app) => {
   const url = "/RegularUser/check-session";
 
   fetch(url)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         return res.json();
       } else {
@@ -13,31 +13,31 @@ export const readCookie = app => {
         window.location.href = "/";
       }
     })
-    .then(json => {
+    .then((json) => {
       app.setState({
         currentUser: json.currentUser,
-        currentUserID: json.currentUserID
+        currentUserID: json.currentUserID,
       });
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
 
-export const loginSubmit = loginBox => {
+export const loginSubmit = (loginBox) => {
   console.log(loginBox.state);
   const request = new Request("/RegularUser/login", {
     method: "post",
     body: JSON.stringify(loginBox.state),
     headers: {
       Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
   // Send the request with fetch()
   console.log("sending request");
   fetch(request)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         console.log("return json");
         return res.json();
@@ -45,7 +45,7 @@ export const loginSubmit = loginBox => {
         loginBox.setState({ error: false });
       }
     })
-    .then(json => {
+    .then((json) => {
       console.log(json);
       if (json.currentUser === "admin") {
         loginBox.setState({ login_admin: true });
@@ -54,7 +54,7 @@ export const loginSubmit = loginBox => {
         loginBox.setState({ login_regular: true });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
@@ -87,31 +87,33 @@ export const signupSubmit = (e, signupBox) => {
     correct = false;
   }
   if (correct && !signupBox.state.used_username) {
+    alert("Successfully Signed Up. Please Login In");
+    window.location.href = "/";
     console.log("sign up for new user");
     const request = new Request("/RegularUser/signup", {
       method: "post",
       body: JSON.stringify(signupBox.state),
       headers: {
         Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
     // Send the request with fetch()
     console.log("sending request");
     fetch(request)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           console.log("return json");
           return res.json();
         }
       })
-      .then(json => {
+      .then((json) => {
         console.log(json);
         if (json.currentUser !== undefined) {
           signupBox.setState({ signin_regular: true, password_match: true });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   } else {
@@ -130,18 +132,18 @@ export const username_verifier = (username, signupBox) => {
     body: JSON.stringify(body),
     headers: {
       Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
   fetch(request)
-    .then(res => {
+    .then((res) => {
       if (res.status === 404) {
         signupBox.setState({ used_username: false });
       } else {
         signupBox.setState({ used_username: true });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
