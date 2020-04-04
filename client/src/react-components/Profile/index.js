@@ -7,7 +7,7 @@ import {
   remove_coursesTaking,
   remove_coursesTeaching,
   SaveButton,
-  switchView
+  switchView,
 } from "../../actions/Profile";
 
 export class Profile extends React.Component {
@@ -29,7 +29,7 @@ export class Profile extends React.Component {
       levelOfEducation: "",
       fieldOfStudy: "",
       coursesTaking: [],
-      coursesTeaching: []
+      coursesTeaching: [],
     };
   }
 
@@ -37,11 +37,11 @@ export class Profile extends React.Component {
     document.title = "My Profile";
   }
 
-  handleProfileFormChange = field => {
+  handleProfileFormChange = (field) => {
     const value = field.value;
     const name = field.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -53,7 +53,7 @@ export class Profile extends React.Component {
       levelOfEducation,
       fieldOfStudy,
       coursesTaking,
-      coursesTeaching
+      coursesTeaching,
     } = this.state;
 
     console.log(this.state);
@@ -112,10 +112,14 @@ export class Profile extends React.Component {
                   Courses Teaching
                 </div>
 
-                {coursesTeaching.map(course => (
-                  <div className="ui huge blue horizontal label">
+                {coursesTeaching.map((course) => (
+                  <a
+                    className="ui huge blue horizontal label"
+                    href={`/courses/${course.name}`}
+                    target="_blank"
+                  >
                     {course.name}
-                  </div>
+                  </a>
                 ))}
               </Grid.Column>
             </Grid.Row>
@@ -126,10 +130,14 @@ export class Profile extends React.Component {
                   Courses Taking
                 </div>
 
-                {coursesTaking.map(course => (
-                  <div className="ui huge blue horizontal label">
+                {coursesTaking.map((course) => (
+                  <a
+                    className="ui huge blue horizontal label"
+                    href={`/courses/${course.name}`}
+                    target="_blank"
+                  >
                     {course.name}
-                  </div>
+                  </a>
                 ))}
               </Grid.Column>
             </Grid.Row>
@@ -153,7 +161,7 @@ export class Profile extends React.Component {
       levelOfEducation,
       fieldOfStudy,
       coursesTaking,
-      coursesTeaching
+      coursesTeaching,
     } = this.state;
 
     console.log(this.state);
@@ -178,7 +186,7 @@ export class Profile extends React.Component {
                     type="text"
                     placeholder="Username"
                     value={username}
-                    onChange={e => this.handleProfileFormChange(e.target)}
+                    onChange={(e) => this.handleProfileFormChange(e.target)}
                   />
                 </div>
               </Grid.Column>
@@ -195,7 +203,7 @@ export class Profile extends React.Component {
                       type="password"
                       placeholder="Old Password"
                       value={this.state.oldPassword}
-                      onChange={e => this.handleProfileFormChange(e.target)}
+                      onChange={(e) => this.handleProfileFormChange(e.target)}
                     />
                   </div>
 
@@ -220,7 +228,7 @@ export class Profile extends React.Component {
                     type="password"
                     placeholder="New Password"
                     value={this.state.newPassword}
-                    onChange={e => this.handleProfileFormChange(e.target)}
+                    onChange={(e) => this.handleProfileFormChange(e.target)}
                   />
                 </div>
               </Grid.Column>
@@ -235,7 +243,7 @@ export class Profile extends React.Component {
                     type="password"
                     placeholder="Confirm Password"
                     value={this.state.confirmNewPassword}
-                    onChange={e => this.handleProfileFormChange(e.target)}
+                    onChange={(e) => this.handleProfileFormChange(e.target)}
                   />
                 </div>
               </Grid.Column>
@@ -249,7 +257,7 @@ export class Profile extends React.Component {
                   className="ui selection dropdown"
                   name="gender"
                   value={gender}
-                  onChange={e => this.handleProfileFormChange(e.target)}
+                  onChange={(e) => this.handleProfileFormChange(e.target)}
                 >
                   <option value="" />
                   <option value="Male">Male</option>
@@ -264,7 +272,7 @@ export class Profile extends React.Component {
                     type="text"
                     placeholder="GPA"
                     value={GPA}
-                    onChange={e => this.handleProfileFormChange(e.target)}
+                    onChange={(e) => this.handleProfileFormChange(e.target)}
                   />
                 </div>
               </Grid.Column>
@@ -279,7 +287,7 @@ export class Profile extends React.Component {
                   className="ui dropdown"
                   name="levelOfEducation"
                   value={levelOfEducation}
-                  onChange={e => this.handleProfileFormChange(e.target)}
+                  onChange={(e) => this.handleProfileFormChange(e.target)}
                 >
                   <option />
                   <option value="1st Year">1st Year</option>
@@ -303,7 +311,7 @@ export class Profile extends React.Component {
                   className="ui dropdown"
                   name="fieldOfStudy"
                   value={fieldOfStudy}
-                  onChange={e => this.handleProfileFormChange(e.target)}
+                  onChange={(e) => this.handleProfileFormChange(e.target)}
                 >
                   <option />
                   <option value="CS">CS</option>
@@ -323,7 +331,7 @@ export class Profile extends React.Component {
                   Courses Teaching
                 </div>
 
-                {coursesTeaching.map(course => (
+                {coursesTeaching.map((course) => (
                   <div
                     className="ui huge blue horizontal label"
                     onClick={() => remove_coursesTeaching(this, course)}
@@ -341,7 +349,7 @@ export class Profile extends React.Component {
                   Courses Taking
                 </div>
 
-                {coursesTaking.map(course => (
+                {coursesTaking.map((course) => (
                   <div
                     className="ui huge blue horizontal label"
                     onClick={() => remove_coursesTaking(this, course)}
