@@ -14,21 +14,33 @@ export class SignupBox extends React.Component {
     confirm_password: "",
     signin_regular: false,
     password_match: false,
-    used_username: false
+    used_username: false,
   };
 
-  handleSignUpFormChange = field => {
+  handleSignUpFormChange = (field) => {
     const value = field.value;
     const name = field.name;
-    this.setState({
-      [name]: value
-    });
-    if (name === "username") {
-      username_verifier(value, this);
-    }
+    this.setState(
+      {
+        [name]: value,
+      },
+      () => {
+        if (name === "username") {
+          username_verifier(value, this);
+        }
+        if (name === "confirm_password" || name === "password") {
+          if (this.state.password === this.state.confirm_password) {
+            this.setState({ password_match: true });
+          } else {
+            this.setState({ password_match: false });
+          }
+        }
+      }
+    );
   };
 
   render() {
+    console.log(this.state);
     if (this.state.signin_regular) {
       return <Redirect to="/dash_board" />;
     }
@@ -44,7 +56,7 @@ export class SignupBox extends React.Component {
                 type="text"
                 placeholder="Username"
                 value={this.state.username}
-                onChange={e => this.handleSignUpFormChange(e.target)}
+                onChange={(e) => this.handleSignUpFormChange(e.target)}
               />
             </div>
             {this.state.username ? null : (
@@ -67,7 +79,7 @@ export class SignupBox extends React.Component {
                   className="ui dropdown"
                   name="gender"
                   value={this.state.gender}
-                  onChange={e => this.handleSignUpFormChange(e.target)}
+                  onChange={(e) => this.handleSignUpFormChange(e.target)}
                 >
                   <option value="" />
                   <option value="Male">Male</option>
@@ -84,7 +96,7 @@ export class SignupBox extends React.Component {
                   type="text"
                   placeholder="GPA"
                   value={this.state.GPA}
-                  onChange={e => this.handleSignUpFormChange(e.target)}
+                  onChange={(e) => this.handleSignUpFormChange(e.target)}
                 />
               </div>
             </div>
@@ -98,7 +110,7 @@ export class SignupBox extends React.Component {
                   className="ui dropdown"
                   name="levelOfEducation"
                   value={this.state.levelOfEducation}
-                  onChange={e => this.handleSignUpFormChange(e.target)}
+                  onChange={(e) => this.handleSignUpFormChange(e.target)}
                 >
                   <option />
                   <option value="1st Year">1st Year</option>
@@ -123,7 +135,7 @@ export class SignupBox extends React.Component {
                   className="ui dropdown"
                   name="fieldOfStudy"
                   value={this.state.fieldOfStudy}
-                  onChange={e => this.handleSignUpFormChange(e.target)}
+                  onChange={(e) => this.handleSignUpFormChange(e.target)}
                 >
                   <option />
                   <option value="CS">CS</option>
@@ -148,7 +160,7 @@ export class SignupBox extends React.Component {
                   type="password"
                   placeholder="Password"
                   value={this.state.password}
-                  onChange={e => this.handleSignUpFormChange(e.target)}
+                  onChange={(e) => this.handleSignUpFormChange(e.target)}
                 />
               </div>
               {this.state.password ? null : (
@@ -167,7 +179,7 @@ export class SignupBox extends React.Component {
                   type="password"
                   placeholder="Confirm Password"
                   value={this.state.confirm_password}
-                  onChange={e => this.handleSignUpFormChange(e.target)}
+                  onChange={(e) => this.handleSignUpFormChange(e.target)}
                 />
               </div>
               {this.state.confirm_password ? null : (
@@ -181,12 +193,12 @@ export class SignupBox extends React.Component {
             <button
               className="ui blue primary button"
               type="submit"
-              onClick={e => signupSubmit(e, this)}
+              onClick={(e) => signupSubmit(e, this)}
             >
               Sign Up
             </button>
           </div>
-          {!this.state.password_match ? (
+          {this.state.password_match ? (
             <div />
           ) : (
             <div className="ui negative message">
