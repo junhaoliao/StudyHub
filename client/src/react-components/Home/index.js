@@ -9,6 +9,8 @@ import {Item} from "semantic-ui-react";
 import {Grid, Image, Segment, Menu} from 'semantic-ui-react'
 import Divider from "semantic-ui-react/dist/commonjs/elements/Divider";
 import List from "semantic-ui-react/dist/commonjs/elements/List";
+import Input from "semantic-ui-react/dist/commonjs/elements/Input";
+import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 
 
 /* Component for the Home page */
@@ -24,7 +26,12 @@ class Home extends React.Component {
         document.title = "StudyHub";
     }
 
+    state = {activeItem: 'dashboard'}
+
+    handleItemClick = (e, {name}) => this.setState({activeItem: name})
+
     render() {
+        const {activeItem} = this.state;
 
         return (
             <div className={"home_page_container"}>
@@ -67,147 +74,276 @@ class Home extends React.Component {
                 )}
 
 
+                <div className={"info_container1"}>
+                    <Segment>
+                        <Menu attached='top' tabular>
+                            <Menu.Item
+                                name='dashboard'
+                                active={activeItem === 'dashboard'}
+                                onClick={this.handleItemClick}
+                            />
+                            <Menu.Item
+                                name='billboard'
+                                active={activeItem === 'billboard'}
+                                onClick={this.handleItemClick}
+                            />
+                            <Menu.Item
+                                name='rankpage'
+                                active={activeItem === 'rankpage'}
+                                onClick={this.handleItemClick}
+                            />
+                        </Menu>
+
+                        {(this.state.activeItem === "dashboard") ? (
+                            // introduction to the DashBoard
+                            <Segment attached='bottom'>
+                                <List>
+                                    <div className={"fontsize"}>
+                                        <List.Item>
+                                            <Icon name='mouse pointer' size='small'/> You can add or join a course here.
+                                        </List.Item>
+                                        <List.Item>
+                                            <Icon name='clock' size='small'/> All the courses you are teaching or taking will be listed.
+                                        </List.Item>
+                                        <List.Item>
+                                            <Icon name='hand point up' size='small'/> Click "Enter" on the course to see announcement and upload files.
+                                        </List.Item>
+                                    </div>
+                                </List>
+                            </Segment>
+                        ) : (
+                            // introduction of BillBoard
+                            (this.state.activeItem === "billboard") ? (
+                                <Segment attached='bottom'>
+                                    <List>
+                                        <div className={"fontsize"}>
+                                            <List.Item>
+                                                <Icon name='comment alternate' size='small'/> You can chat will other users here.
+                                            </List.Item>
+                                            <List.Item>
+                                                <Icon name='file alternate' size='small'/> Up to 50 most recent messages will be kept here.
+                                            </List.Item>
+                                            <List.Item>
+                                                <Icon name='question' size='small'/> Post the question to ask for help from other users when you are stuck!
+                                            </List.Item>
+                                        </div>
+                                    </List>
+                                </Segment>
+                            ) : (
+                                // introduction of RankPage
+                                (this.state.activeItem === "rankpage") ? (
+                                    <Segment attached='bottom'>
+                                        <List>
+                                            <div className={"fontsize"}>
+                                                <List.Item>
+                                                    <Icon name='chart bar outline' size='small'/> You can see all the courses from the website by ranking.
+                                                </List.Item>
+                                                <List.Item>
+                                                    <Icon name='thumbs up' size='small'/> Hit the like bottom on a course to boost its rank!
+                                                </List.Item>
+                                                <List.Item>
+                                                    <Icon name='paper plane' size='small'/> Let other users know which course is on top hits on the website!
+                                                </List.Item>
+                                            </div>
+                                        </List>
+                                    </Segment>
+                                ) : (
+                                    // default of introduction to our website
+                                    <Segment attached='bottom'>
+                                        <List>
+                                            <div className={"fontsize"}>
+                                                <List.Item>
+                                                    <Icon name='mouse pointer' size='small'/> Click to know more about our website!
+                                                </List.Item>
+                                                <List.Item>
+                                                    <Icon name='clock' size='small'/> Sign up within a minute to become a user!
+                                                </List.Item>
+                                                <List.Item>
+                                                    <Icon name='check' size='small'/> Study will never be so easy like this!
+                                                </List.Item>
+                                            </div>
+
+                                        </List>
+                                    </Segment>
+                                )
+
+                            )
+                        )}
+                    </Segment>
+
+                </div>
+
+
                 <div className={"info_container"}>
                     <Grid stackable columns={2}>
 
                         <Grid.Column>
                             <Segment>
-                                <Item.Group >
+                                <Grid divided={"vertically"}>
+                                    <Grid.Row>
+                                        <Grid.Column width={3}>
+                                            <div className={"user_type_icon_container"}><Icon name='user'
+                                                                                              size='massive'/></div>
+                                        </Grid.Column>
+                                        <Grid.Column width={13}>
+                                            <Item.Group>
+                                                <Item><Item.Content>
+                                                    <Item.Header>Become a User!</Item.Header>
+                                                    <Item.Meta>
+                                                        <List bulleted>
+                                                            <List.Item>
+                                                                Sign up as a user can join any class to learn different
+                                                                courses.
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                You can download or upload any file you want and discuss
+                                                                with other users in the chat room.
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                Feel free to like a course if you like the Instructor.
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                Favourite a file so that you can access it later in your
+                                                                own profile page.
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                Learning will become easier since joining the StudyHub!
+                                                            </List.Item>
+                                                        </List>
+                                                    </Item.Meta>
+                                                </Item.Content></Item>
+                                                {/*<Item.Image size='medium' src='https://react.semantic-ui.com/images/wireframe/image.png'/>*/}
 
-                                    <Item.Image size='medium' src='https://react.semantic-ui.com/images/wireframe/image.png'/>
 
-                                    <Item.Content>
-                                        <Item.Header as='a'>Become a User!</Item.Header>
-                                        <Item.Meta>
-                                            <p>
-                                                - Sign up as a user can join any class to learn different courses.
-                                            </p>
-                                            <p>
-                                                - You can download or upload any file you want and discuss with other users
-                                                learning the same course you are taking in the chat room.
-                                            </p>
-                                            <p>
-                                                - Feel free to like a course if you like the Instructor.
-                                            </p>
-                                            <p>
-                                                - Favourite a file so that you can access it later in your own profile page.
-                                            </p>
-                                            <p>
-                                                - Learning will become easier since joining the StudyHub!
-                                            </p>
-                                        </Item.Meta>
-                                    </Item.Content>
-                                </Item.Group>
+                                            </Item.Group>
+                                        </Grid.Column>
+                                    </Grid.Row>
+                                </Grid>
+
+
                             </Segment>
                         </Grid.Column>
 
                         <Grid.Column>
                             <Segment>
-                                <Item.Group>
-                                    <Item.Image size='medium' src='https://react.semantic-ui.com/images/wireframe/image.png'/>
+                                <Grid divided={"vertically"}>
+                                    <Grid.Row>
+                                        <Grid.Column width={3}>
+                                            <div className={"user_type_icon_container"}><Icon name='user secret'
+                                                                                              size='massive'/></div>
+                                        </Grid.Column>
+                                        <Grid.Column width={13}>
+                                            <Item.Group>
+                                                <Item><Item.Content>
+                                                    <Item.Header>Become an Instructor!</Item.Header>
+                                                    <Item.Meta>
+                                                        <List bulleted verticalAlign={"middle"}>
+                                                            <List.Item>
+                                                                Any regular user signed in the StudyHub can create a new
+                                                                course by
+                                                                himself/herself.
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                Create your own course page and you are all set!
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                Start uploading some useful course related files and
+                                                                posting some
+                                                                announcements.
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                Try to post some questions and let other users learn
+                                                                through discussion.
+                                                            </List.Item>
+                                                            <List.Item>
+                                                                It's not that hard to become a teacher!
+                                                            </List.Item>
+                                                        </List>
+                                                    </Item.Meta>
+                                                </Item.Content></Item>
 
-                                    <Item.Content>
-                                        <Item.Header as='a'>Become an Instructor!</Item.Header>
-                                        <Item.Meta>
-                                            <p>
-                                                - Any regular user signed in the StudyHub can create a new course by
-                                                himself/herself.
-                                            </p>
-                                            <p>
-                                                - Create your own course page and you are all set!
-                                            </p>
-                                            <p>
-                                                - Start uploading some useful course related files and posting some
-                                                announcements.
-                                            </p>
-                                            <p>
-                                                - Try to post some questions and let other users learn through discussion
-                                            </p>
-                                            <p>
-                                                - It's not that hard to become a teacher!
-                                            </p>
-                                        </Item.Meta>
-                                    </Item.Content>
-                                </Item.Group>
+                                            </Item.Group>
+                                        </Grid.Column>
+                                    </Grid.Row>
+                                </Grid>
+
                             </Segment>
                         </Grid.Column>
                     </Grid>
                 </div>
 
 
+                {/*<div className={"info_container1"}>*/}
+                {/*    <Segment>*/}
+                {/*        <Grid columns={2} relaxed='very'>*/}
+                {/*            <Grid.Column>*/}
+                {/*                <Image size="large" src='https://react.semantic-ui.com/images/wireframe/image.png'/>                            </Grid.Column>*/}
+                {/*            <Grid.Column center>*/}
+                {/*                <List bulleted>*/}
+                {/*                    <List.Item>*/}
+                {/*                        <p>*/}
+                {/*                            Users can access the courses the added*/}
+                {/*                        </p>*/}
+                {/*                    </List.Item>*/}
+                {/*                    <List.Item></List.Item>*/}
+                {/*                    <List.Item></List.Item>*/}
+                {/*                    <List.Item></List.Item>*/}
+                {/*                </List>*/}
+                {/*            </Grid.Column>*/}
+                {/*        </Grid>*/}
 
-                <div className={"info_container1"}>
-                    <Segment>
-                        <Grid columns={2} relaxed='very'>
-                            <Grid.Column>
-                                <Image size="large" src='https://react.semantic-ui.com/images/wireframe/image.png'/>                            </Grid.Column>
-                            <Grid.Column center>
-                                <List bulleted>
-                                    <List.Item>
-                                        <p>
-                                            Users can access the courses the added
-                                        </p>
-                                    </List.Item>
-                                    <List.Item></List.Item>
-                                    <List.Item></List.Item>
-                                    <List.Item></List.Item>
-                                </List>
-                            </Grid.Column>
-                        </Grid>
+                {/*        <Divider vertical>DashBoard</Divider>*/}
+                {/*    </Segment>*/}
+                {/*</div>*/}
 
-                        <Divider vertical>DashBoard</Divider>
-                    </Segment>
-                </div>
+                {/*<div className={"info_container1"}>*/}
+                {/*    <Segment>*/}
+                {/*        <Grid columns={2} relaxed='very'>*/}
+                {/*            <Grid.Column>*/}
+                {/*                <Image size="large" src='https://react.semantic-ui.com/images/wireframe/image.png'/>*/}
+                {/*            </Grid.Column>*/}
+                {/*            <Grid.Column center>*/}
+                {/*                <List bulleted>*/}
+                {/*                    <List.Item>*/}
+                {/*                        <p>*/}
+                {/*                            Talk here!*/}
+                {/*                        </p>*/}
+                {/*                    </List.Item>*/}
+                {/*                    <List.Item></List.Item>*/}
+                {/*                    <List.Item></List.Item>*/}
+                {/*                    <List.Item></List.Item>*/}
+                {/*                </List>*/}
+                {/*            </Grid.Column>*/}
+                {/*        </Grid>*/}
 
-                <div className={"info_container1"}>
-                    <Segment>
-                        <Grid columns={2} relaxed='very'>
-                            <Grid.Column>
-                                <Image size="large" src='https://react.semantic-ui.com/images/wireframe/image.png'/>
-                            </Grid.Column>
-                            <Grid.Column center>
-                                <List bulleted>
-                                    <List.Item>
-                                        <p>
-                                            Talk here!
-                                        </p>
-                                    </List.Item>
-                                    <List.Item></List.Item>
-                                    <List.Item></List.Item>
-                                    <List.Item></List.Item>
-                                </List>
-                            </Grid.Column>
-                        </Grid>
+                {/*        <Divider vertical>Billboard</Divider>*/}
+                {/*    </Segment>*/}
+                {/*</div>*/}
 
-                        <Divider vertical>Billboard</Divider>
-                    </Segment>
-                </div>
+                {/*<div className={"info_container1"}>*/}
+                {/*    <Segment>*/}
+                {/*        <Grid columns={2} relaxed='very'>*/}
+                {/*            <Grid.Column>*/}
+                {/*                <Image size="large" src='https://react.semantic-ui.com/images/wireframe/image.png'/>*/}
+                {/*            </Grid.Column>*/}
+                {/*            <Grid.Column center>*/}
+                {/*                <List bulleted>*/}
+                {/*                    <List.Item>*/}
+                {/*                        <p>*/}
+                {/*                            rank here*/}
+                {/*                        </p>*/}
+                {/*                    </List.Item>*/}
+                {/*                    <List.Item></List.Item>*/}
+                {/*                    <List.Item></List.Item>*/}
+                {/*                    <List.Item></List.Item>*/}
+                {/*                </List>*/}
+                {/*            </Grid.Column>*/}
+                {/*        </Grid>*/}
 
-                <div className={"info_container1"}>
-                    <Segment>
-                        <Grid columns={2} relaxed='very'>
-                            <Grid.Column>
-                                <Image size="large" src='https://react.semantic-ui.com/images/wireframe/image.png'/>
-                            </Grid.Column>
-                            <Grid.Column center>
-                                <List bulleted>
-                                    <List.Item>
-                                        <p>
-                                            rank here
-                                        </p>
-                                    </List.Item>
-                                    <List.Item></List.Item>
-                                    <List.Item></List.Item>
-                                    <List.Item></List.Item>
-                                </List>
-                            </Grid.Column>
-                        </Grid>
+                {/*        <Divider vertical>RankPage</Divider>*/}
+                {/*    </Segment>*/}
 
-                        <Divider vertical>RankPage</Divider>
-                    </Segment>
-
-                </div>
-
+                {/*</div>*/}
 
 
             </div>

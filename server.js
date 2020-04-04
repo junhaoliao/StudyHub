@@ -148,6 +148,55 @@ app.post("/RegularUser/remove", (req, res) => {
         });
 });
 
+// delete a course in a user's profile, taking or teaching
+app.delete("/RegularUser/:userID/removeCourse/:courseName", (req, res) => {
+    const userid = req.body.userid;
+
+    RegularUser.findById(userid).then((user) =>{
+        if (!user) {
+            res.status(404).send();
+        } else {
+            const courseName = req.params.courseName;
+            Course.findByCourseName(courseName)
+                .then((course) => {
+                    if (course.users[0] = user._id){
+                        // delete admin's course
+                        course.users.shift();
+                        // case 1: there's another user in the course
+                        //  he/she will become the new course admin
+                        if(course.users[0] !== undefined){
+                            RegularUser.findById(course.users[0]).then(newUser => {
+                                // remove the new admin from course taking
+                                newUser.coursesTaking.pull(course);
+
+                                // put the new admin into the course he/she will instruct
+                                newUser.coursesTeaching.push(course);
+                                newUser.save();
+                            });
+                        }
+                        // case 2: there's only the admin user
+                        //  there will be no admin for that course until the next user enroll the course
+                        //  and he/she will become the new course admin
+                        course.save();
+
+                        // remove the course from CourseTeaching list of the user
+                        user.coursesTeaching.pull(course);
+                        user.save();
+                    } else {
+                        // user is not the admin in the course to be deleted
+                        //  delete the user from the course' users list
+                        course.users.pull(user);
+                        course.save();
+
+                        // delete the course from the user's CourseTaking list
+                        user.coursesTaking.pull(course);
+                        user.save();
+                    }
+                })
+        }
+    })
+});
+
 app.post("/RegularUser/signup", (req, res) => {
     const username = req.body.username;
 
