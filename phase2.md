@@ -1,5 +1,5 @@
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).<br />
 Also, react-semantic-ui library is used in this project (https://react.semantic-ui.com/)
 
 # StudyHub
@@ -17,12 +17,12 @@ There is a button at the bottom of the home page to switch between Login and Sig
 We have two types of user: admin and regular users.
 The demo username and password for these two types are set up as follows:
 - Regular user:<br />
-1. Username: user 
+1. Username: user <br />
 Password: user <br /><br />
-2. Username: user2
-Password: user2 <br /><br />
+2. Username: user2<br />
+Password: user2
 - Admin user: <br />
-Username: admin 
+Username: admin <br />
 Password: admin <br />
 
 ### `Signup Page`
@@ -39,11 +39,11 @@ A regular user can also logout by clicking the "Log Out" button on the right sid
 ### `Dashboard`
 In the Dashboard, a regular user can access all courses she/he is currently taking and teaching. <br />
 
-The user can also create or enroll courses by clicking the yellow "Plus" Button on the upper right of the page. 
+The user can also create or enroll courses by clicking the yellow "Plus" Button on the upper right of the page. <br />
 A pop window will show, and a regular user can fill in course information, check the Terms & Conditions, and submit the request to create/enroll a course. The newly added course will show up on the dashboard.
 
 ### `Course Page`
-After clicking enter on any courses, a regular user can access the course page.
+After clicking enter on any courses, a regular user can access the course page.<br />
 There are several features inside each course page:
 1. Chat room: Regular users can chat with other enrolled users on the course page
 2. Course Instructor Information: Regular users can access the instructor information by clicking the profile icon next to the course title
@@ -51,7 +51,8 @@ There are several features inside each course page:
 4. Resources: Regular users can click on Resource button to access course resources. Both icon and list view are available. Admin users can upload files to the course up to a limit of 500M.
 
 ### `BillBoard`
-Billboard functions is similar to the chat room, where every regular user can communicate with each other. The features of the billboard is stripped down compared to the in-course chatroom, on purpose.  In such way, we degrade the experience of chatting globally and encourage users to create/enroll into courses. Then they can chat inside the course, share resources, and have a closer connection.
+Billboard functions is similar to the chat room, where every regular user can communicate with each other. <br />
+The features of the billboard is stripped down compared to the in-course chatroom, on purpose.  In such way, we degrade the experience of chatting globally and encourage users to create/enroll into courses. Then they can chat inside the course, share resources, and have a closer connection.
 
 ### `Ranking`
 The ranking page not only ranks the courses that have most likes, but also ranks the users based on how many courses they have created so far. Only the first 8 items will be listed for performance optimization and a clean appearance. 
@@ -64,8 +65,8 @@ The profile page has all user information. The user is free to:
 
 ## `Admin User`
 Admin page has two views only.  <br />
-An admin user can view all user profiles and remove any regular user when needed. 
-An admin user can remove any content inside a billboard.
+An admin user can view all user profiles and remove any regular user when needed. <br />
+An admin user can remove any content inside a billboard.<br />
 All these actions are done due to a regular user might upload irrelevant resources to the website. 
 
 # Hosting Locally
