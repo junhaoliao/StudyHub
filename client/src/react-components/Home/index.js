@@ -181,9 +181,9 @@ class Home extends React.Component {
                             <Segment>
                                 <Grid divided={"vertically"}>
                                     <Grid.Row>
-                                        <Grid.Column width={3}>
+                                        <Grid.Column width={2}>
                                             <div className={"user_type_icon_container"}><Icon name='user'
-                                                                                              size='massive'/></div>
+                                                                                              size='huge'/></div>
                                         </Grid.Column>
                                         <Grid.Column width={13}>
                                             <Item.Group>
@@ -228,9 +228,9 @@ class Home extends React.Component {
                             <Segment>
                                 <Grid divided={"vertically"}>
                                     <Grid.Row>
-                                        <Grid.Column width={3}>
+                                        <Grid.Column width={2}>
                                             <div className={"user_type_icon_container"}><Icon name='user secret'
-                                                                                              size='massive'/></div>
+                                                                                              size='huge'/></div>
                                         </Grid.Column>
                                         <Grid.Column width={13}>
                                             <Item.Group>
