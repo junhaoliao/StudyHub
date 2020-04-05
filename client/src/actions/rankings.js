@@ -19,7 +19,7 @@ export const getRanking = (app) => {
             // the resolved promise with the JSON body
             app.setState({
                 likesRankings: json.likesRankings,
-                coursesRankings: json.coursesRankings
+                usersRankings: json.usersRankings
             });
         })
         .catch(error => {

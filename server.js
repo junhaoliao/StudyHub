@@ -211,6 +211,7 @@ app.post("/RegularUser/username", (req, res) => {
       req.status(400).send();
     });
 });
+
 app.post("/RegularUser", (req, res) => {
   //console.log("post a new regular user");
   const new_RegularUser = new RegularUser({
@@ -406,7 +407,7 @@ app.get("/getRankings", (req, res) => {
 
           return res.send({
             likesRankings: courses.slice(0, 8),
-            coursesRankings: users.splice(0, 8)
+              usersRankings: users.splice(0, 8)
           });
         })
         .catch(error => {
