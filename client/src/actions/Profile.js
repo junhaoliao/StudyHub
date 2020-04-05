@@ -1,9 +1,9 @@
 const bcrypt = require("bcryptjs");
 
-export const readCookie = Profile => {
+export const readCookie = (Profile) => {
   const url = "/RegularUser/profile";
   fetch(url)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         return res.json();
       } else {
@@ -11,7 +11,7 @@ export const readCookie = Profile => {
         window.location.href = "/";
       }
     })
-    .then(json => {
+    .then((json) => {
       if (json && json.username) {
         console.log(json);
         Profile.setState({
@@ -21,58 +21,58 @@ export const readCookie = Profile => {
           gender: json.gender,
           GPA: json.GPA,
           levelOfEducation: json.levelOfEducation,
-          fieldOfStudy: json.fieldOfStudy
+          fieldOfStudy: json.fieldOfStudy,
         });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 
   console.log("check course taking");
   const url_coursesTaking = "/RegularUser/profile/coursesTaking";
   fetch(url_coursesTaking)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         console.log("find course taking");
         return res.json();
       }
     })
-    .then(json => {
+    .then((json) => {
       if (json && json.courses) {
         console.log(json);
         Profile.setState({
-          coursesTaking: json.courses
+          coursesTaking: json.courses,
         });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 
   console.log("check course teaching");
   const url_coursesTeaching = "/RegularUser/profile/coursesTeaching";
   fetch(url_coursesTeaching)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         console.log("find course teaching");
         return res.json();
       }
     })
-    .then(json => {
+    .then((json) => {
       if (json && json.courses) {
         console.log(json);
         Profile.setState({
-          coursesTeaching: json.courses
+          coursesTeaching: json.courses,
         });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
 
-export const switchView = Profile => {
+export const switchView = (Profile) => {
   if (Profile.state.edit) {
     Profile.setState({
       edit: false,
@@ -80,7 +80,7 @@ export const switchView = Profile => {
       match: true,
       oldPassword: "",
       newPassword: "",
-      confirmNewPassword: ""
+      confirmNewPassword: "",
     });
   } else {
     Profile.setState({
@@ -89,7 +89,7 @@ export const switchView = Profile => {
       match: true,
       oldPassword: "",
       newPassword: "",
-      confirmNewPassword: ""
+      confirmNewPassword: "",
     });
   }
 };
@@ -105,7 +105,7 @@ export const remove_coursesTaking = (Profile, course) => {
   console.log("removed course");
   console.log(courseList);
   Profile.setState({
-    coursesTaking: courseList
+    coursesTaking: courseList,
   });
 };
 
@@ -120,16 +120,16 @@ export const remove_coursesTeaching = (Profile, course) => {
   console.log("removed course");
   console.log(courseList);
   Profile.setState({
-    coursesTeaching: courseList
+    coursesTeaching: courseList,
   });
 };
 
-export const CancelButton = Profile => {
+export const CancelButton = (Profile) => {
   readCookie(Profile);
   switchView(Profile);
 };
 
-export const SaveButton = Profile => {
+export const SaveButton = (Profile) => {
   bcrypt.compare(
     Profile.state.oldPassword,
     Profile.state.password,
@@ -214,19 +214,19 @@ export const SaveButton = Profile => {
             body: JSON.stringify(newProfile),
             headers: {
               Accept: "application/json, text/plain, */*",
-              "Content-Type": "application/json"
-            }
+              "Content-Type": "application/json",
+            },
           });
           console.log(JSON.stringify(newProfile));
           fetch(request)
-            .then(res => {
+            .then((res) => {
               if (res.status === 200) {
                 console.log("Successfully updated user information");
                 readCookie(Profile);
                 switchView(Profile);
               }
             })
-            .catch(error => {
+            .catch((error) => {
               console.log(error);
             });
         }
@@ -238,12 +238,12 @@ export const SaveButton = Profile => {
   );
 };
 
-export const SaveButton_admin = Profile => {
+export const SaveButton_admin = (Profile) => {
   Profile.setState({ save: true });
   const newProfile = {};
   let correct = true;
   newProfile.username = Profile.state.username;
-  newProfile.password = Profile.state.oldPassword;
+  newProfile.password = Profile.state.password;
   // check password
   if (
     Profile.state.newPassword === "" &&
@@ -315,19 +315,19 @@ export const SaveButton_admin = Profile => {
       body: JSON.stringify(newProfile),
       headers: {
         Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
     console.log(JSON.stringify(newProfile));
     fetch(request)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           console.log("Successfully updated user information");
           readCookie(Profile);
           switchView(Profile);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -337,14 +337,14 @@ export const getUserProfileById = (app, user_id) => {
   const url = `/RegularUser/getProfileById/${user_id}`;
 
   fetch(url)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         return res.json();
       } else {
         return console.log("cannot get user profile info");
       }
     })
-    .then(json => {
+    .then((json) => {
       app.setState({
         username: json.username,
         gender: json.gender,
@@ -352,10 +352,10 @@ export const getUserProfileById = (app, user_id) => {
         levelOfEducation: json.levelOfEducation,
         fieldOfStudy: json.fieldOfStudy,
         coursesTaking: json.coursesTaking,
-        coursesTeaching: json.coursesTeaching
+        coursesTeaching: json.coursesTeaching,
       });
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };

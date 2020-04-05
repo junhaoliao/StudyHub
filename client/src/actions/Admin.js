@@ -1,8 +1,7 @@
-export const readCookie = AdminDashboard => {
+export const readCookie = (AdminDashboard) => {
   const url1 = "/RegularUser/check-session";
-
   fetch(url1)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         return res.json();
       } else {
@@ -10,34 +9,31 @@ export const readCookie = AdminDashboard => {
         window.location.href = "/";
       }
     })
-    .then(json => {
-      if (json.currentUser === "admin") {
+    .then((json) => {
+      if (json.currentUser) {
         AdminDashboard.setState({ login: true });
-      } else {
-        alert("Unauthorized to Admin Page.");
-        window.location.href = "/";
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 
   const url = "/AllRegularUser";
   fetch(url)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         return res.json();
       }
     })
-    .then(json => {
+    .then((json) => {
       if (json) {
-        json = json.filter(user => user.username !== "admin");
+        json = json.filter((user) => user.username !== "admin");
         AdminDashboard.setState({
-          allUsers: json
+          allUsers: json,
         });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
@@ -51,18 +47,18 @@ export const getUserAccess = (user, AdminDashboard) => {
     body: JSON.stringify(User),
     headers: {
       Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
   fetch(request)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         AdminDashboard.setState({
-          explore: true
+          explore: true,
         });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
@@ -77,18 +73,18 @@ export const removeUser = (user, AdminDashboard) => {
     body: JSON.stringify(User),
     headers: {
       Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
   fetch(request)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         AdminDashboard.setState({ open: false });
         console.log("confirm clicked");
         readCookie(AdminDashboard);
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
