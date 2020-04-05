@@ -36,10 +36,6 @@ const CourseSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    admin: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
     users: [mongoose.Schema.Types.ObjectId],
     likes: {type: Number, default: 0},
     announcements: [AnnouncementSchema],

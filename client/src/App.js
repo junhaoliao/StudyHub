@@ -20,17 +20,10 @@ import { Rankings } from "./react-components/Rankings";
 // import Action functions
 
 class App extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     currentUser: {},
-  //     currentUserID: {},
-  //   };
-  //
-  // }
 
-  render() {
-    // const { currentUser } = this.state;
+
+    render() {
+        // const { currentUser } = this.state;
 
     return (
       <div>

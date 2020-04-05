@@ -1,7 +1,7 @@
 /* Styles for the Home React component */
 .sign_up_box_container {
     width: 50%;
-    margin-top: 6vh;
+    margin-top: 4vh;
     margin-left: auto;
     margin-right: auto;
 }
@@ -10,8 +10,18 @@
     background-image: url("/background.jpg");
     background-position: center;
     background-size: cover;
-    height: 100vh;
 }
+
+.info_container {
+     width: 90%;
+     margin: 4vh auto 50px;
+ }
+
+.info_container1 {
+    width: 50%;
+    margin: 4vh auto 4vh;
+}
+
 
 .signup_prompt {
     position: fixed;
@@ -21,4 +31,21 @@
     text-align: center;
     background-color: antiquewhite;
     z-index: 999;
+}
+
+.user_type_icon_container{
+    background: lightsteelblue;
+    display: inline-block;
+    height: 200px;
+    vertical-align: middle;
+    line-height: 200px;
+    text-align: center
+}
+
+.fontsize {
+    font-size: large;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
 }

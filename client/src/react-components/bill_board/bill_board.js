@@ -10,47 +10,8 @@ import {
   load_content,
   handleSubmit
 } from "../../actions/BillBoard";
-// export class RegularBB extends React.Component {
-//   render() {
-//     return (
-//       <div>
-//         <NavBar />
-//         <Billboard />
-//       </div>
-//     );
-//   }
-// }
 
-// function load_content(app) {
-//   const url = "/BillBoard/content";
-//   fetch(url)
-//     .then(res => {
-//       if (res.status === 200) {
-//         return res.json();
-//       }
-//     })
-//     .then(json => {
-//       app.setState({
-//         billboard_content: json
-//       });
-//       //console.log(billboard_content);
-//     });
-// }
 
-// const months = [
-//   "January",
-//   "February",
-//   "March",
-//   "April",
-//   "May",
-//   "June",
-//   "July",
-//   "August",
-//   "September",
-//   "October",
-//   "November",
-//   "December"
-// ];
 
 export class RegularBB extends React.Component {
   constructor(props) {
@@ -155,7 +116,7 @@ export class RegularBB extends React.Component {
       console.log("Welcome to BillBoard");
       return (
         <div>
-          <NavBar></NavBar>
+          <NavBar/>
           <Container fluid>
             <div className={"bill_board_header"}>Billboard</div>
 
