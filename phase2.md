@@ -120,8 +120,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 | /getRankings | get | N/A | Get the course ranking and the user ranking |
 | /courses/:courseName/getResources | get | N/A | get resources of a course given a course name if the user is a course taker |
 | /courses/:courseName | Patch | N/A | function to add a user to a course given a course name |
-| /courses/:courseName/announcement | post | :courseName can contain numbers or characters.Eg./courses/CSC309/announcement {&quot;title&quot;: &quot; &quot; ,
-&quot;content&quot;:&quot; &quot; } | Check if the current user is course admin. If is, post an announcement under this certain course. (maximum 3 announcements) |
+| /courses/:courseName/announcement | post | :courseName can contain numbers or characters.Eg./courses/CSC309/announcement {&quot;title&quot;: &quot; &quot; ,&quot;content&quot;:&quot; &quot; } | Check if the current user is course admin. If is, post an announcement under this certain course. (maximum 3 announcements) |
 | /courses/:courseName/:announcement | delete | : courseName can contain numbers or characters. :announcement is the Objectid of the announcement Eg./courses/CSC309/5e87c0f4e675ca065472e702  | Check if the current user is course admin. If is, delete the selected announcement of the course |
 | /BillBoard/content | get | N/A | Only return all BillBoard content if there is currently a session created. |
 | /BillBoard/new  | post | {&quot;username&quot;: ,&quot;date&quot;: ,&quot;message&quot;: ,&quot;image&quot;: } | Only create a new BillBoard content and save to database if there is currently a session created. |

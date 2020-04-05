@@ -13,7 +13,7 @@ export class AdminDashboard extends React.Component {
       allUsers: [],
       explore: false,
       open: false,
-      userToBeRemoved: {}
+      userToBeRemoved: {},
     };
     readCookie(this);
   }
@@ -22,12 +22,17 @@ export class AdminDashboard extends React.Component {
     const { allUsers, userToBeRemoved } = this.state;
     const result = [];
     {
-      allUsers.map(user => {
+      allUsers.map((user) => {
         console.log(user);
         result.push(
           <tr>
             <td>
-              <button className="ui yellow button">{user.username}</button>
+              <button
+                className="ui yellow button"
+                onClick={() => getUserAccess(user, this)}
+              >
+                {user.username}
+              </button>
             </td>
             <td>
               <button
@@ -41,7 +46,7 @@ export class AdminDashboard extends React.Component {
                 onClick={() => {
                   this.setState({
                     open: true,
-                    userToBeRemoved: user
+                    userToBeRemoved: user,
                   });
                   console.log(user.username);
                 }}
@@ -61,6 +66,7 @@ export class AdminDashboard extends React.Component {
     const { allUsers, userToBeRemoved } = this.state;
     console.log("Admin state:");
     console.log(allUsers);
+    console.log(this.state.login);
     if (this.state.login) {
       return (
         <div>
@@ -68,9 +74,11 @@ export class AdminDashboard extends React.Component {
           {this.state.explore ? (
             <ProfileAdmin
               back={() => {
-                readCookie(this);
-                this.setState({ explore: false });
-                window.location.reload(true);
+                this.setState({ login: true }, () => {
+                  readCookie(this);
+                  this.setState({ explore: false });
+                  window.location.reload(true);
+                });
               }}
             />
           ) : (
