@@ -78,32 +78,32 @@ class Home extends React.Component {
                     <Segment>
                         <Menu attached='top' tabular>
                             <Menu.Item
-                                name='dashboard'
+                                name='DashBoard'
                                 active={activeItem === 'dashboard'}
                                 onClick={this.handleItemClick}
                             />
                             <Menu.Item
-                                name='billboard'
+                                name='BillBoard'
                                 active={activeItem === 'billboard'}
                                 onClick={this.handleItemClick}
                             />
                             <Menu.Item
-                                name='rankpage'
+                                name='Rankings'
                                 active={activeItem === 'rankpage'}
                                 onClick={this.handleItemClick}
                             />
                         </Menu>
 
-                        {(this.state.activeItem === "dashboard") ? (
+                        {(this.state.activeItem === "DashBoard") ? (
                             // introduction to the DashBoard
                             <Segment attached='bottom'>
                                 <List>
                                     <div className={"fontsize"}>
                                         <List.Item>
-                                            <Icon name='mouse pointer' size='small'/> You can add or join a course here.
+                                            <Icon name='book' size='small'/> You can add or join a course here.
                                         </List.Item>
                                         <List.Item>
-                                            <Icon name='clock' size='small'/> All the courses you are teaching or taking will be listed.
+                                            <Icon name='clipboard' size='small'/> All the courses you are teaching or taking will be listed.
                                         </List.Item>
                                         <List.Item>
                                             <Icon name='hand point up' size='small'/> Click "Enter" on the course to see announcement and upload files.
@@ -113,7 +113,7 @@ class Home extends React.Component {
                             </Segment>
                         ) : (
                             // introduction of BillBoard
-                            (this.state.activeItem === "billboard") ? (
+                            (this.state.activeItem === "BillBoard") ? (
                                 <Segment attached='bottom'>
                                     <List>
                                         <div className={"fontsize"}>
@@ -131,7 +131,7 @@ class Home extends React.Component {
                                 </Segment>
                             ) : (
                                 // introduction of RankPage
-                                (this.state.activeItem === "rankpage") ? (
+                                (this.state.activeItem === "Rankings") ? (
                                     <Segment attached='bottom'>
                                         <List>
                                             <div className={"fontsize"}>
@@ -142,7 +142,7 @@ class Home extends React.Component {
                                                     <Icon name='thumbs up' size='small'/> Hit the like bottom on a course to boost its rank!
                                                 </List.Item>
                                                 <List.Item>
-                                                    <Icon name='paper plane' size='small'/> Let other users know which course is on top hits on the website!
+                                                    <Icon name='sort amount down' size='small'/> Let other users know which course is on top hits on the website!
                                                 </List.Item>
                                             </div>
                                         </List>
@@ -156,7 +156,7 @@ class Home extends React.Component {
                                                     <Icon name='mouse pointer' size='small'/> Click to know more about our website!
                                                 </List.Item>
                                                 <List.Item>
-                                                    <Icon name='clock' size='small'/> Sign up within a minute to become a user!
+                                                    <Icon name='add user' size='small'/> Sign up within a minute to become a user!
                                                 </List.Item>
                                                 <List.Item>
                                                     <Icon name='check' size='small'/> Study will never be so easy like this!
