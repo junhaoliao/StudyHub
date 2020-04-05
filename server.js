@@ -501,7 +501,7 @@ app.get("/getRankings", (req, res) => {
 
           return res.send({
             likesRankings: courses.slice(0, 8),
-            coursesRankings: users.splice(0, 8)
+            usersRankings: users.splice(0, 8)
           });
         })
         .catch(error => {
