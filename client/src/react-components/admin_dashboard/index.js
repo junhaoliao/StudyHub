@@ -1,15 +1,15 @@
 import React from "react";
 
 import { AdminNavBar } from "../admin_navbar/index";
-import { AlterWindow } from "../AlterWindow/index";
-import { Redirect } from "react-router-dom";
-import { readCookie, getUserAccess, removeUser } from "../../actions/Admin";
+import { getUserAccess, readCookie, removeUser } from "../../actions/Admin";
 import { ProfileAdmin } from "../Profile/admin";
 import { Button, Confirm } from "semantic-ui-react";
+
 export class AdminDashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      login: false,
       allUsers: [],
       explore: false,
       open: false,
@@ -61,40 +61,44 @@ export class AdminDashboard extends React.Component {
     const { allUsers, userToBeRemoved } = this.state;
     console.log("Admin state:");
     console.log(allUsers);
-    return (
-      <div>
-        <AdminNavBar />
-        {this.state.explore ? (
-          <ProfileAdmin
-            back={() => {
-              readCookie(this);
-              this.setState({ explore: false });
-              window.location.reload(true);
+    if (this.state.login) {
+      return (
+        <div>
+          <AdminNavBar />
+          {this.state.explore ? (
+            <ProfileAdmin
+              back={() => {
+                readCookie(this);
+                this.setState({ explore: false });
+                window.location.reload(true);
+              }}
+            />
+          ) : (
+            <table class="ui celled padded table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>{this.list_all_users()}</tbody>
+            </table>
+          )}
+          <Confirm
+            open={this.state.open}
+            content={`Please Confirm to Remove User: ${userToBeRemoved.username}`}
+            cancelButton="Cancel"
+            confirmButton="Confirm"
+            onCancel={() => {
+              this.setState({ open: false });
+              console.log("cancel clicked");
             }}
-          ></ProfileAdmin>
-        ) : (
-          <table class="ui celled padded table">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>{this.list_all_users()}</tbody>
-          </table>
-        )}
-        <Confirm
-          open={this.state.open}
-          content={`Please Confirm to Remove User: ${userToBeRemoved.username}`}
-          cancelButton="Cancel"
-          confirmButton="Confirm"
-          onCancel={() => {
-            this.setState({ open: false });
-            console.log("cancel clicked");
-          }}
-          onConfirm={() => removeUser(userToBeRemoved._id, this)}
-        />
-      </div>
-    );
+            onConfirm={() => removeUser(userToBeRemoved._id, this)}
+          />
+        </div>
+      );
+    } else {
+      return <div>Unauthorized to Admin Page</div>;
+    }
   }
 }

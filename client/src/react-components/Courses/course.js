@@ -13,15 +13,6 @@ class Course extends React.Component {
         }
     }
 
-    // toggle_like = event => {
-    //     // console.log(this.state)
-    //     event.preventDefault();
-    //     this.setState({
-    //         liked: !this.state.liked
-    //     });
-    //
-    // };
-
     render() {
         const {course} = this.props;
 

@@ -1,6 +1,6 @@
 import React from "react";
 import NavBar from "../NavBar/navbar";
-import {Grid} from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import {
   CancelButton,
   readCookie,
@@ -8,10 +8,7 @@ import {
   remove_coursesTeaching,
   SaveButton,
   switchView,
-  updateProfileForm
 } from "../../actions/Profile";
-
-//import "./styles.css";
 
 export class Profile extends React.Component {
   constructor(props) {
@@ -32,13 +29,21 @@ export class Profile extends React.Component {
       levelOfEducation: "",
       fieldOfStudy: "",
       coursesTaking: [],
-      coursesTeaching: []
+      coursesTeaching: [],
     };
   }
 
   componentDidMount() {
     document.title = "My Profile";
   }
+
+  handleProfileFormChange = (field) => {
+    const value = field.value;
+    const name = field.name;
+    this.setState({
+      [name]: value,
+    });
+  };
 
   profilePage() {
     const {
@@ -48,16 +53,16 @@ export class Profile extends React.Component {
       levelOfEducation,
       fieldOfStudy,
       coursesTaking,
-      coursesTeaching
+      coursesTeaching,
     } = this.state;
 
     console.log(this.state);
     return (
       <div>
-        <NavBar></NavBar>
+        <NavBar />
         <div className="ui attached message">
           <h2 className="ui blue inverted center aligned icon header">
-            <i className="user circle icon"></i>
+            <i className="user circle icon" />
             Profile
           </h2>
         </div>
@@ -84,7 +89,7 @@ export class Profile extends React.Component {
 
             <Grid.Row columns={2}>
               <Grid.Column>
-                <div class="ui  huge black horizontal label">
+                <div className="ui  huge black horizontal label">
                   Level of Education
                 </div>
                 <div className="ui huge blue horizontal label">
@@ -92,7 +97,9 @@ export class Profile extends React.Component {
                 </div>
               </Grid.Column>
               <Grid.Column>
-                <div class="ui huge black horizontal label">Field of Study</div>
+                <div className="ui huge black horizontal label">
+                  Field of Study
+                </div>
                 <div className="ui huge blue horizontal label">
                   {fieldOfStudy}
                 </div>
@@ -105,10 +112,14 @@ export class Profile extends React.Component {
                   Courses Teaching
                 </div>
 
-                {coursesTeaching.map(course => (
-                    <div className="ui huge blue horizontal label">
-                      {course.name}
-                    </div>
+                {coursesTeaching.map((course) => (
+                  <a
+                    className="ui huge blue horizontal label"
+                    href={`/courses/${course.name}`}
+                    target="_blank"
+                  >
+                    {course.name}
+                  </a>
                 ))}
               </Grid.Column>
             </Grid.Row>
@@ -119,10 +130,14 @@ export class Profile extends React.Component {
                   Courses Taking
                 </div>
 
-                {coursesTaking.map(course => (
-                    <div className="ui huge blue horizontal label">
-                      {course.name}
-                    </div>
+                {coursesTaking.map((course) => (
+                  <a
+                    className="ui huge blue horizontal label"
+                    href={`/courses/${course.name}`}
+                    target="_blank"
+                  >
+                    {course.name}
+                  </a>
                 ))}
               </Grid.Column>
             </Grid.Row>
@@ -146,16 +161,16 @@ export class Profile extends React.Component {
       levelOfEducation,
       fieldOfStudy,
       coursesTaking,
-      coursesTeaching
+      coursesTeaching,
     } = this.state;
 
     console.log(this.state);
     return (
       <div>
-        <NavBar></NavBar>
+        <NavBar />
         <div className="ui attached message">
           <h2 className="ui blue inverted center aligned icon header">
-            <i className="user circle icon"></i>
+            <i className="user circle icon" />
             Profile
           </h2>
         </div>
@@ -171,8 +186,8 @@ export class Profile extends React.Component {
                     type="text"
                     placeholder="Username"
                     value={username}
-                    onChange={e => updateProfileForm(this, e.target)}
-                  ></input>
+                    onChange={(e) => this.handleProfileFormChange(e.target)}
+                  />
                 </div>
               </Grid.Column>
 
@@ -188,8 +203,8 @@ export class Profile extends React.Component {
                       type="password"
                       placeholder="Old Password"
                       value={this.state.oldPassword}
-                      onChange={e => updateProfileForm(this, e.target)}
-                    ></input>
+                      onChange={(e) => this.handleProfileFormChange(e.target)}
+                    />
                   </div>
 
                   {this.state.oldPassword ? null : (
@@ -213,8 +228,8 @@ export class Profile extends React.Component {
                     type="password"
                     placeholder="New Password"
                     value={this.state.newPassword}
-                    onChange={e => updateProfileForm(this, e.target)}
-                  ></input>
+                    onChange={(e) => this.handleProfileFormChange(e.target)}
+                  />
                 </div>
               </Grid.Column>
               <Grid.Column>
@@ -227,9 +242,9 @@ export class Profile extends React.Component {
                     name="confirmNewPassword"
                     type="password"
                     placeholder="Confirm Password"
-                    value={this.state.confirmnNewPassword}
-                    onChange={e => updateProfileForm(this, e.target)}
-                  ></input>
+                    value={this.state.confirmNewPassword}
+                    onChange={(e) => this.handleProfileFormChange(e.target)}
+                  />
                 </div>
               </Grid.Column>
             </Grid.Row>
@@ -242,9 +257,9 @@ export class Profile extends React.Component {
                   className="ui selection dropdown"
                   name="gender"
                   value={gender}
-                  onChange={e => updateProfileForm(this, e.target)}
+                  onChange={(e) => this.handleProfileFormChange(e.target)}
                 >
-                  <option value=""></option>
+                  <option value="" />
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
@@ -257,24 +272,24 @@ export class Profile extends React.Component {
                     type="text"
                     placeholder="GPA"
                     value={GPA}
-                    onChange={e => updateProfileForm(this, e.target)}
-                  ></input>
+                    onChange={(e) => this.handleProfileFormChange(e.target)}
+                  />
                 </div>
               </Grid.Column>
             </Grid.Row>
 
             <Grid.Row columns={2}>
               <Grid.Column>
-                <div class="ui  huge black horizontal label">
+                <div className="ui  huge black horizontal label">
                   Level of Education
                 </div>
                 <select
                   className="ui dropdown"
                   name="levelOfEducation"
                   value={levelOfEducation}
-                  onChange={e => updateProfileForm(this, e.target)}
+                  onChange={(e) => this.handleProfileFormChange(e.target)}
                 >
-                  <option></option>
+                  <option />
                   <option value="1st Year">1st Year</option>
                   <option value="2nd Year">2nd Year</option>
                   <option value="3rd Year">3rd Year</option>
@@ -289,14 +304,16 @@ export class Profile extends React.Component {
                 )}
               </Grid.Column>
               <Grid.Column>
-                <div class="ui huge black horizontal label">Field of Study</div>
+                <div className="ui huge black horizontal label">
+                  Field of Study
+                </div>
                 <select
                   className="ui dropdown"
                   name="fieldOfStudy"
                   value={fieldOfStudy}
-                  onChange={e => updateProfileForm(this, e.target)}
+                  onChange={(e) => this.handleProfileFormChange(e.target)}
                 >
-                  <option></option>
+                  <option />
                   <option value="CS">CS</option>
                   <option value="ECE">ECE</option>
                 </select>
@@ -314,14 +331,14 @@ export class Profile extends React.Component {
                   Courses Teaching
                 </div>
 
-                {coursesTeaching.map(course => (
-                    <div
-                        className="ui huge blue horizontal label"
-                        onClick={() => remove_coursesTeaching(this, course)}
-                    >
-                      {course.name}
-                      <i className="delete icon"></i>
-                    </div>
+                {coursesTeaching.map((course) => (
+                  <div
+                    className="ui huge blue horizontal label"
+                    onClick={() => remove_coursesTeaching(this, course)}
+                  >
+                    {course.name}
+                    <i className="delete icon" />
+                  </div>
                 ))}
               </Grid.Column>
             </Grid.Row>
@@ -332,13 +349,13 @@ export class Profile extends React.Component {
                   Courses Taking
                 </div>
 
-                {coursesTaking.map(course => (
-                    <div
-                        className="ui huge blue horizontal label"
-                        onClick={() => remove_coursesTaking(this, course)}
-                    >
-                      {course.name} <i className="delete icon"></i>
-                    </div>
+                {coursesTaking.map((course) => (
+                  <div
+                    className="ui huge blue horizontal label"
+                    onClick={() => remove_coursesTaking(this, course)}
+                  >
+                    {course.name} <i className="delete icon" />
+                  </div>
                 ))}
               </Grid.Column>
             </Grid.Row>
@@ -360,13 +377,13 @@ export class Profile extends React.Component {
         </div>
         {this.state.save ? null : (
           <div className="ui negative message">
-            <div class="header">The old password is incorrect</div>
+            <div className="header">The old password is incorrect</div>
             <p>Please Renter the old password to save changes</p>
           </div>
         )}
         {this.state.match ? null : (
           <div className="ui negative message">
-            <div class="header">The new password does not match</div>
+            <div className="header">The new password does not match</div>
             <p>Please Renter the new password to save changes</p>
           </div>
         )}
@@ -385,6 +402,7 @@ export class Profile extends React.Component {
       return <div>Unauthorized Profile Page</div>;
     }
   }
+
   render() {
     return <div>{this.profile()}</div>;
   }

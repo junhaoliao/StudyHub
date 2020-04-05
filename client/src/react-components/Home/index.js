@@ -37,7 +37,7 @@ class Home extends React.Component {
             <div className={"home_page_container"}>
                 <div className="ui attached message">
                     <h2 className="ui blue center aligned icon header">
-                        <i className=" circular users icon"></i>
+                        <i className=" circular users icon"/>
                         Welcome to StudentHub
                     </h2>
                 </div>

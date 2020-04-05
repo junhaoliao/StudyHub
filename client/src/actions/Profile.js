@@ -6,6 +6,9 @@ export const readCookie = Profile => {
     .then(res => {
       if (res.status === 200) {
         return res.json();
+      } else {
+        alert("Session expired. Please try logging in again.");
+        window.location.href = "/";
       }
     })
     .then(json => {
@@ -22,59 +25,51 @@ export const readCookie = Profile => {
         });
       }
     })
-      .catch(error => {
-        console.log(error);
-      });
+    .catch(error => {
+      console.log(error);
+    });
 
   console.log("check course taking");
   const url_coursesTaking = "/RegularUser/profile/coursesTaking";
   fetch(url_coursesTaking)
-      .then(res => {
-        if (res.status === 200) {
-          console.log("find course taking");
-          return res.json();
-        }
-      })
-      .then(json => {
-        if (json && json.courses) {
-          console.log(json);
-          Profile.setState({
-            coursesTaking: json.courses
-          });
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-  console.log("check course teaching");
-  const url_coursesTeaching = "/RegularUser/profile/coursesTeaching";
-  fetch(url_coursesTeaching)
-      .then(res => {
-        if (res.status === 200) {
-          console.log("find course teaching");
-          return res.json();
-        }
-      })
-      .then(json => {
-        if (json && json.courses) {
-          console.log(json);
-          Profile.setState({
-            coursesTeaching: json.courses
+    .then(res => {
+      if (res.status === 200) {
+        console.log("find course taking");
+        return res.json();
+      }
+    })
+    .then(json => {
+      if (json && json.courses) {
+        console.log(json);
+        Profile.setState({
+          coursesTaking: json.courses
         });
       }
     })
     .catch(error => {
       console.log(error);
     });
-};
 
-export const updateProfileForm = (Profile, field) => {
-  const value = field.value;
-  const name = field.name;
-  Profile.setState({
-    [name]: value
-  });
+  console.log("check course teaching");
+  const url_coursesTeaching = "/RegularUser/profile/coursesTeaching";
+  fetch(url_coursesTeaching)
+    .then(res => {
+      if (res.status === 200) {
+        console.log("find course teaching");
+        return res.json();
+      }
+    })
+    .then(json => {
+      if (json && json.courses) {
+        console.log(json);
+        Profile.setState({
+          coursesTeaching: json.courses
+        });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
 };
 
 export const switchView = Profile => {
@@ -208,7 +203,9 @@ export const SaveButton = Profile => {
             newProfile.coursesTaking.push(Profile.state.coursesTaking[i].id);
           }
           for (let i = 0; i < Profile.state.coursesTeaching.length; i++) {
-            newProfile.coursesTeaching.push(Profile.state.coursesTeaching[i].id);
+            newProfile.coursesTeaching.push(
+              Profile.state.coursesTeaching[i].id
+            );
           }
           console.log(newProfile);
           const url = "/RegularUser/Profile";
@@ -334,4 +331,31 @@ export const SaveButton_admin = Profile => {
         console.log(error);
       });
   }
+};
+
+export const getUserProfileById = (app, user_id) => {
+  const url = `/RegularUser/getProfileById/${user_id}`;
+
+  fetch(url)
+    .then(res => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        return console.log("cannot get user profile info");
+      }
+    })
+    .then(json => {
+      app.setState({
+        username: json.username,
+        gender: json.gender,
+        GPA: json.GPA,
+        levelOfEducation: json.levelOfEducation,
+        fieldOfStudy: json.fieldOfStudy,
+        coursesTaking: json.coursesTaking,
+        coursesTeaching: json.coursesTeaching
+      });
+    })
+    .catch(error => {
+      console.log(error);
+    });
 };

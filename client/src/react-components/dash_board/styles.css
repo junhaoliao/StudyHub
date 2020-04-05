@@ -3,7 +3,7 @@
 
 .dashboard_header {
     position: relative;
-    left: -6vh;
+    left: -4vw;
     font-size: 50px;
 }
 
@@ -13,8 +13,8 @@
 }
 
 .courses_container {
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-left: 5vw;
+    margin-right: 5vw;
 }
 
 .add_course_container {

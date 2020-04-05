@@ -17,8 +17,8 @@ export class Favourites extends React.Component {
             currentUserID: {},
             filesFavoured: []
         };
-        getFavourites(this);
         readCookie(this);
+        getFavourites(this);
     }
 
     componentDidMount() {
@@ -56,7 +56,7 @@ export class Favourites extends React.Component {
                     Favourites
                 </div>
                 <div className={"favourites_container"}>
-                    {filesFavoured.map(course => (
+                    {filesFavoured.length !== 0 ? (filesFavoured.map(course => (
                         <Segment>
                             <Header>{course.courseName}</Header>
                             <Table celled fixed>
@@ -71,7 +71,7 @@ export class Favourites extends React.Component {
                                 {this.plot_resource_list(course.files)}
                             </Table>
                         </Segment>
-                    ))}
+                    ))) : <Header>Seems you haven't added any resources to your Favourites.</Header>}
                 </div>
             </div>
         );

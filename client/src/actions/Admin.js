@@ -1,4 +1,27 @@
 export const readCookie = AdminDashboard => {
+  const url1 = "/RegularUser/check-session";
+
+  fetch(url1)
+    .then(res => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        alert("Session expired. Please try logging in again.");
+        window.location.href = "/";
+      }
+    })
+    .then(json => {
+      if (json.currentUser === "admin") {
+        AdminDashboard.setState({ login: true });
+      } else {
+        alert("Unauthorized to Admin Page.");
+        window.location.href = "/";
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
   const url = "/AllRegularUser";
   fetch(url)
     .then(res => {
@@ -8,6 +31,7 @@ export const readCookie = AdminDashboard => {
     })
     .then(json => {
       if (json) {
+        json = json.filter(user => user.username !== "admin");
         AdminDashboard.setState({
           allUsers: json
         });

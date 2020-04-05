@@ -2,33 +2,27 @@ import React from "react";
 import "./styles.css";
 import { Redirect } from "react-router-dom";
 import { Form, Segment } from "semantic-ui-react";
-import { updateLoginForm, loginSubmit } from "../../actions/RegularUser";
-import App from "../../App";
+import { loginSubmit, username_verifier } from "../../actions/RegularUser";
 
 export class LoginBox extends React.Component {
-  // hard code for existing user log in information
-  // username_list = ["Junhao", "Ashley", "Kruzer", "Kevin"];
-  // password_list = ["Admin", "Regular", "Regular", "Regular"];
-  //   constructor(props) {
-  //     super(props);
-  //     //this.props.history.push("/login");
-  //   }
-  state = {
-    username: "",
-    password: "",
-    login_regular: false,
-    error: true
-    // login_admin: false,
-    // finish_typing: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      password: "",
+      login_regular: false,
+      login_admin: false,
+      error: true
+    };
+  }
 
-  // input_handler = event => {
-  //     event.preventDefault();
-  //     this.setState({
-  //         [event.target.name]: event.target.value,
-  //         finish_typing: false
-  //     });
-  // };
+  handleLoginFormChange = field => {
+    const value = field.value;
+    const name = field.name;
+    this.setState({
+      [name]: value
+    });
+  };
 
   submit_handler = event => {
     console.log(this.state);
@@ -43,18 +37,17 @@ export class LoginBox extends React.Component {
       document.querySelector(".password_input").focus();
       return;
     }
+
+    // actual server call
     loginSubmit(this);
   };
 
   render() {
-    // const { app } = this.props;
-    // console.log(App);
-    if (this.state.login_regular) {
+    if (this.state.login_admin) {
+      return <Redirect to="/adash_board" />;
+    } else if (this.state.login_regular) {
       return <Redirect to="/dash_board" />;
     }
-    // if (this.state.login_admin) {
-    //   return <Redirect to="/adash_board" />;
-    // } else {
     return (
       /*The overall login box*/
       <Segment>
@@ -69,7 +62,7 @@ export class LoginBox extends React.Component {
                 type="text"
                 placeholder="Username"
                 value={this.state.username}
-                onChange={e => updateLoginForm(this, e.target)}
+                onChange={e => this.handleLoginFormChange(e.target)}
               />
 
               <i className="blue user icon" />
@@ -84,7 +77,7 @@ export class LoginBox extends React.Component {
                 type="password"
                 placeholder="Password"
                 value={this.state.password}
-                onChange={e => updateLoginForm(this, e.target)}
+                onChange={e => this.handleLoginFormChange(e.target)}
               />
               <i className="blue lock icon" />
             </div>

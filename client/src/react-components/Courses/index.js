@@ -11,11 +11,6 @@ import {ProfileView} from "../ProfileView";
 import {getCourseObject, postNewMsg, removeAnnouncementHandler} from "../../actions/course";
 import {AddAnnouncement} from "./AddAnnouncement";
 
-// const announcements = [
-//     {title: "Announcement 1", content: "I am the first announcement."},
-//     {title: "Announcement 2", content: "I am another announcement."}
-// ];
-
 /* Component for the Home page */
 export class CoursePage extends React.Component {
     constructor(props) {
@@ -24,7 +19,7 @@ export class CoursePage extends React.Component {
 
         this.state = {
             courseName: params.courseName,
-            admin: params.admin,
+            admin: "",
             currentUserID: {},
             chatroom: [],
             announcements: [],
@@ -32,7 +27,6 @@ export class CoursePage extends React.Component {
             scroll_height: 0,
             activeIndex: 0
         };
-
         getCourseObject(this);
     }
 
@@ -50,29 +44,6 @@ export class CoursePage extends React.Component {
     }
 
     handleChange = (e, {name, value}) => this.setState({[name]: value});
-    //
-    // handleSubmit = () => {
-    //     const newMessage = {};
-    //     newMessage.user = "RegularUser";
-    //
-    //     const now = new Date();
-    //
-    //     newMessage.date =
-    //         now.getHours() +
-    //         ":" +
-    //         now.getMinutes() +
-    //         ":" +
-    //         now.getSeconds() +
-    //         " on " +
-    //         months[now.getMonth()] +
-    //         "-" +
-    //         now.getDate();
-    //
-    //     newMessage.message = this.state.message_to_send;
-    //     chat_log.push(newMessage);
-    //
-    //     this.setState({message_to_send: ""});
-    // };
 
     handleClick = (e, titleProps) => {
         const {index} = titleProps;
@@ -100,7 +71,8 @@ export class CoursePage extends React.Component {
     }
 
     plot_announcements(announcements) {
-        const {activeIndex} = this.state;
+        const {activeIndex, currentUserID, admin} = this.state;
+        const isAdmin = currentUserID === admin;
         let result = [];
         for (let i = 0; i < announcements.length; i++) {
             result.push(
@@ -109,8 +81,8 @@ export class CoursePage extends React.Component {
                     index={i}
                     onClick={this.handleClick}
                 >
-                    <Button icon={"remove circle"} app={this} announcement_id={announcements[i]._id}
-                            onClick={removeAnnouncementHandler}/>
+                    {isAdmin ? <Button icon={"remove circle"} app={this} announcement_id={announcements[i]._id}
+                                       onClick={removeAnnouncementHandler}/> : null}
                     <Icon name="dropdown"/>
                     <span>{announcements[i].title}</span>
                 </Accordion.Title>
@@ -127,14 +99,16 @@ export class CoursePage extends React.Component {
     render() {
         const {message_to_send, chatroom, courseName, currentUserID, announcements, admin} = this.state;
         const isAdmin = currentUserID === admin;
-        console.log(currentUserID);
-        console.log(admin);
+        if (admin === "") {
+            return (<div/>);
+        }
+
         return (
             <div>
                 <NavBar/>
                 <Grid padded={"horizontally"} relaxed={"very"}>
                     <Grid.Column>
-                        <ProfileView/>
+                        <ProfileView user_id={admin}/>
                     </Grid.Column>
                     <Grid.Column>
                         <div className={"course_header"}>
