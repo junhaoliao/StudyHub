@@ -103,4 +103,32 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-
+# Server Side Backend Summary
+| URL | Method | req | res/Usage |
+| --- | --- | --- | --- |
+| RegularUser/login  | post | {&quot;username&quot;: &quot;&quot;,&quot;password&quot;: &quot;&quot;} | check if the username and password exists, create a session by returning a current username. |
+| RegularUser/access  | post | {&quot;userid&quot;: &quot;&quot;} | Admin uses userid to get user information by returning database instance of that userid. |
+| /RegularUser/remove  | post | {&quot;userid&quot;: &quot;&quot;} | Admin uses userid to remove a user, return database instance of the removed user. |
+| /RegularUser/signup  | post | {&quot;username&quot;: &quot;&quot;,&quot;password&quot;: &quot;&quot;,&quot;GPA&quot;: &quot;&quot;,&quot;gender&quot;:&quot;&quot;,&quot;levelOfEducation&quot;: &quot;&quot;,&quot;fieldOfStudy&quot;: &quot;&quot;,&quot;coursesTeaching&quot;: [],&quot;coursesTaking&quot;: []} | create a new user. Duplicate username is not allowed. |
+| /RegularUser/logout  | get | N/A | destroy current session. |
+| /RegularUser/check-session | get | N/A | get current user session by returning a current username and userid. |
+| /AllRegularUser  | get | N/A | Admin uses to access all users&#39; information. |
+| /RegularUser/username  | post | {&quot;username&quot;:&quot;&quot;} | check if username already exists. Return user if username exists. Status 404 if username not exists. Used as signup error message check. |
+| /courses  | get | N/A | Get course information of the courses that user teaches and takes |
+| /courses  | post | {&quot;name&quot;: &quot;&quot;,&quot;description&quot;: &quot;&quot;} | Add a course to the coursesTeaching list |
+| /getCourses/:courseName | get | :courseName can contain numbers or characters. Eg./getCourses/CSC309  | Return the course information and chatroom if exist |
+| /getRankings | get | N/A | Get the course ranking and the user ranking |
+| /courses/:courseName/getResources | get | N/A | get resources of a course given a course name if the user is a course taker |
+| /courses/:courseName | Patch | N/A | function to add a user to a course given a course name |
+| /courses/:courseName/announcement | post | :courseName can contain numbers or characters.Eg./courses/CSC309/announcement {&quot;title&quot;: &quot; &quot; ,
+&quot;content&quot;:&quot; &quot; } | Check if the current user is course admin. If is, post an announcement under this certain course. (maximum 3 announcements) |
+| /courses/:courseName/:announcement | delete | : courseName can contain numbers or characters. :announcement is the Objectid of the announcement Eg./courses/CSC309/5e87c0f4e675ca065472e702  | Check if the current user is course admin. If is, delete the selected announcement of the course |
+| /BillBoard/content | get | N/A | Only return all BillBoard content if there is currently a session created. |
+| /BillBoard/new  | post | {&quot;username&quot;: ,&quot;date&quot;: ,&quot;message&quot;: ,&quot;image&quot;: } | Only create a new BillBoard content and save to database if there is currently a session created. |
+| /BillBoard/delete  | post | {&quot;\_id&quot;:&quot;&quot;} | Admin uses to delete any BillBoard content by providing content id. |
+| /RegularUser/profile  | get | N/A | returns user&#39;s information only if there is currently a session created. |
+| /RegularUser/profile/coursesTeaching  | get | N/A | return an array of the course teaching only if there is currently a session created. |
+| /RegularUser/profile/coursesTaking  | get | N/A | return an array of the course taking only if there is currently a session created. |
+| /RegularUser/profile  | post | {&quot;username&quot;: &quot;&quot;,&quot;password&quot;: &quot;&quot;,&quot;GPA&quot;: ,&quot;gender&quot;: &quot;&quot;,&quot;levelOfEducation&quot;: &quot;&quot;,&quot;fieldOfStudy&quot;: &quot;&quot; } | update user&#39;s profile and save to databases only if there is currently a session created. |
+| /courses/:courseName/like | patch | :courseName can contain numbers or characters. Eg./courses/CSC309/like  | Like a course |
+| /resources/favourites | get | N/A | Get all resources favourited |
