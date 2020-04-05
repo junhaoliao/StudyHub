@@ -10,14 +10,14 @@ const months = [
   "September",
   "October",
   "November",
-  "December"
+  "December",
 ];
 
-export const readCookie = BillBoard => {
+export const readCookie = (BillBoard) => {
   const url = "/RegularUser/check-session";
 
   fetch(url)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         return res.json();
       } else {
@@ -25,24 +25,24 @@ export const readCookie = BillBoard => {
         window.location.href = "/";
       }
     })
-    .then(json => {
+    .then((json) => {
       if (json && json.currentUser) {
         BillBoard.setState({
           login: true,
-          username: json.currentUser
+          username: json.currentUser,
         });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
 
-export const readCookie_admin = BillBoard => {
+export const readCookie_admin = (BillBoard) => {
   const url = "/RegularUser/check-session";
 
   fetch(url)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         return res.json();
       } else {
@@ -50,12 +50,12 @@ export const readCookie_admin = BillBoard => {
         window.location.href = "/";
       }
     })
-    .then(json => {
+    .then((json) => {
       if (json && json.currentUser) {
-        if (json.currentUser === "admin") {
+        if (json.currentUser) {
           BillBoard.setState({
             login: true,
-            username: json.currentUser
+            username: json.currentUser,
           });
         } else {
           alert("Unauthorized to Admin Page.");
@@ -63,7 +63,7 @@ export const readCookie_admin = BillBoard => {
         }
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
@@ -72,11 +72,11 @@ export const handleChange = (BillBoard, field) => {
   const value = field.value;
   const name = field.name;
   BillBoard.setState({
-    [name]: value
+    [name]: value,
   });
 };
 
-export const handleSubmit = BillBoard => {
+export const handleSubmit = (BillBoard) => {
   const now = new Date();
 
   BillBoard.state.date =
@@ -106,16 +106,16 @@ export const handleSubmit = BillBoard => {
     body: JSON.stringify(newContent),
     headers: {
       Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
   fetch(request)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         console.log("Successfully record to the database");
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 
@@ -129,23 +129,23 @@ export const handleSubmit = BillBoard => {
   window.location.reload(true);
 };
 
-export const load_content = BillBoard => {
+export const load_content = (BillBoard) => {
   const url = "/BillBoard/content";
   fetch(url)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         return res.json();
       }
     })
-    .then(json => {
+    .then((json) => {
       BillBoard.setState({
-        billboard_content: json
+        billboard_content: json,
       });
       //console.log(billboard_content);
     });
 };
 
-export const comment_remove = Comment => {
+export const comment_remove = (Comment) => {
   const url = "/BillBoard/delete";
   const id = {};
   id._id = Comment._id;
@@ -156,16 +156,16 @@ export const comment_remove = Comment => {
     body: JSON.stringify(id),
     headers: {
       Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
   fetch(request)
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         console.log("Successfully delete comment");
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
   window.location.reload(true);
