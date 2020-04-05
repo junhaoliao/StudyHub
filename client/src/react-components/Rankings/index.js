@@ -17,7 +17,7 @@ export class Rankings extends React.Component {
         this.state = {
             currentUserID: {},
             likesRankings: [],
-            coursesRankings: []
+            usersRankings: []
         };
         readCookie(this);
         getRanking(this);
@@ -34,7 +34,7 @@ export class Rankings extends React.Component {
             <Table.Body>
                 {rankings.map((course) => (
                     <Table.Row>
-                        <Table.Cell>{course.name}</Table.Cell>
+                        <Table.Cell><a href={`/courses/${course.name}`} target="_blank">{course.name}</a></Table.Cell>
                         <Table.Cell>{course.description}</Table.Cell>
                         <Table.Cell>{course.likes}</Table.Cell>
                     </Table.Row>
@@ -44,7 +44,7 @@ export class Rankings extends React.Component {
 
     }
 
-    plotCoursesRankings(rankings) {
+    plotUsersRankings(rankings) {
 
         //rankings.forEach((course)=>{console.log(course)});
         return (
@@ -65,7 +65,7 @@ export class Rankings extends React.Component {
     }
 
     render() {
-        const {likesRankings, coursesRankings} = this.state;
+        const {likesRankings, usersRankings} = this.state;
         return (
             <div>
                 <NavBar/>
@@ -106,7 +106,7 @@ export class Rankings extends React.Component {
                                                 <Table.HeaderCell>Courses Hosted</Table.HeaderCell>
                                             </Table.Row>
                                         </Table.Header>
-                                        {this.plotCoursesRankings(coursesRankings)}
+                                        {this.plotUsersRankings(usersRankings)}
                                     </Table>
                                 </Grid.Column>
                             </Grid>
