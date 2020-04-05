@@ -1,6 +1,6 @@
 import React from "react";
 import NavBar from "../NavBar/navbar";
-import { Grid } from "semantic-ui-react";
+import {Grid} from "semantic-ui-react";
 import {
   CancelButton,
   readCookie,
@@ -13,7 +13,6 @@ import {
 export class Profile extends React.Component {
   constructor(props) {
     super(props);
-    readCookie(this);
     this.state = {
       login: false,
       edit: false,
@@ -30,7 +29,10 @@ export class Profile extends React.Component {
       fieldOfStudy: "",
       coursesTaking: [],
       coursesTeaching: [],
+      coursesToBeRemoved: [],
+      currentUserID: "",
     };
+    readCookie(this);
   }
 
   componentDidMount() {
