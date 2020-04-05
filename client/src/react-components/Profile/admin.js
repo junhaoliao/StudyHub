@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid } from "semantic-ui-react";
+import {Grid} from "semantic-ui-react";
 import {
   CancelButton,
   readCookie,
@@ -27,7 +27,9 @@ export class ProfileAdmin extends React.Component {
       levelOfEducation: "",
       fieldOfStudy: "",
       coursesTaking: [],
-      coursesTeaching: []
+      coursesTeaching: [],
+      coursesToBeRemoved: [],
+      currentUserID: ""
     };
   }
 
