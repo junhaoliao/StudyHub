@@ -1,4 +1,5 @@
 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).<br />
 Also, react-semantic-ui library is used in this project (https://react.semantic-ui.com/)
 
@@ -131,3 +132,5 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 | /RegularUser/profile  | post | {&quot;username&quot;: &quot;&quot;,&quot;password&quot;: &quot;&quot;,&quot;GPA&quot;: ,&quot;gender&quot;: &quot;&quot;,&quot;levelOfEducation&quot;: &quot;&quot;,&quot;fieldOfStudy&quot;: &quot;&quot; } | update user&#39;s profile and save to databases only if there is currently a session created. |
 | /courses/:courseName/like | patch | :courseName can contain numbers or characters. Eg./courses/CSC309/like  | Like a course |
 | /resources/favourites | get | N/A | Get all resources favourited |
+| /upload/:file_id| delete| N/A | Course admin can use this request to remove some uploaded file. |
+| /courses/:courseName/upload| post| N/A | Course admin can use this request to upload some file to the course. |
