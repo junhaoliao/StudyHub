@@ -32,34 +32,100 @@ export class ProfileView extends React.Component {
         } = this.state;
 
         return (
-            <div>
-                <Popup basic on="click" position={"bottom center"}
-                       trigger={<Button icon="user" color={"blue"} size={"huge"} circular={true}/>} flowing>
-                    <List size={"large"} celled>
-                        <List.Item>Username: {username}</List.Item>
-                        <List.Item>Gender: {gender}</List.Item>
-                        <List.Item>GPA: {GPA}</List.Item>
-                        <List.Item>Level of Education: {levelOfEducation}</List.Item>
-                        <List.Item>Field of Study: {fieldOfStudy}</List.Item>
-                    </List>
-                    <List size={"large"} selection relaxed>
-                        <Dropdown icon={null} pointing='left' item
-                                  text={<div>Courses Taking<Icon name={"triangle right"}/></div>}>
-                            <Dropdown.Menu>
-                                {coursesTaking.map((course) => (
-                                    <Dropdown.Item href={`/courses/${course}`}>{course}</Dropdown.Item>))}
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        <Dropdown icon={null} pointing='left' item
-                                  text={<div>Courses Teaching<Icon name={"triangle right"}/></div>}>
-                            <Dropdown.Menu>
-                                {coursesTeaching.map((course) => (
-                                    <Dropdown.Item href={`/courses/${course}`}>{course}</Dropdown.Item>))}
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </List>
-                </Popup>
-            </div>
-        );
+            < div >
+            < Popup
+        basic
+        on = "click"
+        position = {"bottom center"}
+        trigger = { < Button
+        icon = "user"
+        color = {"blue"}
+        size = {"huge"}
+        circular = {true}
+        />} flowing>
+        < List
+        size = {"large"}
+        celled >
+        < List.Item > Username
+    :
+        {
+            username
+        }
+    <
+        /List.Item>
+        < List.Item > Gender
+    :
+        {
+            gender
+        }
+    <
+        /List.Item>
+        < List.Item > GPA
+    :
+        {
+            GPA
+        }
+    <
+        /List.Item>
+        < List.Item > Level
+        of
+        Education: {
+            levelOfEducation
+        }
+    <
+        /List.Item>
+        < List.Item > Field
+        of
+        Study: {
+            fieldOfStudy
+        }
+    <
+        /List.Item>
+        < /List>
+        < List
+        size = {"large"}
+        selection
+        relaxed >
+        < Dropdown
+        icon = {null}
+        pointing = 'left'
+        item
+        text = { < div > Courses
+        Taking < Icon
+        name = {"triangle right"}
+        /></
+        div >
+    }>
+    <
+        Dropdown.Menu >
+        {
+            coursesTaking.map((course) => (
+                < Dropdown.Item href = {`/courses/${course}`
+        } > {course} < /Dropdown.Item>))}
+        < /Dropdown.Menu>
+        < /Dropdown>
+        < Dropdown
+        icon = {null}
+        pointing = 'left'
+        item
+        text = { < div > Courses
+        Teaching < Icon
+        name = {"triangle right"}
+        /></
+        div >
+    }>
+    <
+        Dropdown.Menu >
+        {
+            coursesTeaching.map((course) => (
+                < Dropdown.Item href = {`/courses/${course}`
+        } > {course} < /Dropdown.Item>))}
+        < /Dropdown.Menu>
+        < /Dropdown>
+        < /List>
+        < /Popup>
+        < /div>
+    )
+        ;
     }
-}
+    }

@@ -40,7 +40,7 @@ const {File} = require("./models/File");
 // Create a session cookie
 app.use(
     session({
-        secret: "csc309", // using this for now, may have a security concern
+        secret: "removed", // secret removed for posting online
         resave: false,
         saveUninitialized: false,
         cookie: {
@@ -264,6 +264,18 @@ app.get("/RegularUser/check-session", (req, res) => {
         res.status(401).send();
     }
 });
+app.get("/Admin/check-session", (req, res) => {
+
+    if (req.session.username) {
+        req.session.username = "admin";
+        res.send({
+            currentUser: "admin",
+
+        });
+    } else {
+        res.status(401).send();
+    }
+});
 
 // A rounte to get all regular users
 app.get("/AllRegularUser", (req, res) => {
@@ -446,6 +458,7 @@ app.get("/getCourses/:courseName", (req, res) => {
                             //  after sending this message
                             const updatedMsg = {
                                 user_id: user ? msg.user_id : 0,
+                                raw_date: msg.date,
                                 date: datetime.format(msg.date, "h:mm:s on MMM D"),
                                 message: msg.message,
                                 username: user ? user.username : "User has been removed"
@@ -454,6 +467,9 @@ app.get("/getCourses/:courseName", (req, res) => {
                             count++;
                             //log(msg);
                             if (count === course.chatroom.length) {
+                                chatroom.sort((a, b) => {
+                                    return a.raw_date - b.raw_date;
+                                });
                                 theCourse.chatroom = chatroom;
                                 res.send({course: theCourse});
                             }
@@ -495,9 +511,9 @@ app.get("/getRankings", (req, res) => {
                     users.splice(0, 1);
 
                     users.sort((a, b) => {
-                        if (a.coursesTeaching > b.coursesTeaching) {
+                        if (a.coursesTeaching.length > b.coursesTeaching.length) {
                             return -1;
-                        } else if (a.coursesTeaching < b.coursesTeaching) {
+                        } else if (a.coursesTeaching.length < b.coursesTeaching.length) {
                             return 1;
                         } else {
                             return 0;
@@ -1499,7 +1515,7 @@ app.get("*", (req, res) => {
     res.sendFile(__dirname + "/client/build/index.html");
 });
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`);
 });

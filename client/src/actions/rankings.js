@@ -1,4 +1,3 @@
-
 //hi I am working here
 export const getRanking = (app) => {
     // the URL for the request

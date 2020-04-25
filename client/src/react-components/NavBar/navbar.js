@@ -45,55 +45,75 @@ class NavBar extends React.Component {
     render() {
         const {activeItem, course} = this.state;
         return (
-            <Menu inverted stackable>
-                <Menu.Item className={"navbar_header"}>StudyHub</Menu.Item>
-                {activeItem === "course" && (
-                    <Menu.Item
-                        name={course}
-                        active={activeItem === "course"}
-                        color={"blue"}
-                    />
-                )}
-                <Menu.Item
-                    name="DashBoard"
-                    href={"/dash_board"}
-                    active={activeItem === "dash_board"}
-                    color={"blue"}
-                />
-                <Menu.Item
-                    name="BillBoard"
-                    href={"/bill_board"}
-                    active={activeItem === "bill_board"}
-                    color={"blue"}
-                />
-                <Menu.Item
-                    name="Rankings"
-                    href={"/rankings"}
-                    active={activeItem === "rankings"}
-                    color={"blue"}
-                />
+            < Menu
+        inverted
+        stackable >
+        < Menu.Item
+        className = {"navbar_header"} > StudyHub < /Menu.Item>
+        {
+            activeItem === "course" && (
+            < Menu.Item
+            name = {course}
+            active = {activeItem === "course"
+        }
+            color = {"blue"}
+            />
+        )
+        }
+    <
+        Menu.Item
+        name = "DashBoard"
+        href = {"/dash_board"}
+        active = {activeItem === "dash_board"
+    }
+        color = {"blue"}
+        />
+        < Menu.Item
+        name = "BillBoard"
+        href = {"/bill_board"}
+        active = {activeItem === "bill_board"
+    }
+        color = {"blue"}
+        />
+        < Menu.Item
+        name = "Rankings"
+        href = {"/rankings"}
+        active = {activeItem === "rankings"
+    }
+        color = {"blue"}
+        />
 
-                <Menu.Item
-                    name="Favourites"
-                    href={"/favourites"}
-                    active={activeItem === "favourites"}
-                    color={"blue"}
-                    position="right"
-                />
-                <Menu.Item
-                    name="profile"
-                    href={"/profile"}
-                    active={activeItem === "profile"}
-                    color={"blue"}
-                />
+        < Menu.Item
+        name = "Favourites"
+        href = {"/favourites"}
+        active = {activeItem === "favourites"
+    }
+        color = {"blue"}
+        position = "right"
+            / >
+            < Menu.Item
+        name = "profile"
+        href = {"/profile"}
+        active = {activeItem === "profile"
+    }
+        color = {"blue"}
+        />
 
-                <Menu.Item>
-                    <Button href={"/"} onClick={() => logout()} inverted color={"blue"}>
-                        Logout
-                    </Button>
-                </Menu.Item>
-            </Menu>
-        );
+        < Menu.Item >
+        < Button
+        href = {"/"}
+        onClick = {()
+    =>
+        logout()
+    }
+        inverted
+        color = {"blue"} >
+            Logout
+            < /Button>
+            < /Menu.Item>
+            < /Menu>
+    )
+        ;
     }
 }
 

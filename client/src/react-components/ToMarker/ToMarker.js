@@ -7,13 +7,22 @@ class ToMarker extends React.Component {
 
     render() {
         const {header, content} = this.props;
-        return (this.marking ? <Message warning icon>
-            <Icon name='star' loading/>
-            <Message.Content>
-                <Message.Header>{header}</Message.Header>
-                {content}
-            </Message.Content>
-        </Message> : <empty/>);
+        return (this.marking ? < Message
+        warning
+        icon >
+        < Icon
+        name = 'star'
+        loading / >
+        < Message.Content >
+        < Message.Header > {header} < /Message.Header>
+        {
+            content
+        }
+    <
+        /Message.Content>
+        < /Message> : <empty/ >
+    )
+        ;
     }
 }
 

@@ -13,9 +13,9 @@
 }
 
 .info_container {
-     width: 90%;
-     margin: 4vh auto 50px;
- }
+    width: 90%;
+    margin: 4vh auto 50px;
+}
 
 .info_container1 {
     width: 50%;
@@ -33,7 +33,7 @@
     z-index: 999;
 }
 
-.user_type_icon_container{
+.user_type_icon_container {
     background: lightsteelblue;
     display: inline-block;
 

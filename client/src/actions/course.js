@@ -1,4 +1,3 @@
-import React from "react";
 import {readCookie} from "./RegularUser";
 
 export const getCourseList = (app) => {
