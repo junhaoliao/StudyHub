@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS user(
     username VARCHAR(32) NOT NULL UNIQUE CHECK (username NOT LIKE '%[^a-z0-9]%'),
 
     -- password are encrypted before storing
-    password BIT(128) NOT NULL,
+    password BLOB(8) NOT NULL,
 
 /* -------------------------------------------------------------------------------------
    email address (concatenation of email_localpart+'@'+email_domain)is a secondary key
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS user(
     major ENUM('ECE','CS'),
 
     -- GPA must be a decimal. Only 1 digit after the decimal point is permitted.
-    GPA DECIMAL(2,1)
+    GPA DECIMAL(2,1) CHECK ( GPA >= 0 AND GPA <= 4)
 );
 
 -- course relation schema
